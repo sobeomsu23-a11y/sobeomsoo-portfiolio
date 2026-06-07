@@ -856,35 +856,39 @@
 </div>
 
 <script>
-  /* ─────────────────────────────────────────
-   * 작품 데이터
-   * 작품을 추가하려면 아래 WORKS 배열에 항목을 추가하세요.
-   *
-   * 필드 설명:
-   *   title  : 작품 제목
-   *   year   : 제작 연도
-   *   medium : 매체 (예: 'Oil on canvas')
-   *   type   : 필터 분류 ('oil' | 'acrylic' | 'drawing')
-   *   img    : 이미지 경로 (같은 폴더에 있으면 'images/작품명.jpg' 형식)
-   *            이미지가 없으면 빈 문자열 '' 로 두세요.
-   * ───────────────────────────────────────── */
-  const WORKS = [
-    {
-      title: 'Street',
-      year: '2024',
-      medium: 'Oil on canvas',
-      type: 'oil',
-      img: 'https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp',
-      ph: ['#E8E8E8', '#C8C8C8', '#D8D8D8']
-    },
-    { title: '작품 2', year: '2024', medium: 'Oil on linen',      type: 'oil',     img: '', ph: ['#E0E8F0', '#A8C0D8', '#C8D8E8'] },
-    { title: '작품 3', year: '2023', medium: 'Acrylic on canvas', type: 'acrylic', img: '', ph: ['#F0E8E0', '#D8B898', '#E8D8C8'] },
-    { title: '작품 4', year: '2023', medium: 'Acrylic',           type: 'acrylic', img: '', ph: ['#E8F0E0', '#B8D098', '#D0E0C0'] },
-    { title: '작품 5', year: '2022', medium: 'Graphite',          type: 'drawing', img: '', ph: ['#EBEBEB', '#C0C0C0', '#D8D8D8'] },
-    { title: '작품 6', year: '2022', medium: 'Oil on canvas',     type: 'oil',     img: '', ph: ['#EEE8F0', '#C0A8D8', '#D8C8E8'] },
-  ];
+  /* ═══════════════════════════════════════════
+   * ▼ Supabase 설정 — 여기만 수정하세요!
+   * ═══════════════════════════════════════════ */
+  const SUPABASE_URL = 'https://여기에_Project_URL_붙여넣기';
+  const SUPABASE_KEY = '여기에_Publishable_key_붙여넣기';
+  /* ═══════════════════════════════════════════ */
 
-  /* 작품 placeholder SVG 생성 */
+  /* Supabase REST API */
+  async function sb(table, query = '') {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+      });
+      return res.ok ? res.json() : [];
+    } catch { return []; }
+  }
+
+  async function sbSingle(table, query = '') {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&limit=1`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+      });
+      const data = res.ok ? await res.json() : [];
+      return data[0] || null;
+    } catch { return null; }
+  }
+
+  /* placeholder SVG */
+  const PH_COLORS = [
+    ['#E8E8E8','#C8C8C8','#D8D8D8'],['#E0E8F0','#A8C0D8','#C8D8E8'],
+    ['#F0E8E0','#D8B898','#E8D8C8'],['#E8F0E0','#B8D098','#D0E0C0'],
+    ['#EBEBEB','#C0C0C0','#D8D8D8'],['#EEE8F0','#C0A8D8','#D8C8E8'],
+  ];
   function makePh(c) {
     return `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <rect width="400" height="300" fill="${c[0]}"/>
@@ -894,27 +898,52 @@
     </svg>`;
   }
 
+  /* ── HERO ── */
+  async function loadHero() {
+    const h = await sbSingle('hero');
+    if (h && h.img) {
+      const heroImg = document.querySelector('.hero-r img');
+      const heroLabel = document.querySelector('.hero-img-label');
+      if (heroImg) {
+        heroImg.src = h.img;
+        heroImg.onerror = () => {
+          heroImg.style.display = 'none';
+          document.getElementById('hero-ph').style.display = 'flex';
+        };
+      }
+      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
+    }
+  }
+
+  /* ── WORKS ── */
+  let WORKS = [];
   let curFilter = 'all';
+
+  async function loadWorks() {
+    WORKS = await sb('works');
+    renderWorks();
+  }
 
   function renderWorks() {
     const list = curFilter === 'all' ? WORKS : WORKS.filter(w => w.year === curFilter);
     const grid = document.getElementById('wgrid');
-
-    grid.innerHTML = list.map(w => {
+    if (!list.length) {
+      grid.innerHTML = '<div style="padding:3rem;text-align:center;color:#999;font-size:13px;">등록된 작품이 없습니다</div>';
+      return;
+    }
+    grid.innerHTML = list.map((w, i) => {
+      const c = PH_COLORS[i % PH_COLORS.length];
       const imgHTML = w.img
-        ? `<img src="${w.img}" alt="${w.title}" loading="lazy"
-             onerror="this.outerHTML='${makePh(w.ph).replace(/'/g, "\\'").replace(/\n/g, '')}';">`
-        : makePh(w.ph);
-
-      return `<div class="work-item" onclick="openLb('${w.img}','${w.title}','${w.medium} · ${w.year}')">
+        ? `<img src="${w.img}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
+        : makePh(c);
+      return `<div class="work-item" onclick="openLb('${w.img||''}','${w.title}','${w.medium||''} · ${w.year||''}')">
         <div class="work-thumb">${imgHTML}</div>
         <div class="work-info">
           <span class="work-title">${w.title}</span>
-          <span class="work-meta">${w.year} · ${w.medium}</span>
+          <span class="work-meta">${w.year||''} · ${w.medium||''}</span>
         </div>
       </div>`;
     }).join('');
-
     checkFades();
   }
 
@@ -923,6 +952,112 @@
     document.querySelectorAll('.wf').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
     renderWorks();
+  }
+
+  /* ── EXHIBITIONS ── */
+  let EXHIBITIONS = [];
+
+  async function loadExhibitions() {
+    EXHIBITIONS = await sb('exhibitions');
+    renderExhibitions();
+  }
+
+  function renderExhibitions() {
+    const map = { solo: 'exh-solo', group: 'exh-group', upcoming: 'exh-upcoming' };
+    Object.keys(map).forEach(type => {
+      const el = document.getElementById(map[type]);
+      if (!el) return;
+      const list = EXHIBITIONS.filter(e => e.type === type);
+      if (!list.length) {
+        el.innerHTML = '<div style="padding:1rem 0;color:#999;font-size:12px;">등록된 전시가 없습니다</div>';
+        return;
+      }
+      el.innerHTML = list.map(e => `
+        <div class="exh-row" onclick="openPanel('${e.id}')">
+          <span class="exh-row-yr">${e.year||''}</span>
+          <div>
+            <div class="exh-row-title">${e.title}</div>
+            <div class="exh-row-loc">${e.venue||''}</div>
+          </div>
+          <span class="exh-row-arrow">→</span>
+        </div>`).join('');
+    });
+  }
+
+  function openPanel(id) {
+    const e = EXHIBITIONS.find(x => x.id === id);
+    if (!e) return;
+    const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
+    const hero = document.getElementById('panelHero');
+    if (e.hero_img) {
+      hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover">`;
+    } else {
+      hero.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="450" fill="#EBEBEB"/>
+        <rect x="60" y="70" width="200" height="270" fill="#D8D8D8"/>
+        <rect x="300" y="110" width="240" height="230" fill="#D0D0D0"/>
+        <rect x="580" y="90" width="160" height="250" fill="#D5D5D5"/>
+        <text x="400" y="425" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="3">전시 전경 이미지</text>
+      </svg>`;
+    }
+    document.getElementById('panelType').textContent = typeLabel[e.type] || e.type;
+    document.getElementById('panelTitle').textContent = e.title;
+    document.getElementById('panelPeriod').textContent = e.period || '—';
+    document.getElementById('panelVenue').textContent = e.venue || '—';
+    document.getElementById('panelArtists').textContent = e.artists || '—';
+    document.getElementById('panelIntro').textContent = e.intro || '—';
+    const gallery = document.getElementById('panelGallery');
+    const imgs = e.gallery || [];
+    gallery.innerHTML = imgs.length
+      ? imgs.map(src => `<div class="exh-gallery-item"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
+      : `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>
+         <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>`;
+    document.getElementById('exhPanel').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    document.getElementById('exhPanel').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── CV ── */
+  async function loadCv() {
+    const items = await sb('cv_items');
+    const map = { education: 'Education', awards: 'Awards & Residencies', press: 'Press & Publications' };
+    const groups = { education: [], awards: [], press: [] };
+    items.forEach(c => { if (groups[c.type]) groups[c.type].push(c); });
+    const container = document.querySelector('#cv-section .cv-cols');
+    if (!container) return;
+    const leftDiv = container.children[0];
+    const rightDiv = container.children[1];
+    if (leftDiv) leftDiv.innerHTML = ['education', 'awards'].map(type => `
+      <div class="cv-group">
+        <div class="cv-group-title">${map[type]}</div>
+        ${groups[type].length
+          ? groups[type].map(c => `<div class="cv-row"><span class="cv-yr">${c.year||''}</span><div><div class="cv-t">${c.title}</div><div class="cv-loc">${c.loc||''}</div></div></div>`).join('')
+          : `<div class="cv-row"><span class="cv-yr">—</span><div><div class="cv-t" style="color:#999">등록된 항목이 없습니다</div></div></div>`}
+      </div>`).join('');
+    if (rightDiv) rightDiv.innerHTML = `
+      <div class="cv-group">
+        <div class="cv-group-title">${map['press']}</div>
+        ${groups['press'].length
+          ? groups['press'].map(c => `<div class="cv-row"><span class="cv-yr">${c.year||''}</span><div><div class="cv-t">${c.title}</div><div class="cv-loc">${c.loc||''}</div></div></div>`).join('')
+          : `<div class="cv-row"><span class="cv-yr">—</span><div><div class="cv-t" style="color:#999">등록된 항목이 없습니다</div></div></div>`}
+      </div>`;
+  }
+
+  /* ── ABOUT ── */
+  async function loadAbout() {
+    const a = await sbSingle('about');
+    if (!a) return;
+    const paras = document.querySelectorAll('#about-section .about-body');
+    if (paras[0] && a.bio1) paras[0].textContent = a.bio1;
+    if (paras[1] && a.bio2) paras[1].textContent = a.bio2;
+    const rows = document.querySelectorAll('#about-section .c-row .contact-val');
+    if (rows[0] && a.email) rows[0].textContent = a.email;
+    if (rows[1] && a.instagram) rows[1].textContent = a.instagram;
+    if (rows[2] && a.studio) rows[2].textContent = a.studio;
   }
 
   /* ── LIGHTBOX ── */
@@ -937,12 +1072,9 @@
     document.getElementById('lb').classList.remove('open');
     document.body.style.overflow = '';
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
   /* ── SCROLL & FADE ── */
-  function goTo(id) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  }
+  function goTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }
 
   function checkFades() {
     document.querySelectorAll('.fade:not(.in)').forEach(el => {
@@ -951,7 +1083,6 @@
   }
 
   window.addEventListener('scroll', () => {
-    /* nav active 표시 */
     ['works', 'exhibition', 'cv', 'about'].forEach(id => {
       const el = document.getElementById(id + '-section');
       if (!el) return;
@@ -961,179 +1092,14 @@
     checkFades();
   }, { passive: true });
 
-  /* ─────────────────────────────────────────
-   * 전시 데이터
-   * 전시를 추가하려면 아래 EXHIBITIONS 배열에 항목을 추가하세요.
-   *
-   * 필드 설명:
-   *   id       : 고유 번호 (순서대로)
-   *   type     : 'solo' | 'group' | 'upcoming'
-   *   year     : 연도
-   *   title    : 전시명
-   *   venue    : 장소
-   *   period   : 전시 기간 (예: '2024. 3. 5 – 3. 30')
-   *   artists  : 참여작가 (예: '소범수' 또는 '소범수, 홍길동, 김민수')
-   *   intro    : 전시 서문 텍스트
-   *   heroImg  : 대표 전시 전경 이미지 URL (없으면 '')
-   *   gallery  : 추가 전시 전경 이미지 URL 배열 (없으면 [])
-   * ───────────────────────────────────────── */
-  const EXHIBITIONS = [
-    {
-      id: 1,
-      type: 'solo',
-      year: '2024',
-      title: '전시명을 입력해주세요',
-      venue: '갤러리명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수',
-      intro: '전시 서문을 여기에 입력해주세요. 전시의 주제와 작가의 작업 세계, 이번 전시에서 선보이는 작품들에 대한 소개글을 작성해주시면 됩니다.',
-      heroImg: '',
-      gallery: []
-    },
-    {
-      id: 2,
-      type: 'solo',
-      year: '2023',
-      title: '전시명을 입력해주세요',
-      venue: '갤러리명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수',
-      intro: '전시 서문을 여기에 입력해주세요.',
-      heroImg: '',
-      gallery: []
-    },
-    {
-      id: 3,
-      type: 'group',
-      year: '2024',
-      title: '전시명을 입력해주세요',
-      venue: '공간명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수 외 참여작가',
-      intro: '전시 서문을 여기에 입력해주세요.',
-      heroImg: '',
-      gallery: []
-    },
-    {
-      id: 4,
-      type: 'group',
-      year: '2023',
-      title: '전시명을 입력해주세요',
-      venue: '공간명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수 외 참여작가',
-      intro: '전시 서문을 여기에 입력해주세요.',
-      heroImg: '',
-      gallery: []
-    },
-    {
-      id: 5,
-      type: 'group',
-      year: '2022',
-      title: '전시명을 입력해주세요',
-      venue: '공간명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수 외 참여작가',
-      intro: '전시 서문을 여기에 입력해주세요.',
-      heroImg: '',
-      gallery: []
-    },
-    {
-      id: 6,
-      type: 'upcoming',
-      year: '2026',
-      title: '예정 전시명을 입력해주세요',
-      venue: '갤러리명, 서울',
-      period: '20XX. XX. XX – XX. XX',
-      artists: '소범수',
-      intro: '예정 전시 소개글을 입력해주세요.',
-      heroImg: '',
-      gallery: []
-    },
-  ];
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLb(); closePanel(); } });
 
-  /* 전시 목록 렌더 */
-  function renderExhibitions() {
-    const map = { solo: 'exh-solo', group: 'exh-group', upcoming: 'exh-upcoming' };
-    const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
-
-    Object.keys(map).forEach(type => {
-      const el = document.getElementById(map[type]);
-      if (!el) return;
-      const list = EXHIBITIONS.filter(e => e.type === type);
-      el.innerHTML = list.map(e => `
-        <div class="exh-row" onclick="openPanel(${e.id})">
-          <span class="exh-row-yr">${e.year}</span>
-          <div>
-            <div class="exh-row-title">${e.title}</div>
-            <div class="exh-row-loc">${e.venue}</div>
-          </div>
-          <span class="exh-row-arrow">→</span>
-        </div>`).join('');
-    });
+  /* ── 초기 로드 ── */
+  async function init() {
+    await Promise.all([loadHero(), loadWorks(), loadExhibitions(), loadCv(), loadAbout()]);
+    setTimeout(checkFades, 100);
   }
-
-  /* 전시 상세 패널 열기 */
-  function openPanel(id) {
-    const e = EXHIBITIONS.find(x => x.id === id);
-    if (!e) return;
-
-    const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
-
-    /* 대표 이미지 */
-    const hero = document.getElementById('panelHero');
-    if (e.heroImg) {
-      hero.innerHTML = `<img src="${e.heroImg}" alt="${e.title}">`;
-    } else {
-      hero.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <rect width="800" height="450" fill="#EBEBEB"/>
-        <rect x="60" y="70" width="200" height="270" fill="#D8D8D8"/>
-        <rect x="300" y="110" width="240" height="230" fill="#D0D0D0"/>
-        <rect x="580" y="90" width="160" height="250" fill="#D5D5D5"/>
-        <text x="400" y="425" text-anchor="middle" font-family="'Apple SD Gothic Neo',sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="3">전시 전경 이미지를 등록해주세요</text>
-      </svg>`;
-    }
-
-    document.getElementById('panelType').textContent = typeLabel[e.type] || e.type;
-    document.getElementById('panelTitle').textContent = e.title;
-    document.getElementById('panelPeriod').textContent = e.period;
-    document.getElementById('panelVenue').textContent = e.venue;
-    document.getElementById('panelArtists').textContent = e.artists;
-    document.getElementById('panelIntro').textContent = e.intro;
-
-    /* 갤러리 이미지 */
-    const gallery = document.getElementById('panelGallery');
-    if (e.gallery && e.gallery.length) {
-      gallery.innerHTML = e.gallery.map(src =>
-        `<div class="exh-gallery-item"><img src="${src}" alt="전시 전경"></div>`
-      ).join('');
-    } else {
-      gallery.innerHTML = `
-        <div class="exh-gallery-item"><div class="exh-gallery-ph">
-          <svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg>
-        </div></div>
-        <div class="exh-gallery-item"><div class="exh-gallery-ph">
-          <svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg>
-        </div></div>`;
-    }
-
-    document.getElementById('exhPanel').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closePanel() {
-    document.getElementById('exhPanel').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeLb(); closePanel(); }
-  });
-
-  /* 초기 실행 */
-  renderWorks();
-  renderExhibitions();
-  setTimeout(checkFades, 100);
+  init();
 </script>
 </body>
 </html>
