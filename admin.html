@@ -907,17 +907,27 @@
 
   async function saveAbout() {
     const data = { bio1: document.getElementById('about-bio1').value.trim(), bio2: document.getElementById('about-bio2').value.trim(), email: ABOUT.email||'', instagram: ABOUT.instagram||'', studio: ABOUT.studio||'' };
-    if (ABOUT.id) data.id = ABOUT.id;
-    const ok = await sbUpsert('about', data);
-    if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('소개글이 저장되었습니다.'); }
+    if (ABOUT.id) {
+      const ok = await sbUpdate('about', ABOUT.id, data);
+      if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('소개글이 저장되었습니다.'); }
+    } else {
+      const ok = await sbInsert('about', data);
+      if (ok) { ABOUT = await sbGetSingle('about') || {}; showToast('소개글이 저장되었습니다.'); }
+    }
+  }
     else showToast('저장 실패.');
   }
 
   async function saveContact() {
     const data = { bio1: ABOUT.bio1||'', bio2: ABOUT.bio2||'', email: document.getElementById('about-email').value.trim(), instagram: document.getElementById('about-instagram').value.trim(), studio: document.getElementById('about-studio').value.trim() };
-    if (ABOUT.id) data.id = ABOUT.id;
-    const ok = await sbUpsert('about', data);
-    if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('연락처가 저장되었습니다.'); }
+    if (ABOUT.id) {
+      const ok = await sbUpdate('about', ABOUT.id, data);
+      if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('연락처가 저장되었습니다.'); }
+    } else {
+      const ok = await sbInsert('about', data);
+      if (ok) { ABOUT = await sbGetSingle('about') || {}; showToast('연락처가 저장되었습니다.'); }
+    }
+  }
     else showToast('저장 실패.');
   }
 </script>
