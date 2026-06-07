@@ -902,17 +902,23 @@
   /* ── HERO ── */
   async function loadHero() {
     const h = await sbSingle('hero');
+    const heroImg = document.querySelector('.hero-r img');
+    const heroLabel = document.querySelector('.hero-img-label');
     if (h && h.img) {
-      const heroImg = document.querySelector('.hero-r img');
-      const heroLabel = document.querySelector('.hero-img-label');
       if (heroImg) {
         heroImg.src = h.img;
+        heroImg.style.display = 'block';
         heroImg.onerror = () => {
           heroImg.style.display = 'none';
           document.getElementById('hero-ph').style.display = 'flex';
         };
       }
-      if (heroLabel) heroLabel.textContent = h.caption || '';
+      if (heroLabel) {
+        heroLabel.textContent = h.caption || '';
+        heroLabel.style.display = 'block';
+      }
+    } else {
+      document.getElementById('hero-ph').style.display = 'flex';
     }
   }
 
