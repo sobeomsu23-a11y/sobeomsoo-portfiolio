@@ -11,7 +11,6 @@
       --white: #ffffff; --black: #111111;
       --gray1: #333333; --gray2: #666666; --gray3: #999999;
       --gray4: #E0E0E0; --gray5: #F5F5F5; --gray6: #FAFAFA;
-      --accent: #111111;
       --font: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
       --sidebar: 220px;
     }
@@ -20,88 +19,49 @@
     input, textarea, select, button { font-family: var(--font); }
     button { cursor: pointer; border: none; background: none; }
 
-    /* ── LOGIN ── */
-    #loginScreen {
-      position: fixed; inset: 0; background: var(--white);
-      display: flex; align-items: center; justify-content: center; z-index: 999;
-    }
+    /* LOGIN */
+    #loginScreen { position: fixed; inset: 0; background: var(--white); display: flex; align-items: center; justify-content: center; z-index: 999; }
     .login-box { width: 320px; }
     .login-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
     .login-logo span { font-weight: 300; color: var(--gray3); }
     .login-sub { font-size: 11px; color: var(--gray3); letter-spacing: 0.06em; margin-bottom: 2.5rem; }
     .login-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); margin-bottom: 6px; display: block; }
-    .login-input {
-      width: 100%; padding: 10px 14px; font-size: 14px; font-weight: 300;
-      border: 1px solid var(--gray4); background: var(--white);
-      outline: none; transition: border-color 0.15s;
-    }
+    .login-input { width: 100%; padding: 10px 14px; font-size: 14px; font-weight: 300; border: 1px solid var(--gray4); background: var(--white); outline: none; transition: border-color 0.15s; }
     .login-input:focus { border-color: var(--black); }
-    .login-btn {
-      width: 100%; margin-top: 12px; padding: 11px;
-      background: var(--black); color: var(--white);
-      font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-      transition: opacity 0.2s;
-    }
+    .login-btn { width: 100%; margin-top: 12px; padding: 11px; background: var(--black); color: var(--white); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s; }
     .login-btn:hover { opacity: 0.75; }
     .login-err { font-size: 12px; color: #cc3333; margin-top: 8px; display: none; }
 
-    /* ── LAYOUT ── */
+    /* LAYOUT */
     #adminApp { display: none; height: 100vh; }
     .admin-layout { display: flex; height: 100%; }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar); flex-shrink: 0;
-      background: var(--white); border-right: 1px solid var(--gray4);
-      display: flex; flex-direction: column;
-      position: fixed; top: 0; bottom: 0; left: 0; z-index: 10;
-    }
-    .sidebar-header {
-      padding: 1.4rem 1.2rem 1rem;
-      border-bottom: 1px solid var(--gray4);
-    }
+    /* SIDEBAR */
+    .sidebar { width: var(--sidebar); flex-shrink: 0; background: var(--white); border-right: 1px solid var(--gray4); display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; z-index: 10; }
+    .sidebar-header { padding: 1.4rem 1.2rem 1rem; border-bottom: 1px solid var(--gray4); }
     .sidebar-logo { font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
     .sidebar-logo span { font-weight: 300; color: var(--gray3); }
     .sidebar-role { font-size: 10px; color: var(--gray3); letter-spacing: 0.06em; margin-top: 3px; }
     .sidebar-nav { flex: 1; padding: 0.75rem 0; overflow-y: auto; }
-    .nav-section-label {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--gray3); padding: 0.6rem 1.2rem 0.3rem;
-    }
-    .nav-btn {
-      display: flex; align-items: center; gap: 10px;
-      width: 100%; padding: 0.6rem 1.2rem;
-      font-size: 13px; font-weight: 400; color: var(--gray2);
-      transition: all 0.12s; text-align: left;
-    }
+    .nav-section-label { font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gray3); padding: 0.6rem 1.2rem 0.3rem; }
+    .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 0.6rem 1.2rem; font-size: 13px; font-weight: 400; color: var(--gray2); transition: all 0.12s; text-align: left; }
     .nav-btn:hover { color: var(--black); background: var(--gray5); }
     .nav-btn.active { color: var(--black); background: var(--gray5); font-weight: 500; }
-    .nav-btn .nav-icon { font-size: 15px; width: 18px; text-align: center; }
-    .sidebar-footer {
-      padding: 1rem 1.2rem; border-top: 1px solid var(--gray4);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .sidebar-footer a {
-      font-size: 11px; color: var(--gray3); text-decoration: none;
-      letter-spacing: 0.06em; transition: color 0.15s;
-    }
+    .sidebar-footer { padding: 1rem 1.2rem; border-top: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-footer a { font-size: 11px; color: var(--gray3); text-decoration: none; letter-spacing: 0.06em; transition: color 0.15s; }
     .sidebar-footer a:hover { color: var(--black); }
     .logout-btn { font-size: 11px; color: var(--gray3); letter-spacing: 0.06em; transition: color 0.15s; }
     .logout-btn:hover { color: var(--black); }
 
-    /* ── MAIN ── */
-    .admin-main {
-      margin-left: var(--sidebar); flex: 1;
-      overflow-y: auto; padding: 2.5rem 2.5rem 4rem;
-    }
+    /* MAIN */
+    .admin-main { margin-left: var(--sidebar); flex: 1; overflow-y: auto; padding: 2.5rem 2.5rem 4rem; }
     .page { display: none; }
     .page.active { display: block; }
-
     .page-header { margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: baseline; }
     .page-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
     .page-sub { font-size: 12px; color: var(--gray3); }
 
-    /* ── BUTTONS ── */
+    /* BUTTONS */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.15s; }
     .btn-dark { background: var(--black); color: var(--white); }
     .btn-dark:hover { opacity: 0.75; }
@@ -111,12 +71,13 @@
     .btn-danger:hover { background: #fff5f5; }
     .btn-sm { padding: 5px 12px; font-size: 11px; }
 
-    /* ── CARDS / TABLE ── */
+    /* CARDS */
     .card { background: var(--white); border: 1px solid var(--gray4); margin-bottom: 1rem; }
     .card-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: center; }
     .card-title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray2); }
     .card-body { padding: 1.25rem; }
 
+    /* TABLE */
     .data-table { width: 100%; border-collapse: collapse; }
     .data-table th { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray3); padding: 0 0 0.6rem; text-align: left; border-bottom: 1px solid var(--gray4); }
     .data-table td { font-size: 13px; padding: 0.85rem 0; border-bottom: 1px solid var(--gray4); vertical-align: top; }
@@ -125,65 +86,64 @@
     .td-year { font-size: 11px; color: var(--gray3); width: 52px; }
     .td-title { font-weight: 400; }
     .td-sub { font-size: 11px; color: var(--gray2); margin-top: 2px; }
-    .td-badge {
-      display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 2px 8px; border: 1px solid var(--gray4); color: var(--gray2); margin-bottom: 4px;
-    }
+    .td-badge { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--gray4); color: var(--gray2); margin-bottom: 4px; }
 
-    /* ── FORM ── */
+    /* FORM */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-group { margin-bottom: 1.25rem; }
     .form-group.full { grid-column: span 2; }
     .form-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); display: block; margin-bottom: 6px; }
-    .form-input, .form-select, .form-textarea {
-      width: 100%; padding: 9px 12px; font-size: 13px; font-weight: 300;
-      border: 1px solid var(--gray4); background: var(--white);
-      outline: none; transition: border-color 0.15s; color: var(--black);
-    }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 9px 12px; font-size: 13px; font-weight: 300; border: 1px solid var(--gray4); background: var(--white); outline: none; transition: border-color 0.15s; color: var(--black); }
     .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--black); }
     .form-textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
     .form-hint { font-size: 11px; color: var(--gray3); margin-top: 4px; }
     .form-actions { display: flex; gap: 8px; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--gray4); }
 
-    /* ── MODAL ── */
-    .modal-bg {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 500;
-      display: none; align-items: center; justify-content: center;
+    /* DRAG DROP UPLOAD */
+    .upload-zone {
+      border: 1.5px dashed var(--gray4); padding: 1.5rem;
+      text-align: center; cursor: pointer; transition: all 0.15s;
+      background: var(--gray6); position: relative;
     }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--black); background: var(--gray5); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-zone-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .upload-zone-text { font-size: 12px; color: var(--gray2); }
+    .upload-zone-hint { font-size: 11px; color: var(--gray3); margin-top: 4px; }
+    .upload-progress { margin-top: 8px; display: none; }
+    .upload-bar-bg { height: 3px; background: var(--gray4); border-radius: 2px; }
+    .upload-bar { height: 3px; background: var(--black); border-radius: 2px; width: 0%; transition: width 0.3s; }
+    .upload-status { font-size: 11px; color: var(--gray2); margin-top: 4px; }
+    .img-preview-wrap { margin-top: 10px; display: none; }
+    .img-preview-wrap img { max-height: 120px; max-width: 100%; object-fit: contain; border: 1px solid var(--gray4); }
+    .img-url-result { margin-top: 8px; display: flex; gap: 6px; align-items: center; }
+    .img-url-result input { flex: 1; padding: 7px 10px; font-size: 11px; border: 1px solid var(--gray4); background: var(--gray5); color: var(--gray2); outline: none; }
+    .img-url-copy { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 7px 12px; border: 1px solid var(--gray4); background: var(--white); cursor: pointer; white-space: nowrap; }
+    .img-url-copy:hover { background: var(--gray5); }
+
+    /* MODAL */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 500; display: none; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
-    .modal {
-      background: var(--white); width: min(640px, 92vw);
-      max-height: 88vh; overflow-y: auto;
-      border: 1px solid var(--gray4);
-    }
+    .modal { background: var(--white); width: min(680px, 92vw); max-height: 88vh; overflow-y: auto; border: 1px solid var(--gray4); }
     .modal-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--white); z-index: 2; }
     .modal-title { font-size: 14px; font-weight: 600; }
     .modal-close { font-size: 18px; color: var(--gray3); line-height: 1; padding: 2px 6px; transition: color 0.15s; }
     .modal-close:hover { color: var(--black); }
     .modal-body { padding: 1.5rem; }
 
-    /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
-      background: var(--black); color: var(--white);
-      padding: 10px 20px; font-size: 13px; font-weight: 400;
-      opacity: 0; transform: translateY(8px);
-      transition: all 0.25s ease; pointer-events: none;
-    }
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; background: var(--black); color: var(--white); padding: 10px 20px; font-size: 13px; font-weight: 400; opacity: 0; transform: translateY(8px); transition: all 0.25s ease; pointer-events: none; }
     .toast.show { opacity: 1; transform: none; }
 
-    /* ── EMPTY STATE ── */
+    /* EMPTY */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--gray3); }
     .empty-icon { font-size: 2rem; margin-bottom: 0.75rem; }
     .empty p { font-size: 13px; }
-
-    /* ── ABOUT FORM ── */
-    .about-section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--gray4); }
   </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">SO BEOMSOO <span>소범수</span></div>
@@ -195,11 +155,9 @@
   </div>
 </div>
 
-<!-- ── ADMIN APP ── -->
+<!-- ADMIN APP -->
 <div id="adminApp">
   <div class="admin-layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">SO BEOMSOO <span>소범수</span></div>
@@ -207,18 +165,10 @@
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section-label">콘텐츠</div>
-        <button class="nav-btn active" onclick="showPage('works')" id="nav-works">
-          <span class="nav-icon">◻</span> Works
-        </button>
-        <button class="nav-btn" onclick="showPage('exhibition')" id="nav-exhibition">
-          <span class="nav-icon">◻</span> Exhibition
-        </button>
-        <button class="nav-btn" onclick="showPage('cv')" id="nav-cv">
-          <span class="nav-icon">◻</span> CV
-        </button>
-        <button class="nav-btn" onclick="showPage('about')" id="nav-about">
-          <span class="nav-icon">◻</span> About
-        </button>
+        <button class="nav-btn active" onclick="showPage('works')" id="nav-works">◻ Works</button>
+        <button class="nav-btn" onclick="showPage('exhibition')" id="nav-exhibition">◻ Exhibition</button>
+        <button class="nav-btn" onclick="showPage('cv')" id="nav-cv">◻ CV</button>
+        <button class="nav-btn" onclick="showPage('about')" id="nav-about">◻ About</button>
       </nav>
       <div class="sidebar-footer">
         <a href="index.html" target="_blank">사이트 보기 ↗</a>
@@ -226,64 +176,57 @@
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="admin-main">
 
       <!-- WORKS PAGE -->
       <div class="page active" id="page-works">
         <div class="page-header">
-          <div>
-            <div class="page-title">Works</div>
-            <div class="page-sub">작품 목록 관리</div>
-          </div>
+          <div><div class="page-title">Works</div><div class="page-sub">작품 목록 관리</div></div>
           <button class="btn btn-dark" onclick="openWorkModal()">+ 작품 추가</button>
         </div>
-
-        <!-- 대표작품 설정 -->
         <div class="card" style="margin-bottom:1.5rem">
           <div class="card-header">
             <span class="card-title">대표작품 설정</span>
             <span style="font-size:11px;color:var(--gray3)">메인 페이지 첫 화면에 표시되는 이미지</span>
           </div>
           <div class="card-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
-              <div>
-                <div class="form-label" style="margin-bottom:6px">대표 이미지 URL</div>
-                <input class="form-input" id="hero-img" placeholder="https://...이미지주소.jpg">
-                <div class="form-hint">Supabase 등에 업로드한 이미지 URL을 입력해주세요.</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">대표 이미지 업로드</label>
+                <div class="upload-zone" id="heroUploadZone" ondragover="onDragOver(event,'heroUploadZone')" ondragleave="onDragLeave('heroUploadZone')" ondrop="onDrop(event,'hero-img','heroUploadZone','heroUploadProgress','heroImgPreview','heroImgUrl')">
+                  <input type="file" accept="image/*" onchange="onFileSelect(event,'hero-img','heroUploadZone','heroUploadProgress','heroImgPreview','heroImgUrl')">
+                  <div class="upload-zone-icon">🖼</div>
+                  <div class="upload-zone-text">이미지를 드래그하거나 클릭해서 선택</div>
+                  <div class="upload-zone-hint">JPG, PNG, WEBP · 최대 50MB</div>
+                </div>
+                <div class="upload-progress" id="heroUploadProgress">
+                  <div class="upload-bar-bg"><div class="upload-bar" id="heroUploadBar"></div></div>
+                  <div class="upload-status" id="heroUploadStatus">업로드 중...</div>
+                </div>
+                <div class="img-preview-wrap" id="heroImgPreview">
+                  <img id="heroImgPreviewImg" src="" alt="">
+                  <div class="img-url-result">
+                    <input type="text" id="hero-img" readonly placeholder="업로드 후 URL이 자동 입력됩니다">
+                    <button class="img-url-copy" onclick="copyUrl('hero-img')">복사</button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div class="form-label" style="margin-bottom:6px">작품 캡션</div>
-                <input class="form-input" id="hero-caption" placeholder="Street, 2024 · Oil on canvas">
+              <div class="form-group">
+                <label class="form-label">작품 캡션</label>
+                <input class="form-input" id="hero-caption" placeholder="Peregrino, 2026 · Oil on canvas">
                 <div class="form-hint">이미지 우측 하단에 표시됩니다.</div>
+                <button class="btn btn-dark btn-sm" style="margin-top:1rem" onclick="saveHero()">저장</button>
               </div>
-            </div>
-            <!-- 미리보기 -->
-            <div style="margin-bottom:1rem">
-              <div class="form-label" style="margin-bottom:6px">미리보기</div>
-              <div id="hero-preview" style="width:100%;max-width:480px;aspect-ratio:16/9;background:var(--gray4);position:relative;overflow:hidden;border:1px solid var(--gray4)">
-                <div id="hero-preview-ph" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--gray3);font-size:12px;">이미지 URL을 입력하면 미리보기가 표시됩니다</div>
-                <img id="hero-preview-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;">
-                <div id="hero-preview-caption" style="display:none;position:absolute;bottom:0.75rem;right:0.75rem;background:white;padding:4px 10px;font-size:11px;color:var(--gray1)"></div>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-dark btn-sm" onclick="saveHero()">저장</button>
-              <button class="btn btn-outline btn-sm" onclick="previewHero()">미리보기 업데이트</button>
             </div>
           </div>
         </div>
-
-        <!-- 작품 목록 -->
         <div class="card">
           <div class="card-header"><span class="card-title">작품 목록</span></div>
           <div class="card-body" style="padding:0">
-            <table class="data-table" style="padding: 0 1.25rem;">
-              <thead><tr style="padding: 0 1.25rem;">
-                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
-                <th>제목</th>
-                <th>매체</th>
-                <th></th>
+            <table class="data-table">
+              <thead><tr>
+                <th style="padding:1rem 1.25rem 0.6rem">연도</th>
+                <th>제목</th><th>매체</th><th></th>
               </tr></thead>
               <tbody id="worksTbody"></tbody>
             </table>
@@ -294,20 +237,15 @@
       <!-- EXHIBITION PAGE -->
       <div class="page" id="page-exhibition">
         <div class="page-header">
-          <div>
-            <div class="page-title">Exhibition</div>
-            <div class="page-sub">전시 이력 관리</div>
-          </div>
+          <div><div class="page-title">Exhibition</div><div class="page-sub">전시 이력 관리</div></div>
           <button class="btn btn-dark" onclick="openExhModal()">+ 전시 추가</button>
         </div>
         <div class="card">
           <div class="card-body" style="padding:0">
             <table class="data-table">
               <thead><tr>
-                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
-                <th>전시명</th>
-                <th>장소</th>
-                <th></th>
+                <th style="padding:1rem 1.25rem 0.6rem">연도</th>
+                <th>전시명</th><th>장소</th><th></th>
               </tr></thead>
               <tbody id="exhTbody"></tbody>
             </table>
@@ -318,20 +256,15 @@
       <!-- CV PAGE -->
       <div class="page" id="page-cv">
         <div class="page-header">
-          <div>
-            <div class="page-title">CV</div>
-            <div class="page-sub">학력 / 수상 / 출판 관리</div>
-          </div>
+          <div><div class="page-title">CV</div><div class="page-sub">학력 / 수상 / 출판 관리</div></div>
           <button class="btn btn-dark" onclick="openCvModal()">+ 항목 추가</button>
         </div>
         <div class="card">
           <div class="card-body" style="padding:0">
             <table class="data-table">
               <thead><tr>
-                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
-                <th>내용</th>
-                <th>구분</th>
-                <th></th>
+                <th style="padding:1rem 1.25rem 0.6rem">연도</th>
+                <th>내용</th><th>구분</th><th></th>
               </tr></thead>
               <tbody id="cvTbody"></tbody>
             </table>
@@ -342,12 +275,8 @@
       <!-- ABOUT PAGE -->
       <div class="page" id="page-about">
         <div class="page-header">
-          <div>
-            <div class="page-title">About</div>
-            <div class="page-sub">소개글 및 연락처</div>
-          </div>
+          <div><div class="page-title">About</div><div class="page-sub">소개글 및 연락처</div></div>
         </div>
-
         <div class="card" style="margin-bottom:1rem">
           <div class="card-header"><span class="card-title">작가 소개</span></div>
           <div class="card-body">
@@ -359,12 +288,9 @@
               <label class="form-label">소개글 (두 번째 단락)</label>
               <textarea class="form-textarea" id="about-bio2" rows="4"></textarea>
             </div>
-            <div class="form-actions" style="border:none;padding:0;margin-top:0.5rem">
-              <button class="btn btn-dark btn-sm" onclick="saveAbout()">저장</button>
-            </div>
+            <button class="btn btn-dark btn-sm" onclick="saveAbout()">저장</button>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header"><span class="card-title">연락처</span></div>
           <div class="card-body">
@@ -382,18 +308,15 @@
                 <input class="form-input" type="text" id="about-studio" placeholder="서울, 대한민국">
               </div>
             </div>
-            <div class="form-actions" style="border:none;padding:0;margin-top:0">
-              <button class="btn btn-dark btn-sm" onclick="saveContact()">저장</button>
-            </div>
+            <button class="btn btn-dark btn-sm" onclick="saveContact()">저장</button>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 </div>
 
-<!-- ── WORK MODAL ── -->
+<!-- WORK MODAL -->
 <div class="modal-bg" id="workModal">
   <div class="modal">
     <div class="modal-header">
@@ -404,11 +327,11 @@
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">작품 제목 *</label>
-          <input class="form-input" id="w-title" placeholder="Street">
+          <input class="form-input" id="w-title" placeholder="Peregrino">
         </div>
         <div class="form-group">
           <label class="form-label">연도 *</label>
-          <input class="form-input" id="w-year" placeholder="2024">
+          <input class="form-input" id="w-year" placeholder="2026">
         </div>
         <div class="form-group">
           <label class="form-label">매체</label>
@@ -419,9 +342,24 @@
           <input class="form-input" id="w-size" placeholder="72.7 × 91.0 cm">
         </div>
         <div class="form-group full">
-          <label class="form-label">이미지 URL</label>
-          <input class="form-input" id="w-img" placeholder="https://...">
-          <div class="form-hint">이미지를 Supabase나 다른 서비스에 업로드한 후 URL을 입력해주세요.</div>
+          <label class="form-label">이미지 업로드</label>
+          <div class="upload-zone" id="workUploadZone" ondragover="onDragOver(event,'workUploadZone')" ondragleave="onDragLeave('workUploadZone')" ondrop="onDrop(event,'w-img','workUploadZone','workUploadProgress','workImgPreview','workImgUrl')">
+            <input type="file" accept="image/*" onchange="onFileSelect(event,'w-img','workUploadZone','workUploadProgress','workImgPreview','workImgUrl')">
+            <div class="upload-zone-icon">🖼</div>
+            <div class="upload-zone-text">이미지를 드래그하거나 클릭해서 선택</div>
+            <div class="upload-zone-hint">JPG, PNG, WEBP · 최대 50MB</div>
+          </div>
+          <div class="upload-progress" id="workUploadProgress">
+            <div class="upload-bar-bg"><div class="upload-bar" id="workUploadBar"></div></div>
+            <div class="upload-status" id="workUploadStatus">업로드 중...</div>
+          </div>
+          <div class="img-preview-wrap" id="workImgPreview">
+            <img id="workImgPreviewImg" src="" alt="">
+            <div class="img-url-result">
+              <input type="text" id="w-img" readonly placeholder="업로드 후 URL이 자동 입력됩니다">
+              <button class="img-url-copy" onclick="copyUrl('w-img')">복사</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-actions">
@@ -432,7 +370,7 @@
   </div>
 </div>
 
-<!-- ── EXHIBITION MODAL ── -->
+<!-- EXHIBITION MODAL -->
 <div class="modal-bg" id="exhModal">
   <div class="modal">
     <div class="modal-header">
@@ -474,12 +412,39 @@
           <textarea class="form-textarea" id="e-intro" rows="5" placeholder="전시 소개 및 서문을 입력해주세요."></textarea>
         </div>
         <div class="form-group full">
-          <label class="form-label">대표 이미지 URL</label>
-          <input class="form-input" id="e-heroImg" placeholder="https://...">
+          <label class="form-label">대표 이미지 업로드</label>
+          <div class="upload-zone" id="exhHeroUploadZone" ondragover="onDragOver(event,'exhHeroUploadZone')" ondragleave="onDragLeave('exhHeroUploadZone')" ondrop="onDrop(event,'e-heroImg','exhHeroUploadZone','exhHeroUploadProgress','exhHeroImgPreview','exhHeroImgUrl')">
+            <input type="file" accept="image/*" onchange="onFileSelect(event,'e-heroImg','exhHeroUploadZone','exhHeroUploadProgress','exhHeroImgPreview','exhHeroImgUrl')">
+            <div class="upload-zone-icon">🖼</div>
+            <div class="upload-zone-text">대표 전시 전경 이미지를 드래그하거나 클릭</div>
+            <div class="upload-zone-hint">JPG, PNG, WEBP · 최대 50MB</div>
+          </div>
+          <div class="upload-progress" id="exhHeroUploadProgress">
+            <div class="upload-bar-bg"><div class="upload-bar" id="exhHeroUploadBar"></div></div>
+            <div class="upload-status" id="exhHeroUploadStatus">업로드 중...</div>
+          </div>
+          <div class="img-preview-wrap" id="exhHeroImgPreview">
+            <img id="exhHeroImgPreviewImg" src="" alt="">
+            <div class="img-url-result">
+              <input type="text" id="e-heroImg" readonly placeholder="업로드 후 URL이 자동 입력됩니다">
+              <button class="img-url-copy" onclick="copyUrl('e-heroImg')">복사</button>
+            </div>
+          </div>
         </div>
         <div class="form-group full">
-          <label class="form-label">전시 전경 이미지 URL (여러 개는 줄바꿈으로 구분)</label>
-          <textarea class="form-textarea" id="e-gallery" rows="3" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+          <label class="form-label">전시 전경 추가 이미지 (여러 개 선택 가능)</label>
+          <div class="upload-zone" id="exhGalleryUploadZone" ondragover="onDragOver(event,'exhGalleryUploadZone')" ondragleave="onDragLeave('exhGalleryUploadZone')" ondrop="onDropMultiple(event,'exhGalleryUploadZone','exhGalleryProgress','exhGalleryPreview')">
+            <input type="file" accept="image/*" multiple onchange="onFileSelectMultiple(event,'exhGalleryUploadZone','exhGalleryProgress','exhGalleryPreview')">
+            <div class="upload-zone-icon">🖼</div>
+            <div class="upload-zone-text">여러 이미지를 드래그하거나 클릭해서 선택</div>
+            <div class="upload-zone-hint">여러 파일 동시 선택 가능</div>
+          </div>
+          <div class="upload-progress" id="exhGalleryProgress">
+            <div class="upload-bar-bg"><div class="upload-bar" id="exhGalleryBar"></div></div>
+            <div class="upload-status" id="exhGalleryStatus">업로드 중...</div>
+          </div>
+          <div id="exhGalleryPreview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
+          <input type="hidden" id="e-gallery">
         </div>
       </div>
       <div class="form-actions">
@@ -490,7 +455,7 @@
   </div>
 </div>
 
-<!-- ── CV MODAL ── -->
+<!-- CV MODAL -->
 <div class="modal-bg" id="cvModal">
   <div class="modal">
     <div class="modal-header">
@@ -528,21 +493,19 @@
   </div>
 </div>
 
-<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
 <script>
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
    * ▼ Supabase 설정 — 여기만 수정하세요!
-   * ═══════════════════════════════════════════ */
+   * ═══════════════════════════════════════ */
   const SUPABASE_URL = 'https://jytyhonnmtqukdisdyjh.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
-  /* ═══════════════════════════════════════════ */
+  const SUPABASE_KEY = 'sb_publishable_U0YI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
+  /* ═══════════════════════════════════════ */
 
-  /* ── 비밀번호 설정 ── */
   const ADMIN_PW = 'sobeomsoo2024';
 
-  /* ── Supabase API ── */
+  /* Supabase API */
   async function sbGet(table) {
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&order=created_at.desc`, {
@@ -551,7 +514,6 @@
       return res.ok ? res.json() : [];
     } catch { return []; }
   }
-
   async function sbGetSingle(table) {
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&limit=1`, {
@@ -561,7 +523,6 @@
       return d[0] || null;
     } catch { return null; }
   }
-
   async function sbInsert(table, data) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
       method: 'POST',
@@ -570,7 +531,6 @@
     });
     return res.ok;
   }
-
   async function sbUpdate(table, id, data) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
       method: 'PATCH',
@@ -579,7 +539,6 @@
     });
     return res.ok;
   }
-
   async function sbUpsert(table, data) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
       method: 'POST',
@@ -588,13 +547,113 @@
     });
     return res.ok;
   }
-
   async function sbDelete(table, id) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
       method: 'DELETE',
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
     });
     return res.ok;
+  }
+
+  /* ── 이미지 업로드 ── */
+  async function uploadImage(file) {
+    const ext = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${fileName}`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': file.type },
+      body: file
+    });
+    if (!res.ok) return null;
+    return `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
+  }
+
+  function onDragOver(e, zoneId) {
+    e.preventDefault();
+    document.getElementById(zoneId).classList.add('dragover');
+  }
+  function onDragLeave(zoneId) {
+    document.getElementById(zoneId).classList.remove('dragover');
+  }
+
+  async function handleUpload(file, inputId, zoneId, progressId, previewId, urlId) {
+    const progress = document.getElementById(progressId);
+    const bar = document.getElementById(zoneId.replace('UploadZone','UploadBar').replace('Zone','Bar'));
+    const status = document.getElementById(progressId.replace('Progress','Status').replace('UploadProgress', 'UploadStatus'));
+    const preview = document.getElementById(previewId);
+    const urlInput = document.getElementById(inputId);
+
+    progress.style.display = 'block';
+    if (bar) { bar.style.width = '30%'; }
+    if (status) status.textContent = '업로드 중...';
+
+    const url = await uploadImage(file);
+
+    if (url) {
+      if (bar) bar.style.width = '100%';
+      if (status) status.textContent = '완료!';
+      urlInput.value = url;
+      preview.style.display = 'block';
+      const previewImg = document.getElementById(previewId + 'Img');
+      if (previewImg) previewImg.src = url;
+      setTimeout(() => { progress.style.display = 'none'; }, 1200);
+    } else {
+      if (status) status.textContent = '업로드 실패. 다시 시도해주세요.';
+    }
+    document.getElementById(zoneId).classList.remove('dragover');
+  }
+
+  function onDrop(e, inputId, zoneId, progressId, previewId, urlId) {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleUpload(file, inputId, zoneId, progressId, previewId, urlId);
+  }
+  function onFileSelect(e, inputId, zoneId, progressId, previewId, urlId) {
+    const file = e.target.files[0];
+    if (file) handleUpload(file, inputId, zoneId, progressId, previewId, urlId);
+  }
+
+  /* 갤러리 다중 업로드 */
+  let galleryUrls = [];
+  async function handleMultipleUpload(files, zoneId, progressId, previewId) {
+    const progress = document.getElementById(progressId);
+    const bar = document.getElementById(progressId.replace('Progress','Bar'));
+    const status = document.getElementById(progressId.replace('Progress','Status'));
+    const preview = document.getElementById(previewId);
+    progress.style.display = 'block';
+    if (status) status.textContent = `0 / ${files.length} 업로드 중...`;
+
+    for (let i = 0; i < files.length; i++) {
+      if (bar) bar.style.width = `${((i+1)/files.length)*100}%`;
+      const url = await uploadImage(files[i]);
+      if (url) {
+        galleryUrls.push(url);
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.cssText = 'width:80px;height:60px;object-fit:cover;border:1px solid #E0E0E0';
+        preview.appendChild(img);
+        document.getElementById('e-gallery').value = JSON.stringify(galleryUrls);
+      }
+      if (status) status.textContent = `${i+1} / ${files.length} 완료`;
+    }
+    setTimeout(() => { progress.style.display = 'none'; }, 1200);
+  }
+
+  function onDropMultiple(e, zoneId, progressId, previewId) {
+    e.preventDefault();
+    const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+    if (files.length) handleMultipleUpload(files, zoneId, progressId, previewId);
+    document.getElementById(zoneId).classList.remove('dragover');
+  }
+  function onFileSelectMultiple(e, zoneId, progressId, previewId) {
+    const files = [...e.target.files];
+    if (files.length) handleMultipleUpload(files, zoneId, progressId, previewId);
+  }
+
+  function copyUrl(inputId) {
+    const val = document.getElementById(inputId).value;
+    if (!val) return;
+    navigator.clipboard.writeText(val).then(() => showToast('URL이 복사됐어요!'));
   }
 
   /* ── LOGIN ── */
@@ -645,66 +704,41 @@
     showToast('불러오기 완료!');
   }
 
-  /* ════════════════════════ HERO ════════════════════════ */
+  /* ── HERO ── */
   function loadHero() {
-    document.getElementById('hero-img').value = HERO.img || '';
+    if (HERO.img) {
+      document.getElementById('hero-img').value = HERO.img;
+      const preview = document.getElementById('heroImgPreview');
+      preview.style.display = 'block';
+      document.getElementById('heroImgPreviewImg').src = HERO.img;
+    }
     document.getElementById('hero-caption').value = HERO.caption || '';
-    if (HERO.img) updateHeroPreview(HERO.img, HERO.caption);
-    document.getElementById('hero-img').oninput = () => {
-      const img = document.getElementById('hero-img').value.trim();
-      if (img) updateHeroPreview(img, document.getElementById('hero-caption').value.trim());
-    };
-    document.getElementById('hero-caption').oninput = () => {
-      document.getElementById('hero-preview-caption').textContent = document.getElementById('hero-caption').value.trim();
-    };
-  }
-
-  function updateHeroPreview(img, caption) {
-    const pi = document.getElementById('hero-preview-img');
-    const ph = document.getElementById('hero-preview-ph');
-    const cap = document.getElementById('hero-preview-caption');
-    pi.src = img; pi.style.display = 'block'; ph.style.display = 'none';
-    cap.style.display = caption ? 'block' : 'none';
-    cap.textContent = caption || '';
-    pi.onerror = () => { pi.style.display = 'none'; ph.style.display = 'flex'; ph.textContent = 'URL을 확인해주세요.'; };
-  }
-
-  function previewHero() {
-    const img = document.getElementById('hero-img').value.trim();
-    if (!img) { showToast('이미지 URL을 입력해주세요.'); return; }
-    updateHeroPreview(img, document.getElementById('hero-caption').value.trim());
   }
 
   async function saveHero() {
     const img = document.getElementById('hero-img').value.trim();
-    if (!img) { showToast('이미지 URL을 입력해주세요.'); return; }
-    const caption = document.getElementById('hero-caption').value.trim();
-    const data = HERO.id ? { id: HERO.id, img, caption } : { img, caption };
+    if (!img) { showToast('이미지를 먼저 업로드해주세요.'); return; }
+    const data = { img, caption: document.getElementById('hero-caption').value.trim() };
+    if (HERO.id) data.id = HERO.id;
     const ok = await sbUpsert('hero', data);
-    if (ok) { HERO = { ...HERO, img, caption }; showToast('대표작품이 저장되었습니다.'); }
-    else showToast('저장 실패. Supabase 설정을 확인해주세요.');
+    if (ok) { HERO = { ...HERO, ...data }; showToast('대표작품이 저장되었습니다.'); }
+    else showToast('저장 실패. 다시 시도해주세요.');
   }
 
-  /* ════════════════════════ WORKS ════════════════════════ */
+  /* ── WORKS ── */
   let editWorkId = null;
-
   function renderWorks() {
     const tbody = document.getElementById('worksTbody');
-    if (!WORKS.length) {
-      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 작품이 없습니다</p></div></td></tr>`;
-      return;
-    }
+    if (!WORKS.length) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 작품이 없습니다</p></div></td></tr>`; return; }
     tbody.innerHTML = WORKS.map(w => `
       <tr>
         <td class="td-year" style="padding-left:1.25rem">${w.year||''}</td>
-        <td class="td-title">${w.title}${w.size ? `<div class="td-sub">${w.size}</div>` : ''}</td>
+        <td class="td-title">${w.title}${w.size?`<div class="td-sub">${w.size}</div>`:''}</td>
         <td><div class="td-sub">${w.medium||'—'}</div></td>
-        <td style="padding-right:1.25rem">
-          <div class="td-actions">
-            <button class="btn btn-outline btn-sm" onclick="editWork('${w.id}')">수정</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteWork('${w.id}','${w.title}')">삭제</button>
-          </div>
-        </td>
+        <td style="padding-right:1.25rem"><div class="td-actions">
+          <button class="btn btn-outline btn-sm" onclick="editWork('${w.id}')">수정</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteWork('${w.id}','${w.title}')">삭제</button>
+        </div></td>
       </tr>`).join('');
   }
 
@@ -717,9 +751,11 @@
     document.getElementById('w-medium').value = w?.medium || '';
     document.getElementById('w-size').value = w?.size || '';
     document.getElementById('w-img').value = w?.img || '';
+    const preview = document.getElementById('workImgPreview');
+    if (w?.img) { preview.style.display = 'block'; document.getElementById('workImgPreviewImg').src = w.img; }
+    else { preview.style.display = 'none'; }
     openModal('workModal');
   }
-
   function editWork(id) { openWorkModal(id); }
 
   async function saveWork() {
@@ -727,49 +763,38 @@
     const year = document.getElementById('w-year').value.trim();
     if (!title || !year) { alert('제목과 연도는 필수입니다.'); return; }
     const data = { title, year, medium: document.getElementById('w-medium').value.trim(), size: document.getElementById('w-size').value.trim(), img: document.getElementById('w-img').value.trim() };
-    let ok;
-    if (editWorkId) { ok = await sbUpdate('works', editWorkId, data); }
-    else { ok = await sbInsert('works', data); }
-    if (ok) {
-      WORKS = await sbGet('works');
-      renderWorks(); closeModal('workModal');
-      showToast(editWorkId ? '작품이 수정되었습니다.' : '작품이 추가되었습니다.');
-    } else showToast('저장 실패. 다시 시도해주세요.');
+    const ok = editWorkId ? await sbUpdate('works', editWorkId, data) : await sbInsert('works', data);
+    if (ok) { WORKS = await sbGet('works'); renderWorks(); closeModal('workModal'); showToast(editWorkId ? '수정되었습니다.' : '작품이 추가되었습니다.'); }
+    else showToast('저장 실패.');
   }
 
   async function deleteWork(id, title) {
     if (!confirm(`"${title}" 작품을 삭제할까요?`)) return;
     const ok = await sbDelete('works', id);
     if (ok) { WORKS = WORKS.filter(w => w.id !== id); renderWorks(); showToast('삭제되었습니다.'); }
-    else showToast('삭제 실패. 다시 시도해주세요.');
   }
 
-  /* ════════════════════════ EXHIBITION ════════════════════════ */
+  /* ── EXHIBITION ── */
   let editExhId = null;
   const typeLabel = { solo: 'Solo', group: 'Group', upcoming: 'Upcoming' };
-
   function renderExh() {
     const tbody = document.getElementById('exhTbody');
-    if (!EXHIBITIONS.length) {
-      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 전시가 없습니다</p></div></td></tr>`;
-      return;
-    }
+    if (!EXHIBITIONS.length) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 전시가 없습니다</p></div></td></tr>`; return; }
     tbody.innerHTML = EXHIBITIONS.map(e => `
       <tr>
         <td class="td-year" style="padding-left:1.25rem">${e.year||''}</td>
         <td><span class="td-badge">${typeLabel[e.type]||e.type}</span><div class="td-title">${e.title}</div>${e.period?`<div class="td-sub">${e.period}</div>`:''}</td>
         <td><div class="td-sub">${e.venue||'—'}</div></td>
-        <td style="padding-right:1.25rem">
-          <div class="td-actions">
-            <button class="btn btn-outline btn-sm" onclick="editExh('${e.id}')">수정</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteExh('${e.id}','${e.title}')">삭제</button>
-          </div>
-        </td>
+        <td style="padding-right:1.25rem"><div class="td-actions">
+          <button class="btn btn-outline btn-sm" onclick="editExh('${e.id}')">수정</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteExh('${e.id}','${e.title}')">삭제</button>
+        </div></td>
       </tr>`).join('');
   }
 
   function openExhModal(id = null) {
     editExhId = id;
+    galleryUrls = [];
     const e = id ? EXHIBITIONS.find(x => x.id === id) : {};
     document.getElementById('exhModalTitle').textContent = id ? '전시 수정' : '전시 추가';
     document.getElementById('e-title').value = e?.title || '';
@@ -780,17 +805,30 @@
     document.getElementById('e-artists').value = e?.artists || '';
     document.getElementById('e-intro').value = e?.intro || '';
     document.getElementById('e-heroImg').value = e?.hero_img || '';
-    document.getElementById('e-gallery').value = (e?.gallery || []).join('\n');
+    document.getElementById('e-gallery').value = '';
+    document.getElementById('exhGalleryPreview').innerHTML = '';
+    const heroPreview = document.getElementById('exhHeroImgPreview');
+    if (e?.hero_img) { heroPreview.style.display = 'block'; document.getElementById('exhHeroImgPreviewImg').src = e.hero_img; }
+    else { heroPreview.style.display = 'none'; }
+    if (e?.gallery?.length) {
+      galleryUrls = [...e.gallery];
+      const preview = document.getElementById('exhGalleryPreview');
+      e.gallery.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.cssText = 'width:80px;height:60px;object-fit:cover;border:1px solid #E0E0E0';
+        preview.appendChild(img);
+      });
+    }
     openModal('exhModal');
   }
-
   function editExh(id) { openExhModal(id); }
 
   async function saveExh() {
     const title = document.getElementById('e-title').value.trim();
     const year = document.getElementById('e-year').value.trim();
     if (!title || !year) { alert('전시명과 연도는 필수입니다.'); return; }
-    const galleryRaw = document.getElementById('e-gallery').value.trim();
+    const galleryVal = document.getElementById('e-gallery').value;
     const data = {
       title, year,
       type: document.getElementById('e-type').value,
@@ -799,46 +837,34 @@
       artists: document.getElementById('e-artists').value.trim(),
       intro: document.getElementById('e-intro').value.trim(),
       hero_img: document.getElementById('e-heroImg').value.trim(),
-      gallery: galleryRaw ? galleryRaw.split('\n').map(s => s.trim()).filter(Boolean) : [],
+      gallery: galleryUrls.length ? galleryUrls : (galleryVal ? JSON.parse(galleryVal) : []),
     };
-    let ok;
-    if (editExhId) { ok = await sbUpdate('exhibitions', editExhId, data); }
-    else { ok = await sbInsert('exhibitions', data); }
-    if (ok) {
-      EXHIBITIONS = await sbGet('exhibitions');
-      renderExh(); closeModal('exhModal');
-      showToast(editExhId ? '전시가 수정되었습니다.' : '전시가 추가되었습니다.');
-    } else showToast('저장 실패. 다시 시도해주세요.');
+    const ok = editExhId ? await sbUpdate('exhibitions', editExhId, data) : await sbInsert('exhibitions', data);
+    if (ok) { EXHIBITIONS = await sbGet('exhibitions'); renderExh(); closeModal('exhModal'); showToast(editExhId ? '수정되었습니다.' : '전시가 추가되었습니다.'); }
+    else showToast('저장 실패.');
   }
 
   async function deleteExh(id, title) {
     if (!confirm(`"${title}" 전시를 삭제할까요?`)) return;
     const ok = await sbDelete('exhibitions', id);
     if (ok) { EXHIBITIONS = EXHIBITIONS.filter(e => e.id !== id); renderExh(); showToast('삭제되었습니다.'); }
-    else showToast('삭제 실패. 다시 시도해주세요.');
   }
 
-  /* ════════════════════════ CV ════════════════════════ */
+  /* ── CV ── */
   let editCvId = null;
   const cvTypeLabel = { education: 'Education', awards: 'Awards', press: 'Press' };
-
   function renderCv() {
     const tbody = document.getElementById('cvTbody');
-    if (!CV_ITEMS.length) {
-      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 항목이 없습니다</p></div></td></tr>`;
-      return;
-    }
+    if (!CV_ITEMS.length) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 항목이 없습니다</p></div></td></tr>`; return; }
     tbody.innerHTML = CV_ITEMS.map(c => `
       <tr>
         <td class="td-year" style="padding-left:1.25rem">${c.year||''}</td>
         <td><div class="td-title">${c.title}</div>${c.loc?`<div class="td-sub">${c.loc}</div>`:''}</td>
         <td><span class="td-badge">${cvTypeLabel[c.type]||c.type}</span></td>
-        <td style="padding-right:1.25rem">
-          <div class="td-actions">
-            <button class="btn btn-outline btn-sm" onclick="editCv('${c.id}')">수정</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteCv('${c.id}','${c.title}')">삭제</button>
-          </div>
-        </td>
+        <td style="padding-right:1.25rem"><div class="td-actions">
+          <button class="btn btn-outline btn-sm" onclick="editCv('${c.id}')">수정</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCv('${c.id}','${c.title}')">삭제</button>
+        </div></td>
       </tr>`).join('');
   }
 
@@ -852,7 +878,6 @@
     document.getElementById('cv-loc').value = c?.loc || '';
     openModal('cvModal');
   }
-
   function editCv(id) { openCvModal(id); }
 
   async function saveCv() {
@@ -860,24 +885,18 @@
     const year = document.getElementById('cv-year').value.trim();
     if (!title || !year) { alert('내용과 연도는 필수입니다.'); return; }
     const data = { type: document.getElementById('cv-type').value, year, title, loc: document.getElementById('cv-loc').value.trim() };
-    let ok;
-    if (editCvId) { ok = await sbUpdate('cv_items', editCvId, data); }
-    else { ok = await sbInsert('cv_items', data); }
-    if (ok) {
-      CV_ITEMS = await sbGet('cv_items');
-      renderCv(); closeModal('cvModal');
-      showToast(editCvId ? '수정되었습니다.' : '추가되었습니다.');
-    } else showToast('저장 실패. 다시 시도해주세요.');
+    const ok = editCvId ? await sbUpdate('cv_items', editCvId, data) : await sbInsert('cv_items', data);
+    if (ok) { CV_ITEMS = await sbGet('cv_items'); renderCv(); closeModal('cvModal'); showToast(editCvId ? '수정되었습니다.' : '추가되었습니다.'); }
+    else showToast('저장 실패.');
   }
 
   async function deleteCv(id, title) {
     if (!confirm(`"${title}" 항목을 삭제할까요?`)) return;
     const ok = await sbDelete('cv_items', id);
     if (ok) { CV_ITEMS = CV_ITEMS.filter(c => c.id !== id); renderCv(); showToast('삭제되었습니다.'); }
-    else showToast('삭제 실패. 다시 시도해주세요.');
   }
 
-  /* ════════════════════════ ABOUT ════════════════════════ */
+  /* ── ABOUT ── */
   function renderAbout() {
     document.getElementById('about-bio1').value = ABOUT.bio1 || '';
     document.getElementById('about-bio2').value = ABOUT.bio2 || '';
@@ -887,31 +906,19 @@
   }
 
   async function saveAbout() {
-    const data = {
-      bio1: document.getElementById('about-bio1').value.trim(),
-      bio2: document.getElementById('about-bio2').value.trim(),
-      email: ABOUT.email || '',
-      instagram: ABOUT.instagram || '',
-      studio: ABOUT.studio || '',
-    };
+    const data = { bio1: document.getElementById('about-bio1').value.trim(), bio2: document.getElementById('about-bio2').value.trim(), email: ABOUT.email||'', instagram: ABOUT.instagram||'', studio: ABOUT.studio||'' };
     if (ABOUT.id) data.id = ABOUT.id;
     const ok = await sbUpsert('about', data);
     if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('소개글이 저장되었습니다.'); }
-    else showToast('저장 실패. 다시 시도해주세요.');
+    else showToast('저장 실패.');
   }
 
   async function saveContact() {
-    const data = {
-      bio1: ABOUT.bio1 || '',
-      bio2: ABOUT.bio2 || '',
-      email: document.getElementById('about-email').value.trim(),
-      instagram: document.getElementById('about-instagram').value.trim(),
-      studio: document.getElementById('about-studio').value.trim(),
-    };
+    const data = { bio1: ABOUT.bio1||'', bio2: ABOUT.bio2||'', email: document.getElementById('about-email').value.trim(), instagram: document.getElementById('about-instagram').value.trim(), studio: document.getElementById('about-studio').value.trim() };
     if (ABOUT.id) data.id = ABOUT.id;
     const ok = await sbUpsert('about', data);
     if (ok) { ABOUT = { ...ABOUT, ...data }; showToast('연락처가 저장되었습니다.'); }
-    else showToast('저장 실패. 다시 시도해주세요.');
+    else showToast('저장 실패.');
   }
 </script>
 </body>
