@@ -997,7 +997,7 @@
     const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
     const hero = document.getElementById('panelHero');
     if (e.hero_img) {
-      hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover">`;
+      hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="openLb('${e.hero_img}','${e.title}','')">`;
     } else {
       hero.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="800" height="450" fill="#EBEBEB"/>
@@ -1016,7 +1016,7 @@
     const gallery = document.getElementById('panelGallery');
     const imgs = e.gallery || [];
     gallery.innerHTML = imgs.length
-      ? imgs.map(src => `<div class="exh-gallery-item"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
+      ? imgs.map(src => `<div class="exh-gallery-item" onclick="openLb('${src}','전시 전경','')" style="cursor:pointer"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
       : `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>
          <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>`;
     document.getElementById('exhPanel').classList.add('open');
