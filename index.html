@@ -911,7 +911,7 @@
           document.getElementById('hero-ph').style.display = 'flex';
         };
       }
-      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
+      if (heroLabel) heroLabel.textContent = h.caption || '';
     }
   }
 
