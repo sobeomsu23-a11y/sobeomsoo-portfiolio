@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — So Beomsoo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff; --black: #111111;
+      --gray1: #333333; --gray2: #666666; --gray3: #999999;
+      --gray4: #E0E0E0; --gray5: #F5F5F5; --gray6: #FAFAFA;
+      --accent: #111111;
+      --font: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+      --sidebar: 220px;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font); font-weight: 300; background: var(--gray6); color: var(--black); -webkit-font-smoothing: antialiased; }
+    input, textarea, select, button { font-family: var(--font); }
+    button { cursor: pointer; border: none; background: none; }
+
+    /* ── LOGIN ── */
+    #loginScreen {
+      position: fixed; inset: 0; background: var(--white);
+      display: flex; align-items: center; justify-content: center; z-index: 999;
+    }
+    .login-box { width: 320px; }
+    .login-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .login-logo span { font-weight: 300; color: var(--gray3); }
+    .login-sub { font-size: 11px; color: var(--gray3); letter-spacing: 0.06em; margin-bottom: 2.5rem; }
+    .login-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); margin-bottom: 6px; display: block; }
+    .login-input {
+      width: 100%; padding: 10px 14px; font-size: 14px; font-weight: 300;
+      border: 1px solid var(--gray4); background: var(--white);
+      outline: none; transition: border-color 0.15s;
+    }
+    .login-input:focus { border-color: var(--black); }
+    .login-btn {
+      width: 100%; margin-top: 12px; padding: 11px;
+      background: var(--black); color: var(--white);
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .login-btn:hover { opacity: 0.75; }
+    .login-err { font-size: 12px; color: #cc3333; margin-top: 8px; display: none; }
+
+    /* ── LAYOUT ── */
+    #adminApp { display: none; height: 100vh; }
+    .admin-layout { display: flex; height: 100%; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar); flex-shrink: 0;
+      background: var(--white); border-right: 1px solid var(--gray4);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; bottom: 0; left: 0; z-index: 10;
+    }
+    .sidebar-header {
+      padding: 1.4rem 1.2rem 1rem;
+      border-bottom: 1px solid var(--gray4);
+    }
+    .sidebar-logo { font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+    .sidebar-logo span { font-weight: 300; color: var(--gray3); }
+    .sidebar-role { font-size: 10px; color: var(--gray3); letter-spacing: 0.06em; margin-top: 3px; }
+    .sidebar-nav { flex: 1; padding: 0.75rem 0; overflow-y: auto; }
+    .nav-section-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gray3); padding: 0.6rem 1.2rem 0.3rem;
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 0.6rem 1.2rem;
+      font-size: 13px; font-weight: 400; color: var(--gray2);
+      transition: all 0.12s; text-align: left;
+    }
+    .nav-btn:hover { color: var(--black); background: var(--gray5); }
+    .nav-btn.active { color: var(--black); background: var(--gray5); font-weight: 500; }
+    .nav-btn .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+    .sidebar-footer {
+      padding: 1rem 1.2rem; border-top: 1px solid var(--gray4);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sidebar-footer a {
+      font-size: 11px; color: var(--gray3); text-decoration: none;
+      letter-spacing: 0.06em; transition: color 0.15s;
+    }
+    .sidebar-footer a:hover { color: var(--black); }
+    .logout-btn { font-size: 11px; color: var(--gray3); letter-spacing: 0.06em; transition: color 0.15s; }
+    .logout-btn:hover { color: var(--black); }
+
+    /* ── MAIN ── */
+    .admin-main {
+      margin-left: var(--sidebar); flex: 1;
+      overflow-y: auto; padding: 2.5rem 2.5rem 4rem;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header { margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: baseline; }
+    .page-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+    .page-sub { font-size: 12px; color: var(--gray3); }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.15s; }
+    .btn-dark { background: var(--black); color: var(--white); }
+    .btn-dark:hover { opacity: 0.75; }
+    .btn-outline { border: 1px solid var(--gray4); color: var(--gray1); background: var(--white); }
+    .btn-outline:hover { border-color: var(--black); color: var(--black); }
+    .btn-danger { border: 1px solid #f0c0c0; color: #cc3333; background: var(--white); }
+    .btn-danger:hover { background: #fff5f5; }
+    .btn-sm { padding: 5px 12px; font-size: 11px; }
+
+    /* ── CARDS / TABLE ── */
+    .card { background: var(--white); border: 1px solid var(--gray4); margin-bottom: 1rem; }
+    .card-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: center; }
+    .card-title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray2); }
+    .card-body { padding: 1.25rem; }
+
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray3); padding: 0 0 0.6rem; text-align: left; border-bottom: 1px solid var(--gray4); }
+    .data-table td { font-size: 13px; padding: 0.85rem 0; border-bottom: 1px solid var(--gray4); vertical-align: top; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table .td-actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .td-year { font-size: 11px; color: var(--gray3); width: 52px; }
+    .td-title { font-weight: 400; }
+    .td-sub { font-size: 11px; color: var(--gray2); margin-top: 2px; }
+    .td-badge {
+      display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 2px 8px; border: 1px solid var(--gray4); color: var(--gray2); margin-bottom: 4px;
+    }
+
+    /* ── FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group.full { grid-column: span 2; }
+    .form-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); display: block; margin-bottom: 6px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 9px 12px; font-size: 13px; font-weight: 300;
+      border: 1px solid var(--gray4); background: var(--white);
+      outline: none; transition: border-color 0.15s; color: var(--black);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--black); }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+    .form-hint { font-size: 11px; color: var(--gray3); margin-top: 4px; }
+    .form-actions { display: flex; gap: 8px; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--gray4); }
+
+    /* ── MODAL ── */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 500;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--white); width: min(640px, 92vw);
+      max-height: 88vh; overflow-y: auto;
+      border: 1px solid var(--gray4);
+    }
+    .modal-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--gray4); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--white); z-index: 2; }
+    .modal-title { font-size: 14px; font-weight: 600; }
+    .modal-close { font-size: 18px; color: var(--gray3); line-height: 1; padding: 2px 6px; transition: color 0.15s; }
+    .modal-close:hover { color: var(--black); }
+    .modal-body { padding: 1.5rem; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      background: var(--black); color: var(--white);
+      padding: 10px 20px; font-size: 13px; font-weight: 400;
+      opacity: 0; transform: translateY(8px);
+      transition: all 0.25s ease; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: none; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 3rem 1rem; color: var(--gray3); }
+    .empty-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .empty p { font-size: 13px; }
+
+    /* ── ABOUT FORM ── */
+    .about-section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray2); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--gray4); }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">SO BEOMSOO <span>소범수</span></div>
+    <div class="login-sub">Admin · 관리자 페이지</div>
+    <label class="login-label" for="pwInput">비밀번호</label>
+    <input class="login-input" type="password" id="pwInput" placeholder="비밀번호를 입력하세요" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">로그인</button>
+    <div class="login-err" id="loginErr">비밀번호가 올바르지 않습니다.</div>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="adminApp">
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">SO BEOMSOO <span>소범수</span></div>
+        <div class="sidebar-role">관리자</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">콘텐츠</div>
+        <button class="nav-btn active" onclick="showPage('works')" id="nav-works">
+          <span class="nav-icon">◻</span> Works
+        </button>
+        <button class="nav-btn" onclick="showPage('exhibition')" id="nav-exhibition">
+          <span class="nav-icon">◻</span> Exhibition
+        </button>
+        <button class="nav-btn" onclick="showPage('cv')" id="nav-cv">
+          <span class="nav-icon">◻</span> CV
+        </button>
+        <button class="nav-btn" onclick="showPage('about')" id="nav-about">
+          <span class="nav-icon">◻</span> About
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="index.html" target="_blank">사이트 보기 ↗</a>
+        <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+
+      <!-- WORKS PAGE -->
+      <div class="page active" id="page-works">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Works</div>
+            <div class="page-sub">작품 목록 관리</div>
+          </div>
+          <button class="btn btn-dark" onclick="openWorkModal()">+ 작품 추가</button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table class="data-table" style="padding: 0 1.25rem;">
+              <thead><tr style="padding: 0 1.25rem;">
+                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
+                <th>제목</th>
+                <th>매체</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="worksTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXHIBITION PAGE -->
+      <div class="page" id="page-exhibition">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Exhibition</div>
+            <div class="page-sub">전시 이력 관리</div>
+          </div>
+          <button class="btn btn-dark" onclick="openExhModal()">+ 전시 추가</button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table class="data-table">
+              <thead><tr>
+                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
+                <th>전시명</th>
+                <th>장소</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="exhTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CV PAGE -->
+      <div class="page" id="page-cv">
+        <div class="page-header">
+          <div>
+            <div class="page-title">CV</div>
+            <div class="page-sub">학력 / 수상 / 출판 관리</div>
+          </div>
+          <button class="btn btn-dark" onclick="openCvModal()">+ 항목 추가</button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table class="data-table">
+              <thead><tr>
+                <th style="padding: 1rem 1.25rem 0.6rem;">연도</th>
+                <th>내용</th>
+                <th>구분</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="cvTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT PAGE -->
+      <div class="page" id="page-about">
+        <div class="page-header">
+          <div>
+            <div class="page-title">About</div>
+            <div class="page-sub">소개글 및 연락처</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem">
+          <div class="card-header"><span class="card-title">작가 소개</span></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">소개글 (첫 번째 단락)</label>
+              <textarea class="form-textarea" id="about-bio1" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">소개글 (두 번째 단락)</label>
+              <textarea class="form-textarea" id="about-bio2" rows="4"></textarea>
+            </div>
+            <div class="form-actions" style="border:none;padding:0;margin-top:0.5rem">
+              <button class="btn btn-dark btn-sm" onclick="saveAbout()">저장</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">연락처</span></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="text" id="about-email" placeholder="example@email.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Instagram</label>
+                <input class="form-input" type="text" id="about-instagram" placeholder="@아이디">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Studio</label>
+                <input class="form-input" type="text" id="about-studio" placeholder="서울, 대한민국">
+              </div>
+            </div>
+            <div class="form-actions" style="border:none;padding:0;margin-top:0">
+              <button class="btn btn-dark btn-sm" onclick="saveContact()">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ── WORK MODAL ── -->
+<div class="modal-bg" id="workModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="workModalTitle">작품 추가</span>
+      <button class="modal-close" onclick="closeModal('workModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">작품 제목 *</label>
+          <input class="form-input" id="w-title" placeholder="Street">
+        </div>
+        <div class="form-group">
+          <label class="form-label">연도 *</label>
+          <input class="form-input" id="w-year" placeholder="2024">
+        </div>
+        <div class="form-group">
+          <label class="form-label">매체</label>
+          <input class="form-input" id="w-medium" placeholder="Oil on canvas">
+        </div>
+        <div class="form-group">
+          <label class="form-label">크기</label>
+          <input class="form-input" id="w-size" placeholder="72.7 × 91.0 cm">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">이미지 URL</label>
+          <input class="form-input" id="w-img" placeholder="https://...">
+          <div class="form-hint">이미지를 Supabase나 다른 서비스에 업로드한 후 URL을 입력해주세요.</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-dark" onclick="saveWork()">저장</button>
+        <button class="btn btn-outline" onclick="closeModal('workModal')">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── EXHIBITION MODAL ── -->
+<div class="modal-bg" id="exhModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="exhModalTitle">전시 추가</span>
+      <button class="modal-close" onclick="closeModal('exhModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">전시명 *</label>
+          <input class="form-input" id="e-title" placeholder="전시 제목">
+        </div>
+        <div class="form-group">
+          <label class="form-label">구분 *</label>
+          <select class="form-select" id="e-type">
+            <option value="solo">Solo Exhibition</option>
+            <option value="group">Group Exhibition</option>
+            <option value="upcoming">Upcoming</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">연도 *</label>
+          <input class="form-input" id="e-year" placeholder="2024">
+        </div>
+        <div class="form-group">
+          <label class="form-label">장소</label>
+          <input class="form-input" id="e-venue" placeholder="갤러리명, 서울">
+        </div>
+        <div class="form-group">
+          <label class="form-label">전시 기간</label>
+          <input class="form-input" id="e-period" placeholder="2024. 3. 5 – 3. 30">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">참여작가</label>
+          <input class="form-input" id="e-artists" placeholder="소범수 (또는 소범수, 홍길동, ...)">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">전시 서문</label>
+          <textarea class="form-textarea" id="e-intro" rows="5" placeholder="전시 소개 및 서문을 입력해주세요."></textarea>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">대표 이미지 URL</label>
+          <input class="form-input" id="e-heroImg" placeholder="https://...">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">전시 전경 이미지 URL (여러 개는 줄바꿈으로 구분)</label>
+          <textarea class="form-textarea" id="e-gallery" rows="3" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-dark" onclick="saveExh()">저장</button>
+        <button class="btn btn-outline" onclick="closeModal('exhModal')">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CV MODAL ── -->
+<div class="modal-bg" id="cvModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="cvModalTitle">CV 항목 추가</span>
+      <button class="modal-close" onclick="closeModal('cvModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">구분 *</label>
+          <select class="form-select" id="cv-type">
+            <option value="education">Education</option>
+            <option value="awards">Awards & Residencies</option>
+            <option value="press">Press & Publications</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">연도 *</label>
+          <input class="form-input" id="cv-year" placeholder="2024">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">내용 *</label>
+          <input class="form-input" id="cv-title" placeholder="학위명 / 수상명 / 기사 제목">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">기관 / 출처</label>
+          <input class="form-input" id="cv-loc" placeholder="학교명 / 기관명 / 매체명">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-dark" onclick="saveCv()">저장</button>
+        <button class="btn btn-outline" onclick="closeModal('cvModal')">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ──────────────────────────────────────────
+   * 비밀번호 설정
+   * 아래 ADMIN_PW 값을 원하는 비밀번호로 바꿔주세요!
+   * ────────────────────────────────────────── */
+  const ADMIN_PW = 'sobeomsoo2024';
+
+  /* ── LOGIN ── */
+  function doLogin() {
+    const pw = document.getElementById('pwInput').value;
+    if (pw === ADMIN_PW) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+      loadAll();
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+    }
+  }
+  function doLogout() {
+    document.getElementById('adminApp').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('pwInput').value = '';
+  }
+
+  /* ── PAGE NAV ── */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+  }
+
+  /* ── LOCAL STORAGE DATA ── */
+  function load(key, def) {
+    try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; }
+  }
+  function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  let WORKS = [];
+  let EXHIBITIONS = [];
+  let CV_ITEMS = [];
+  let ABOUT = {};
+
+  function loadAll() {
+    WORKS = load('admin_works', []);
+    EXHIBITIONS = load('admin_exhibitions', []);
+    CV_ITEMS = load('admin_cv', []);
+    ABOUT = load('admin_about', { bio1: '', bio2: '', email: '', instagram: '', studio: '' });
+    renderWorks(); renderExh(); renderCv(); renderAbout();
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  /* ── MODAL ── */
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open')); });
+
+  /* ════════════════════════
+     WORKS
+  ════════════════════════ */
+  let editWorkIdx = -1;
+
+  function renderWorks() {
+    const tbody = document.getElementById('worksTbody');
+    if (!WORKS.length) {
+      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 작품이 없습니다</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = WORKS.map((w, i) => `
+      <tr>
+        <td class="td-year" style="padding-left:1.25rem">${w.year}</td>
+        <td class="td-title">
+          ${w.title}
+          ${w.size ? `<div class="td-sub">${w.size}</div>` : ''}
+        </td>
+        <td><div class="td-sub">${w.medium || '—'}</div></td>
+        <td style="padding-right:1.25rem">
+          <div class="td-actions">
+            <button class="btn btn-outline btn-sm" onclick="editWork(${i})">수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteWork(${i})">삭제</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function openWorkModal(idx = -1) {
+    editWorkIdx = idx;
+    const w = idx >= 0 ? WORKS[idx] : {};
+    document.getElementById('workModalTitle').textContent = idx >= 0 ? '작품 수정' : '작품 추가';
+    document.getElementById('w-title').value = w.title || '';
+    document.getElementById('w-year').value = w.year || '';
+    document.getElementById('w-medium').value = w.medium || '';
+    document.getElementById('w-size').value = w.size || '';
+    document.getElementById('w-img').value = w.img || '';
+    openModal('workModal');
+  }
+
+  function editWork(i) { openWorkModal(i); }
+
+  function saveWork() {
+    const title = document.getElementById('w-title').value.trim();
+    const year = document.getElementById('w-year').value.trim();
+    if (!title || !year) { alert('제목과 연도는 필수입니다.'); return; }
+    const w = {
+      title, year,
+      medium: document.getElementById('w-medium').value.trim(),
+      size: document.getElementById('w-size').value.trim(),
+      img: document.getElementById('w-img').value.trim(),
+    };
+    if (editWorkIdx >= 0) { WORKS[editWorkIdx] = w; }
+    else { WORKS.unshift(w); }
+    save('admin_works', WORKS);
+    renderWorks();
+    closeModal('workModal');
+    showToast(editWorkIdx >= 0 ? '작품이 수정되었습니다.' : '작품이 추가되었습니다.');
+  }
+
+  function deleteWork(i) {
+    if (!confirm(`"${WORKS[i].title}" 작품을 삭제할까요?`)) return;
+    WORKS.splice(i, 1);
+    save('admin_works', WORKS);
+    renderWorks();
+    showToast('삭제되었습니다.');
+  }
+
+  /* ════════════════════════
+     EXHIBITION
+  ════════════════════════ */
+  let editExhIdx = -1;
+  const typeLabel = { solo: 'Solo', group: 'Group', upcoming: 'Upcoming' };
+
+  function renderExh() {
+    const tbody = document.getElementById('exhTbody');
+    if (!EXHIBITIONS.length) {
+      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 전시가 없습니다</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = EXHIBITIONS.map((e, i) => `
+      <tr>
+        <td class="td-year" style="padding-left:1.25rem">${e.year}</td>
+        <td>
+          <span class="td-badge">${typeLabel[e.type] || e.type}</span>
+          <div class="td-title">${e.title}</div>
+          ${e.period ? `<div class="td-sub">${e.period}</div>` : ''}
+        </td>
+        <td><div class="td-sub">${e.venue || '—'}</div></td>
+        <td style="padding-right:1.25rem">
+          <div class="td-actions">
+            <button class="btn btn-outline btn-sm" onclick="editExh(${i})">수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteExh(${i})">삭제</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function openExhModal(idx = -1) {
+    editExhIdx = idx;
+    const e = idx >= 0 ? EXHIBITIONS[idx] : {};
+    document.getElementById('exhModalTitle').textContent = idx >= 0 ? '전시 수정' : '전시 추가';
+    document.getElementById('e-title').value = e.title || '';
+    document.getElementById('e-type').value = e.type || 'solo';
+    document.getElementById('e-year').value = e.year || '';
+    document.getElementById('e-venue').value = e.venue || '';
+    document.getElementById('e-period').value = e.period || '';
+    document.getElementById('e-artists').value = e.artists || '';
+    document.getElementById('e-intro').value = e.intro || '';
+    document.getElementById('e-heroImg').value = e.heroImg || '';
+    document.getElementById('e-gallery').value = (e.gallery || []).join('\n');
+    openModal('exhModal');
+  }
+
+  function editExh(i) { openExhModal(i); }
+
+  function saveExh() {
+    const title = document.getElementById('e-title').value.trim();
+    const year = document.getElementById('e-year').value.trim();
+    if (!title || !year) { alert('전시명과 연도는 필수입니다.'); return; }
+    const galleryRaw = document.getElementById('e-gallery').value.trim();
+    const e = {
+      id: editExhIdx >= 0 ? EXHIBITIONS[editExhIdx].id : Date.now(),
+      title, year,
+      type: document.getElementById('e-type').value,
+      venue: document.getElementById('e-venue').value.trim(),
+      period: document.getElementById('e-period').value.trim(),
+      artists: document.getElementById('e-artists').value.trim(),
+      intro: document.getElementById('e-intro').value.trim(),
+      heroImg: document.getElementById('e-heroImg').value.trim(),
+      gallery: galleryRaw ? galleryRaw.split('\n').map(s => s.trim()).filter(Boolean) : [],
+    };
+    if (editExhIdx >= 0) { EXHIBITIONS[editExhIdx] = e; }
+    else { EXHIBITIONS.unshift(e); }
+    save('admin_exhibitions', EXHIBITIONS);
+    renderExh();
+    closeModal('exhModal');
+    showToast(editExhIdx >= 0 ? '전시가 수정되었습니다.' : '전시가 추가되었습니다.');
+  }
+
+  function deleteExh(i) {
+    if (!confirm(`"${EXHIBITIONS[i].title}" 전시를 삭제할까요?`)) return;
+    EXHIBITIONS.splice(i, 1);
+    save('admin_exhibitions', EXHIBITIONS);
+    renderExh();
+    showToast('삭제되었습니다.');
+  }
+
+  /* ════════════════════════
+     CV
+  ════════════════════════ */
+  let editCvIdx = -1;
+  const cvTypeLabel = { education: 'Education', awards: 'Awards', press: 'Press' };
+
+  function renderCv() {
+    const tbody = document.getElementById('cvTbody');
+    if (!CV_ITEMS.length) {
+      tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 항목이 없습니다</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = CV_ITEMS.map((c, i) => `
+      <tr>
+        <td class="td-year" style="padding-left:1.25rem">${c.year}</td>
+        <td>
+          <div class="td-title">${c.title}</div>
+          ${c.loc ? `<div class="td-sub">${c.loc}</div>` : ''}
+        </td>
+        <td><span class="td-badge">${cvTypeLabel[c.type] || c.type}</span></td>
+        <td style="padding-right:1.25rem">
+          <div class="td-actions">
+            <button class="btn btn-outline btn-sm" onclick="editCv(${i})">수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCv(${i})">삭제</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function openCvModal(idx = -1) {
+    editCvIdx = idx;
+    const c = idx >= 0 ? CV_ITEMS[idx] : {};
+    document.getElementById('cvModalTitle').textContent = idx >= 0 ? 'CV 수정' : 'CV 항목 추가';
+    document.getElementById('cv-type').value = c.type || 'education';
+    document.getElementById('cv-year').value = c.year || '';
+    document.getElementById('cv-title').value = c.title || '';
+    document.getElementById('cv-loc').value = c.loc || '';
+    openModal('cvModal');
+  }
+
+  function editCv(i) { openCvModal(i); }
+
+  function saveCv() {
+    const title = document.getElementById('cv-title').value.trim();
+    const year = document.getElementById('cv-year').value.trim();
+    if (!title || !year) { alert('내용과 연도는 필수입니다.'); return; }
+    const c = {
+      type: document.getElementById('cv-type').value,
+      year, title,
+      loc: document.getElementById('cv-loc').value.trim(),
+    };
+    if (editCvIdx >= 0) { CV_ITEMS[editCvIdx] = c; }
+    else { CV_ITEMS.unshift(c); }
+    save('admin_cv', CV_ITEMS);
+    renderCv();
+    closeModal('cvModal');
+    showToast(editCvIdx >= 0 ? '수정되었습니다.' : '추가되었습니다.');
+  }
+
+  function deleteCv(i) {
+    if (!confirm(`"${CV_ITEMS[i].title}" 항목을 삭제할까요?`)) return;
+    CV_ITEMS.splice(i, 1);
+    save('admin_cv', CV_ITEMS);
+    renderCv();
+    showToast('삭제되었습니다.');
+  }
+
+  /* ════════════════════════
+     ABOUT
+  ════════════════════════ */
+  function renderAbout() {
+    document.getElementById('about-bio1').value = ABOUT.bio1 || '';
+    document.getElementById('about-bio2').value = ABOUT.bio2 || '';
+    document.getElementById('about-email').value = ABOUT.email || '';
+    document.getElementById('about-instagram').value = ABOUT.instagram || '';
+    document.getElementById('about-studio').value = ABOUT.studio || '';
+  }
+
+  function saveAbout() {
+    ABOUT.bio1 = document.getElementById('about-bio1').value.trim();
+    ABOUT.bio2 = document.getElementById('about-bio2').value.trim();
+    save('admin_about', ABOUT);
+    showToast('소개글이 저장되었습니다.');
+  }
+
+  function saveContact() {
+    ABOUT.email = document.getElementById('about-email').value.trim();
+    ABOUT.instagram = document.getElementById('about-instagram').value.trim();
+    ABOUT.studio = document.getElementById('about-studio').value.trim();
+    save('admin_about', ABOUT);
+    showToast('연락처가 저장되었습니다.');
+  }
+</script>
+</body>
+</html>
