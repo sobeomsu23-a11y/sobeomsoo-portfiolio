@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="So Beomsoo — Contemporary Painter based in Seoul, Korea">
+  <meta name="keywords" content="artist, painting, contemporary art, exhibition, portfolio, So Beomsoo, 소범수">
+  <meta property="og:title" content="So, Beomsoo — Artist Portfolio">
+  <meta property="og:description" content="Contemporary Painter based in Seoul, Korea">
+  <meta property="og:type" content="website">
+  <title>So, Beomsoo — Artist Portfolio</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #ffffff;
+      --black: #111111;
+      --gray1: #333333;
+      --gray2: #666666;
+      --gray3: #999999;
+      --gray4: #E0E0E0;
+      --gray5: #F5F5F5;
+      --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      --header-h: 56px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--header-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--gray4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 3rem;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .logo span { font-weight: 300; color: var(--gray3); }
+
+    nav { display: flex; height: var(--header-h); }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 0 1.4rem;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav-item:hover { color: var(--black); }
+    .nav-item.active { color: var(--black); border-bottom-color: var(--black); }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: var(--header-h);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: calc(100vh - var(--header-h));
+      border-bottom: 1px solid var(--gray4);
+    }
+
+    .hero-l {
+      padding: 4rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--gray4);
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      border: 1px solid var(--gray4);
+      padding: 5px 12px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-name {
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-name-ko {
+      font-size: clamp(1rem, 2vw, 1.6rem);
+      font-weight: 300;
+      color: var(--gray2);
+      letter-spacing: 0.14em;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--gray1);
+      max-width: 340px;
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .hero-stats { display: flex; gap: 2.5rem; }
+    .hero-stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .hero-stat-lbl {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      margin-top: 4px;
+    }
+
+    .btn-primary {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      background: var(--black);
+      color: var(--white);
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.7; }
+
+    .hero-r {
+      position: relative;
+      overflow: hidden;
+      background: var(--gray5);
+    }
+    .hero-r img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-img-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-img-label {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--white);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--gray1);
+    }
+
+    /* ── SECTION COMMON ── */
+    .section { border-bottom: 1px solid var(--gray4); }
+    .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 3rem; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--gray4);
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray2);
+    }
+    .section-sub {
+      font-size: 11px;
+      color: var(--gray3);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── WORKS SECTION ── */
+    .works-filters {
+      display: flex;
+      margin-bottom: 2.5rem;
+    }
+    .wf {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      color: var(--gray2);
+      cursor: pointer;
+      border: 1px solid var(--gray4);
+      border-right: none;
+      background: var(--white);
+      transition: all 0.15s;
+    }
+    .wf:last-child { border-right: 1px solid var(--gray4); }
+    .wf:hover { color: var(--black); background: var(--gray5); }
+    .wf.on { color: var(--white); background: var(--black); border-color: var(--black); }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--gray4);
+      border: 1px solid var(--gray4);
+    }
+
+    .work-item {
+      background: var(--white);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .work-thumb {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--gray5);
+      position: relative;
+    }
+    .work-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .work-item:hover .work-thumb img { transform: scale(1.04); }
+    .work-thumb svg { width: 100%; height: 100%; }
+
+    .work-info {
+      padding: 16px 18px;
+      border-top: 1px solid var(--gray4);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .work-title { font-size: 13px; font-weight: 500; }
+    .work-meta { font-size: 11px; color: var(--gray2); font-weight: 300; }
+
+    /* ── CV SECTION ── */
+    #cv-section { background: var(--white); }
+
+    .cv-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+
+    .cv-group { margin-bottom: 3rem; }
+    .cv-group-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--gray4);
+      margin-bottom: 1.25rem;
+    }
+    .cv-row {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      margin-bottom: 1.1rem;
+      align-items: start;
+    }
+    .cv-yr {
+      font-size: 11px;
+      color: var(--gray3);
+      font-weight: 400;
+      padding-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .cv-t {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 2px;
+    }
+    .cv-loc {
+      font-size: 12px;
+      color: var(--gray2);
+      font-weight: 300;
+    }
+
+    /* ── ABOUT SECTION ── */
+    #about-section { background: var(--gray5); }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-portrait {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--gray4);
+      overflow: hidden;
+      position: relative;
+    }
+    .about-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .portrait-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray4);
+    }
+
+    .about-name-en {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .about-name-ko {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gray2);
+      letter-spacing: 0.14em;
+      margin-bottom: 2rem;
+    }
+    .about-body {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.95;
+      color: var(--gray1);
+      margin-bottom: 1.2rem;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 1.5rem 0 2rem; }
+    .tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--gray4);
+      padding: 5px 12px;
+      color: var(--gray1);
+      background: var(--white);
+    }
+
+    .divider { height: 1px; background: var(--gray4); margin: 2rem 0; }
+
+    .contact-lbl {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray3);
+    }
+    .contact-val { font-size: 13px; font-weight: 400; }
+    .c-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+      align-items: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .footer-logo span { font-weight: 300; color: var(--gray3); }
+    .footer-copy { font-size: 11px; color: var(--gray3); font-weight: 300; margin-top: 6px; }
+
+    .footer-links { display: flex; gap: 1.8rem; }
+    .footer-links a {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray3);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── LIGHTBOX ── */
+    .lb {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.93);
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .lb.open { display: flex; }
+    .lb-img-wrap {
+      max-width: 80vw;
+      max-height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-img-wrap img {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+    }
+    .lb-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .lb-meta {
+      font-size: 12px;
+      color: var(--gray3);
+      font-weight: 300;
+      text-align: center;
+    }
+    .lb-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 2rem;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray3);
+      cursor: pointer;
+      transition: color 0.15s;
+      font-family: var(--font);
+    }
+    .lb-close:hover { color: var(--white); }
+
+    /* ── FADE IN ── */
+    .fade {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      header { padding: 0 1.5rem; }
+      .hero { grid-template-columns: 1fr; height: auto; }
+      .hero-l { border-right: none; border-bottom: 1px solid var(--gray4); padding: 3rem 1.5rem; }
+      .hero-r { height: 60vw; }
+      .section-inner { padding: 3.5rem 1.5rem; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .cv-cols { grid-template-columns: 1fr; gap: 0; }
+      .about-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .about-portrait { max-width: 280px; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+
+    @media (max-width: 560px) {
+      .works-grid { grid-template-columns: 1fr; }
+      .hero-name { font-size: 2.5rem; }
+      .nav-item { padding: 0 0.8rem; font-size: 11px; }
+      .logo { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="hdr">
+  <div class="logo">SO BEOMSOO <span>소범수</span></div>
+  <nav>
+    <div class="nav-item active" id="n-works" onclick="goTo('works-section')">Works</div>
+    <div class="nav-item" id="n-cv" onclick="goTo('cv-section')">CV</div>
+    <div class="nav-item" id="n-about" onclick="goTo('about-section')">About</div>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-l">
+    <div>
+      <div class="hero-tag">Contemporary Painter · Seoul, Korea</div>
+      <div class="hero-name">SO<br>BEOMSOO</div>
+      <div class="hero-name-ko">소 범 수</div>
+      <p class="hero-desc">
+        도시의 풍경과 일상의 빛 속에서 회화의 언어를 탐구합니다.<br>
+        캔버스 위에서 시간과 장소가 만나는 순간을 기록합니다.
+      </p>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">—</div>
+          <div class="hero-stat-lbl">Exhibitions</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">—</div>
+          <div class="hero-stat-lbl">Years</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">—</div>
+          <div class="hero-stat-lbl">Works</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goTo('works-section')">View Works</button>
+    </div>
+  </div>
+  <div class="hero-r">
+    <img
+      src="https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp"
+      alt="Street — So Beomsoo, 2024"
+      onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';"
+    >
+    <div class="hero-img-ph" id="hero-ph" style="display:none;">
+      <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="700" fill="#EBEBEB"/>
+        <rect x="0" y="370" width="600" height="330" fill="#E0E0E0"/>
+        <rect x="155" y="185" width="52" height="310" fill="#D0D0D0"/>
+        <rect x="275" y="135" width="72" height="360" fill="#CACACA"/>
+        <rect x="398" y="200" width="46" height="295" fill="#D0D0D0"/>
+        <rect x="68" y="255" width="36" height="235" fill="#D5D5D5"/>
+        <rect x="490" y="230" width="40" height="265" fill="#D2D2D2"/>
+        <text x="300" y="645" text-anchor="middle" font-family="'Apple SD Gothic Neo', sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="4">작품 이미지를 여기에 등록해주세요</text>
+      </svg>
+    </div>
+    <div class="hero-img-label">Street, 2024 · Oil on canvas</div>
+  </div>
+</div>
+
+<!-- ── WORKS ── -->
+<div class="section" id="works-section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-title">Selected Works</span>
+      <span class="section-sub" id="works-range">—</span>
+    </div>
+    <div class="works-filters">
+      <button class="wf on" onclick="filterW('all', this)">All</button>
+      <button class="wf" onclick="filterW('oil', this)">Oil</button>
+      <button class="wf" onclick="filterW('acrylic', this)">Acrylic</button>
+      <button class="wf" onclick="filterW('drawing', this)">Drawing</button>
+    </div>
+    <div class="works-grid fade" id="wgrid"></div>
+  </div>
+</div>
+
+<!-- ── CV ── -->
+<div class="section" id="cv-section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-title">Curriculum Vitae</span>
+      <span class="section-sub">So, Beomsoo · 소범수</span>
+    </div>
+    <div class="cv-cols fade">
+      <div>
+        <div class="cv-group">
+          <div class="cv-group-title">Solo Exhibitions</div>
+          <!-- 개인전 이력을 아래 형식으로 추가해주세요 -->
+          <div class="cv-row">
+            <span class="cv-yr">2024</span>
+            <div><div class="cv-t">전시명을 입력해주세요</div><div class="cv-loc">갤러리명, 서울</div></div>
+          </div>
+          <div class="cv-row">
+            <span class="cv-yr">2023</span>
+            <div><div class="cv-t">전시명을 입력해주세요</div><div class="cv-loc">갤러리명, 서울</div></div>
+          </div>
+        </div>
+        <div class="cv-group">
+          <div class="cv-group-title">Group Exhibitions</div>
+          <!-- 단체전 이력을 아래 형식으로 추가해주세요 -->
+          <div class="cv-row">
+            <span class="cv-yr">2024</span>
+            <div><div class="cv-t">전시명을 입력해주세요</div><div class="cv-loc">공간명, 서울</div></div>
+          </div>
+          <div class="cv-row">
+            <span class="cv-yr">2023</span>
+            <div><div class="cv-t">전시명을 입력해주세요</div><div class="cv-loc">공간명, 서울</div></div>
+          </div>
+          <div class="cv-row">
+            <span class="cv-yr">2022</span>
+            <div><div class="cv-t">전시명을 입력해주세요</div><div class="cv-loc">공간명, 서울</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cv-group">
+          <div class="cv-group-title">Education</div>
+          <div class="cv-row">
+            <span class="cv-yr">20XX</span>
+            <div><div class="cv-t">학위 및 전공</div><div class="cv-loc">학교명</div></div>
+          </div>
+        </div>
+        <div class="cv-group">
+          <div class="cv-group-title">Awards &amp; Residencies</div>
+          <div class="cv-row">
+            <span class="cv-yr">20XX</span>
+            <div><div class="cv-t">수상 또는 레지던시명</div><div class="cv-loc">기관명</div></div>
+          </div>
+          <div class="cv-row">
+            <span class="cv-yr">20XX</span>
+            <div><div class="cv-t">수상 또는 레지던시명</div><div class="cv-loc">기관명</div></div>
+          </div>
+        </div>
+        <div class="cv-group">
+          <div class="cv-group-title">Press &amp; Publications</div>
+          <div class="cv-row">
+            <span class="cv-yr">20XX</span>
+            <div><div class="cv-t">기사 또는 출판물 제목</div><div class="cv-loc">매체명</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
+<div class="section" id="about-section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-title">About</span>
+      <span class="section-sub">Artist Statement</span>
+    </div>
+    <div class="about-layout fade">
+      <div class="about-portrait">
+        <!-- 작가 사진이 있으면 아래 img 태그의 src를 파일 경로로 바꿔주세요 -->
+        <div class="portrait-ph">
+          <svg width="120" height="160" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="60" cy="52" rx="32" ry="36" fill="#D0D0D0"/>
+            <ellipse cx="60" cy="160" rx="60" ry="52" fill="#D0D0D0"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="about-name-en">So Beomsoo</div>
+        <div class="about-name-ko">소 범 수</div>
+        <!-- 소개글을 아래에 직접 수정해주세요 -->
+        <p class="about-body">
+          소범수는 서울을 기반으로 활동하는 현대 화가입니다. 도시의 일상과 빛의 변화를 주요 주제로 삼아, 캔버스 위에 시간의 흔적과 장소의 기억을 기록합니다.
+        </p>
+        <p class="about-body">
+          작가 소개글과 작업 노트를 여기에 직접 입력해주세요.
+        </p>
+        <div class="tags">
+          <span class="tag">Oil Painting</span>
+          <span class="tag">Contemporary</span>
+          <span class="tag">Urban Landscape</span>
+          <span class="tag">Figurative</span>
+          <span class="tag">Seoul Based</span>
+        </div>
+        <div class="divider"></div>
+        <!-- 연락처를 아래에 직접 수정해주세요 -->
+        <div class="cv-group-title" style="margin-bottom: 1rem;">Contact</div>
+        <div class="c-row">
+          <span class="contact-lbl">Email</span>
+          <span class="contact-val">이메일 주소를 입력해주세요</span>
+        </div>
+        <div class="c-row">
+          <span class="contact-lbl">Instagram</span>
+          <span class="contact-val">@인스타그램 아이디</span>
+        </div>
+        <div class="c-row">
+          <span class="contact-lbl">Studio</span>
+          <span class="contact-val">서울, 대한민국</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-logo">SO BEOMSOO <span>소범수</span></div>
+    <div class="footer-copy">© 2026 All rights reserved.</div>
+  </div>
+  <div class="footer-links">
+    <a onclick="goTo('works-section')">Works</a>
+    <a onclick="goTo('cv-section')">CV</a>
+    <a onclick="goTo('about-section')">About</a>
+    <a href="https://instagram.com/" target="_blank">Instagram</a>
+  </div>
+</footer>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-close" onclick="closeLb()">Close ✕</button>
+  <div class="lb-img-wrap">
+    <img id="lb-img" src="" alt="">
+  </div>
+  <div>
+    <div class="lb-title" id="lb-title"></div>
+    <div class="lb-meta" id="lb-meta"></div>
+  </div>
+</div>
+
+<script>
+  /* ─────────────────────────────────────────
+   * 작품 데이터
+   * 작품을 추가하려면 아래 WORKS 배열에 항목을 추가하세요.
+   *
+   * 필드 설명:
+   *   title  : 작품 제목
+   *   year   : 제작 연도
+   *   medium : 매체 (예: 'Oil on canvas')
+   *   type   : 필터 분류 ('oil' | 'acrylic' | 'drawing')
+   *   img    : 이미지 경로 (같은 폴더에 있으면 'images/작품명.jpg' 형식)
+   *            이미지가 없으면 빈 문자열 '' 로 두세요.
+   * ───────────────────────────────────────── */
+  const WORKS = [
+    {
+      title: 'Street',
+      year: '2024',
+      medium: 'Oil on canvas',
+      type: 'oil',
+      img: 'https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp',
+      ph: ['#E8E8E8', '#C8C8C8', '#D8D8D8']
+    },
+    { title: '작품 2', year: '2024', medium: 'Oil on linen',      type: 'oil',     img: '', ph: ['#E0E8F0', '#A8C0D8', '#C8D8E8'] },
+    { title: '작품 3', year: '2023', medium: 'Acrylic on canvas', type: 'acrylic', img: '', ph: ['#F0E8E0', '#D8B898', '#E8D8C8'] },
+    { title: '작품 4', year: '2023', medium: 'Acrylic',           type: 'acrylic', img: '', ph: ['#E8F0E0', '#B8D098', '#D0E0C0'] },
+    { title: '작품 5', year: '2022', medium: 'Graphite',          type: 'drawing', img: '', ph: ['#EBEBEB', '#C0C0C0', '#D8D8D8'] },
+    { title: '작품 6', year: '2022', medium: 'Oil on canvas',     type: 'oil',     img: '', ph: ['#EEE8F0', '#C0A8D8', '#D8C8E8'] },
+  ];
+
+  /* 작품 placeholder SVG 생성 */
+  function makePh(c) {
+    return `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="300" fill="${c[0]}"/>
+      <ellipse cx="240" cy="135" rx="140" ry="84" fill="${c[1]}" opacity="0.6"/>
+      <rect x="40" y="186" width="320" height="66" fill="${c[2]}" opacity="0.45" rx="2"/>
+      <ellipse cx="100" cy="90" rx="60" ry="66" fill="${c[2]}" opacity="0.4"/>
+    </svg>`;
+  }
+
+  let curFilter = 'all';
+
+  function renderWorks() {
+    const list = curFilter === 'all' ? WORKS : WORKS.filter(w => w.type === curFilter);
+    const grid = document.getElementById('wgrid');
+
+    grid.innerHTML = list.map(w => {
+      const imgHTML = w.img
+        ? `<img src="${w.img}" alt="${w.title}" loading="lazy"
+             onerror="this.outerHTML='${makePh(w.ph).replace(/'/g, "\\'").replace(/\n/g, '')}';">`
+        : makePh(w.ph);
+
+      return `<div class="work-item" onclick="openLb('${w.img}','${w.title}','${w.medium} · ${w.year}')">
+        <div class="work-thumb">${imgHTML}</div>
+        <div class="work-info">
+          <span class="work-title">${w.title}</span>
+          <span class="work-meta">${w.year} · ${w.medium}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    /* 연도 범위 표시 */
+    const years = list.map(w => parseInt(w.year)).filter(Boolean);
+    if (years.length) {
+      const min = Math.min(...years), max = Math.max(...years);
+      document.getElementById('works-range').textContent = min === max ? String(min) : `${min} – ${max}`;
+    }
+
+    checkFades();
+  }
+
+  function filterW(type, el) {
+    curFilter = type;
+    document.querySelectorAll('.wf').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+    renderWorks();
+  }
+
+  /* ── LIGHTBOX ── */
+  function openLb(src, title, meta) {
+    document.getElementById('lb-img').src = src || '';
+    document.getElementById('lb-title').textContent = title;
+    document.getElementById('lb-meta').textContent = meta;
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+  /* ── SCROLL & FADE ── */
+  function goTo(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkFades() {
+    document.querySelectorAll('.fade:not(.in)').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 60) el.classList.add('in');
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    /* nav active 표시 */
+    ['works', 'cv', 'about'].forEach(id => {
+      const el = document.getElementById(id + '-section');
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      document.getElementById('n-' + id)?.classList.toggle('active', r.top <= 80 && r.bottom > 0);
+    });
+    checkFades();
+  }, { passive: true });
+
+  /* 초기 실행 */
+  renderWorks();
+  setTimeout(checkFades, 100);
+</script>
+</body>
+</html>
