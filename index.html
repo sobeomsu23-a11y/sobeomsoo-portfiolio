@@ -948,7 +948,7 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
       const imgHTML = w.img
         ? `<img src="${w.img}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
         : makePh(c);
-      return `<div class="work-item" onclick="openLb('${w.img||''}','${w.title}','${w.medium||''} · ${w.year||''}')">
+      return `<div class="work-item" onclick="openLb('${w.img||''}','${w.title}','${w.medium||''} · ${w.year||''}${w.size ? ' · ' + w.size : ''}')">
         <div class="work-thumb">${imgHTML}</div>
         <div class="work-info">
           <span class="work-title">${w.title}</span>
