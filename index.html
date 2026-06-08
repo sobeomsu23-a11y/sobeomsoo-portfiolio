@@ -276,14 +276,14 @@
     .work-thumb svg { width: 100%; height: 100%; }
 
     .work-info {
-      padding: 16px 18px;
+      padding: 10px 12px;
       border-top: 1px solid var(--gray4);
       display: flex;
       justify-content: space-between;
       align-items: baseline;
     }
-    .work-title { font-size: 13px; font-weight: 500; }
-    .work-meta { font-size: 11px; color: var(--gray2); font-weight: 300; }
+    .work-title { font-size: 11px; font-weight: 500; }
+    .work-meta { font-size: 9.5px; color: var(--gray2); font-weight: 300; }
 
     /* ── CV SECTION ── */
     #cv-section { background: var(--white); }
@@ -603,7 +603,11 @@
     }
 
     @media (max-width: 560px) {
-      .works-grid { grid-template-columns: 1fr; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .work-thumb { aspect-ratio: 4/5; }
+      .work-title { font-size: 10.4px; }
+      .work-meta { font-size: 8.8px; }
+      .work-info { padding: 10px 12px; }
       .hero-name { font-size: 2.5rem; }
       .nav-item { padding: 0 0.8rem; font-size: 11px; }
       .logo { font-size: 12px; }
@@ -633,11 +637,10 @@
   </div>
   <div class="hero-r">
     <img
-  src=""
-  alt=""
-  style="display:none"
-  id="heroMainImg"
->
+      src="https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp"
+      alt="Street — So Beomsoo, 2024"
+      onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';"
+    >
     <div class="hero-img-ph" id="hero-ph" style="display:none;">
       <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="600" height="700" fill="#EBEBEB"/>
@@ -650,7 +653,7 @@
         <text x="300" y="645" text-anchor="middle" font-family="'Apple SD Gothic Neo', sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="4">작품 이미지를 여기에 등록해주세요</text>
       </svg>
     </div>
-    <div class="hero-img-label" style="display:none"></div>
+    <div class="hero-img-label">Street, 2024 · Oil on canvas</div>
   </div>
 </div>
 
@@ -860,14 +863,14 @@
   /* ═══════════════════════════════════════════
    * ▼ Supabase 설정 — 여기만 수정하세요!
    * ═══════════════════════════════════════════ */
-  const SUPABASE_URL = 'https://jytyhonnmtqukdisdyjh.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
+  const SUPABASE_URL = 'https://여기에_Project_URL_붙여넣기';
+  const SUPABASE_KEY = '여기에_Publishable_key_붙여넣기';
   /* ═══════════════════════════════════════════ */
 
   /* Supabase REST API */
   async function sb(table, query = '') {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&order=year.desc,created_at.desc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
       });
       return res.ok ? res.json() : [];
@@ -902,23 +905,17 @@
   /* ── HERO ── */
   async function loadHero() {
     const h = await sbSingle('hero');
-    const heroImg = document.querySelector('.hero-r img');
-    const heroLabel = document.querySelector('.hero-img-label');
     if (h && h.img) {
+      const heroImg = document.querySelector('.hero-r img');
+      const heroLabel = document.querySelector('.hero-img-label');
       if (heroImg) {
         heroImg.src = h.img;
-        heroImg.style.display = 'block';
         heroImg.onerror = () => {
           heroImg.style.display = 'none';
           document.getElementById('hero-ph').style.display = 'flex';
         };
       }
-      if (heroLabel) {
-        heroLabel.textContent = h.caption || '';
-        heroLabel.style.display = 'block';
-      }
-    } else {
-      document.getElementById('hero-ph').style.display = 'flex';
+      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
     }
   }
 
@@ -997,7 +994,7 @@
     const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
     const hero = document.getElementById('panelHero');
     if (e.hero_img) {
-      hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="openLb('${e.hero_img}','${e.title}','')">`;
+      hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover">`;
     } else {
       hero.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="800" height="450" fill="#EBEBEB"/>
@@ -1016,7 +1013,7 @@
     const gallery = document.getElementById('panelGallery');
     const imgs = e.gallery || [];
     gallery.innerHTML = imgs.length
-      ? imgs.map(src => `<div class="exh-gallery-item" onclick="openLb('${src}','전시 전경','')" style="cursor:pointer"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
+      ? imgs.map(src => `<div class="exh-gallery-item"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
       : `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>
          <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>`;
     document.getElementById('exhPanel').classList.add('open');
