@@ -871,7 +871,7 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
   /* Supabase REST API */
   async function sb(table, query = '') {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&&order=year.desc,updated_at.desc`, {
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
       });
       return res.ok ? res.json() : [];
