@@ -953,19 +953,18 @@
 </footer>
 
 <!-- ── LIGHTBOX ── -->
-<div class="lb" id="lb">
-  <div style="position:fixed;inset:0;z-index:0;" onclick="closeLb()"></div>
-  <button class="lb-close" onclick="closeLb()">Close ✕</button>
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-close" onclick="event.stopPropagation();closeLb()">Close ✕</button>
 
-  <div class="lb-slider">
-    <button class="lb-arrow prev" id="lb-prev" onclick="lbGo(-1)">&#8592;</button>
+  <div class="lb-slider" onclick="event.stopPropagation()">
+    <button class="lb-arrow prev" id="lb-prev" onclick="event.stopPropagation();lbGo(-1)">&#8592;</button>
     <div class="lb-img-wrap">
-      <img id="lb-img" src="" alt="" onclick="lbGo(1)">
+      <img id="lb-img" src="" alt="">
     </div>
-    <button class="lb-arrow next" id="lb-next" onclick="lbGo(1)">&#8594;</button>
+    <button class="lb-arrow next" id="lb-next" onclick="event.stopPropagation();lbGo(1)">&#8594;</button>
   </div>
 
-  <div class="lb-bottom">
+  <div class="lb-bottom" onclick="event.stopPropagation()">
     <div class="lb-info">
       <div class="lb-title" id="lb-title"></div>
       <div class="lb-meta" id="lb-meta"></div>
@@ -1193,7 +1192,6 @@
   let lbIdx = 0;
 
   function openLb(images, title, meta) {
-    // images는 배열 또는 단일 문자열
     lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
     lbIdx = 0;
     document.getElementById('lb-title').textContent = title;
