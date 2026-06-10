@@ -461,8 +461,9 @@
       transition: color 0.15s;
     }
     .exh-panel-close:hover { color: var(--black); }
-    .exh-panel-hero { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--gray5); }
-    .exh-panel-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .exh-panel-hero { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--gray5); cursor: pointer; }
+    .exh-panel-hero img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.15s; }
+    .exh-panel-hero:hover img { opacity: 0.88; }
     .exh-panel-content { padding: 2rem 2.5rem 4rem; }
     .exh-panel-tag {
       display: inline-block; font-size: 10px; font-weight: 500;
@@ -491,8 +492,9 @@
     }
     .exh-panel-text { font-size: 14px; font-weight: 300; line-height: 1.95; color: var(--gray1); }
     .exh-panel-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 1rem; }
-    .exh-gallery-item { aspect-ratio: 4/3; overflow: hidden; background: var(--gray5); }
-    .exh-gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    .exh-gallery-item { aspect-ratio: 4/3; overflow: hidden; background: var(--gray5); cursor: pointer; }
+    .exh-gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.15s; }
+    .exh-gallery-item:hover img { opacity: 0.88; }
     .exh-gallery-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--gray4); }
 
     /* ── FOOTER ── */
@@ -953,18 +955,18 @@
 </footer>
 
 <!-- ── LIGHTBOX ── -->
-<div class="lb" id="lb" onclick="closeLb()">
-  <button class="lb-close" onclick="event.stopPropagation();closeLb()">Close ✕</button>
+<div class="lb" id="lb">
+  <button class="lb-close" id="lb-close-btn">Close ✕</button>
 
-  <div class="lb-slider" onclick="event.stopPropagation()">
-    <button class="lb-arrow prev" id="lb-prev" onclick="event.stopPropagation();lbGo(-1)">&#8592;</button>
-    <div class="lb-img-wrap">
+  <div class="lb-slider" id="lb-slider">
+    <button class="lb-arrow prev" id="lb-prev">&#8592;</button>
+    <div class="lb-img-wrap" id="lb-img-wrap">
       <img id="lb-img" src="" alt="">
     </div>
-    <button class="lb-arrow next" id="lb-next" onclick="event.stopPropagation();lbGo(1)">&#8594;</button>
+    <button class="lb-arrow next" id="lb-next">&#8594;</button>
   </div>
 
-  <div class="lb-bottom" onclick="event.stopPropagation()">
+  <div class="lb-bottom" id="lb-bottom">
     <div class="lb-info">
       <div class="lb-title" id="lb-title"></div>
       <div class="lb-meta" id="lb-meta"></div>
@@ -1116,8 +1118,14 @@
     if (!e) return;
     const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
     const hero = document.getElementById('panelHero');
+
+    // hero_img + gallery 이미지를 합쳐서 라이트박스용 배열 생성
+    const galleryImgs = Array.isArray(e.gallery) ? e.gallery.filter(Boolean) : [];
+    const allImgs = [e.hero_img, ...galleryImgs].filter(Boolean);
+
     if (e.hero_img) {
       hero.innerHTML = `<img src="${e.hero_img}" alt="${e.title}" style="width:100%;height:100%;object-fit:cover">`;
+      hero.onclick = () => openLb(allImgs, e.title, e.period || '');
     } else {
       hero.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="800" height="450" fill="#EBEBEB"/>
@@ -1126,6 +1134,8 @@
         <rect x="580" y="90" width="160" height="250" fill="#D5D5D5"/>
         <text x="400" y="425" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="3">전시 전경 이미지</text>
       </svg>`;
+      hero.onclick = null;
+      hero.style.cursor = 'default';
     }
     document.getElementById('panelType').textContent = typeLabel[e.type] || e.type;
     document.getElementById('panelTitle').textContent = e.title;
@@ -1133,12 +1143,20 @@
     document.getElementById('panelVenue').textContent = e.venue || '—';
     document.getElementById('panelArtists').textContent = e.artists || '—';
     document.getElementById('panelIntro').textContent = e.intro || '—';
+
     const gallery = document.getElementById('panelGallery');
-    const imgs = e.gallery || [];
-    gallery.innerHTML = imgs.length
-      ? imgs.map(src => `<div class="exh-gallery-item"><img src="${src}" alt="전시 전경" style="width:100%;height:100%;object-fit:cover"></div>`).join('')
-      : `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>
+    if (galleryImgs.length) {
+      gallery.innerHTML = galleryImgs.map((src, i) => {
+        // 라이트박스 시작 인덱스: hero가 있으면 i+1, 없으면 i
+        const lbIdx = e.hero_img ? i + 1 : i;
+        return `<div class="exh-gallery-item" onclick="openLbAt(${JSON.stringify(allImgs).replace(/"/g,'&quot;')}, ${lbIdx}, '${e.title.replace(/'/g,"\\'")}', '${(e.period||'').replace(/'/g,"\\'")}')">
+          <img src="${src}" alt="전시 전경">
+        </div>`;
+      }).join('');
+    } else {
+      gallery.innerHTML = `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>
          <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E8E8E8" rx="2"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#BBBBBB" font-family="sans-serif">이미지</text></svg></div></div>`;
+    }
     document.getElementById('exhPanel').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -1194,6 +1212,16 @@
   function openLb(images, title, meta) {
     lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
     lbIdx = 0;
+    document.getElementById('lb-title').textContent = title;
+    document.getElementById('lb-meta').textContent = meta;
+    _lbRender();
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openLbAt(images, startIdx, title, meta) {
+    lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
+    lbIdx = Math.min(startIdx, lbImages.length - 1);
     document.getElementById('lb-title').textContent = title;
     document.getElementById('lb-meta').textContent = meta;
     _lbRender();
@@ -1284,6 +1312,29 @@
       if (e.key === 'ArrowRight') lbGo(1);
     }
   });
+
+  /* ── 라이트박스 클릭 이벤트 설정 ── */
+  (function initLbEvents() {
+    const lb       = document.getElementById('lb');
+    const imgWrap  = document.getElementById('lb-img-wrap');
+    const bottom   = document.getElementById('lb-bottom');
+    const prevBtn  = document.getElementById('lb-prev');
+    const nextBtn  = document.getElementById('lb-next');
+    const closeBtn = document.getElementById('lb-close-btn');
+
+    // 배경(lb 전체) 클릭 → 닫기
+    lb.addEventListener('click', () => closeLb());
+
+    // 이미지·하단정보·화살표는 클릭 전파 차단
+    [imgWrap, bottom].forEach(el => el.addEventListener('click', e => e.stopPropagation()));
+
+    // 화살표
+    prevBtn.addEventListener('click', e => { e.stopPropagation(); lbGo(-1); });
+    nextBtn.addEventListener('click', e => { e.stopPropagation(); lbGo(1); });
+
+    // 닫기 버튼
+    closeBtn.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+  })();
 
   /* ── 초기 로드 ── */
   async function init() {
