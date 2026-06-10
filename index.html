@@ -569,12 +569,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
     .lb-img-wrap img {
       max-width: 100%;
       max-height: 72vh;
       object-fit: contain;
-      transition: opacity 0.2s;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
+    }
+    .lb-img-wrap img.slide-left {
+      animation: lbSlideLeft 0.28s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    .lb-img-wrap img.slide-right {
+      animation: lbSlideRight 0.28s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    @keyframes lbSlideLeft {
+      from { transform: translateX(60px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+    @keyframes lbSlideRight {
+      from { transform: translateX(-60px); opacity: 0; }
+      to   { transform: translateX(0);     opacity: 1; }
     }
 
     /* 이전/다음 버튼 */
@@ -723,11 +738,10 @@
   </div>
   <div class="hero-r">
     <img
-  id="hero-img"
-  src=""
-  alt="So Beomsoo"
-  style="opacity:0; transition: opacity 0.4s;"
->
+      src="https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp"
+      alt="Street — So Beomsoo, 2024"
+      onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';"
+    >
     <div class="hero-img-ph" id="hero-ph" style="display:none;">
       <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="600" height="700" fill="#EBEBEB"/>
@@ -935,7 +949,7 @@
 </footer>
 
 <!-- ── LIGHTBOX ── -->
-<div class="lb" id="lb">
+<div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
   <button class="lb-close" onclick="closeLb()">Close ✕</button>
 
   <div class="lb-slider">
@@ -1001,21 +1015,20 @@
 
   /* ── HERO ── */
   async function loadHero() {
-  const h = await sbSingle('hero');
-  const heroImg = document.querySelector('.hero-r img');
-  const heroLabel = document.querySelector('.hero-img-label');
-  if (h && h.img && heroImg) {
-    heroImg.onload = () => { heroImg.style.opacity = '1'; };
-    heroImg.onerror = () => {
-      heroImg.style.display = 'none';
-      document.getElementById('hero-ph').style.display = 'flex';
-    };
-    heroImg.src = h.img;
-    if (heroLabel && h.caption) heroLabel.textContent = h.caption;
-  } else if (heroImg) {
-    document.getElementById('hero-ph').style.display = 'flex';
+    const h = await sbSingle('hero');
+    if (h && h.img) {
+      const heroImg = document.querySelector('.hero-r img');
+      const heroLabel = document.querySelector('.hero-img-label');
+      if (heroImg) {
+        heroImg.src = h.img;
+        heroImg.onerror = () => {
+          heroImg.style.display = 'none';
+          document.getElementById('hero-ph').style.display = 'flex';
+        };
+      }
+      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
+    }
   }
-}
 
   /* ── WORKS ── */
   let WORKS = [];
@@ -1183,7 +1196,7 @@
     document.body.style.overflow = 'hidden';
   }
 
-  function _lbRender() {
+  function _lbRender(dir) {
     const img = document.getElementById('lb-img');
     const prev = document.getElementById('lb-prev');
     const next = document.getElementById('lb-next');
@@ -1191,21 +1204,26 @@
     const counter = document.getElementById('lb-counter');
     const total = lbImages.length;
 
-    img.style.opacity = '0';
+    // 슬라이드 애니메이션
+    img.classList.remove('slide-left', 'slide-right');
     img.src = lbImages[lbIdx] || '';
-    img.onload = () => { img.style.opacity = '1'; };
-    img.onerror = () => { img.style.opacity = '1'; };
+    if (dir === 1) {
+      img.classList.add('slide-left');
+    } else if (dir === -1) {
+      img.classList.add('slide-right');
+    } else {
+      img.style.opacity = '0';
+      img.onload = () => { img.style.opacity = '1'; };
+      img.onerror = () => { img.style.opacity = '1'; };
+    }
 
     prev.disabled = lbIdx === 0;
     next.disabled = lbIdx === total - 1;
-    // 이미지 1장이면 화살표 숨김
     prev.style.display = total > 1 ? 'flex' : 'none';
     next.style.display = total > 1 ? 'flex' : 'none';
 
-    // 카운터
     counter.textContent = total > 1 ? `${lbIdx + 1} / ${total}` : '';
 
-    // 썸네일 스트립 (2장 이상일 때만)
     if (total > 1) {
       thumbs.innerHTML = lbImages.map((src, i) =>
         `<img class="lb-thumb${i === lbIdx ? ' active' : ''}" src="${src}" alt="" onclick="lbJump(${i})" loading="lazy">`
@@ -1219,12 +1237,13 @@
     const next = lbIdx + dir;
     if (next < 0 || next >= lbImages.length) return;
     lbIdx = next;
-    _lbRender();
+    _lbRender(dir);
   }
 
   function lbJump(idx) {
+    const dir = idx > lbIdx ? 1 : -1;
     lbIdx = idx;
-    _lbRender();
+    _lbRender(dir);
   }
 
   function closeLb() {
