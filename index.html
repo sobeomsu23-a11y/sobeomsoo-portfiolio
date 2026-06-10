@@ -1142,7 +1142,7 @@
     document.getElementById('panelPeriod').textContent = e.period || '—';
     document.getElementById('panelVenue').textContent = e.venue || '—';
     document.getElementById('panelArtists').textContent = e.artists || '—';
-    document.getElementById('panelIntro').textContent = e.intro || '—';
+    document.getElementById('panelIntro').innerHTML = (e.intro || '—').replace(/\n/g, '<br>');
 
     const gallery = document.getElementById('panelGallery');
     if (galleryImgs.length) {
