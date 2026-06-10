@@ -562,6 +562,7 @@
       width: 100vw;
       flex: 1;
       min-height: 0;
+      z-index: 1;
     }
     .lb-img-wrap {
       max-width: 80vw;
@@ -624,6 +625,8 @@
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
+      z-index: 1;
+      position: relative;
     }
     .lb-info { text-align: center; }
     .lb-title {
@@ -738,9 +741,10 @@
   </div>
   <div class="hero-r">
     <img
-      src="https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp"
-      alt="Street — So Beomsoo, 2024"
-      onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';"
+      id="hero-img"
+      src=""
+      alt="So Beomsoo"
+      style="opacity:0; transition: opacity 0.4s;"
     >
     <div class="hero-img-ph" id="hero-ph" style="display:none;">
       <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -754,7 +758,7 @@
         <text x="300" y="645" text-anchor="middle" font-family="'Apple SD Gothic Neo', sans-serif" font-size="11" fill="#AAAAAA" letter-spacing="4">작품 이미지를 여기에 등록해주세요</text>
       </svg>
     </div>
-    <div class="hero-img-label">Street, 2024 · Oil on canvas</div>
+    <div class="hero-img-label" id="hero-label"></div>
   </div>
 </div>
 
@@ -949,7 +953,8 @@
 </footer>
 
 <!-- ── LIGHTBOX ── -->
-<div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
+<div class="lb" id="lb">
+  <div style="position:fixed;inset:0;z-index:0;" onclick="closeLb()"></div>
   <button class="lb-close" onclick="closeLb()">Close ✕</button>
 
   <div class="lb-slider">
@@ -1016,17 +1021,19 @@
   /* ── HERO ── */
   async function loadHero() {
     const h = await sbSingle('hero');
-    if (h && h.img) {
-      const heroImg = document.querySelector('.hero-r img');
-      const heroLabel = document.querySelector('.hero-img-label');
-      if (heroImg) {
-        heroImg.src = h.img;
-        heroImg.onerror = () => {
-          heroImg.style.display = 'none';
-          document.getElementById('hero-ph').style.display = 'flex';
-        };
-      }
+    const heroImg = document.getElementById('hero-img');
+    const heroLabel = document.getElementById('hero-label');
+    if (h && h.img && heroImg) {
+      heroImg.onload = () => { heroImg.style.opacity = '1'; };
+      heroImg.onerror = () => {
+        heroImg.style.display = 'none';
+        document.getElementById('hero-ph').style.display = 'flex';
+      };
+      heroImg.src = h.img;
       if (heroLabel && h.caption) heroLabel.textContent = h.caption;
+    } else if (heroImg) {
+      heroImg.style.display = 'none';
+      document.getElementById('hero-ph').style.display = 'flex';
     }
   }
 
