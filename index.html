@@ -534,34 +534,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
     }
     .lb.open { display: flex; }
-    .lb-img-wrap {
-      max-width: 80vw;
-      max-height: 75vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .lb-img-wrap img {
-      max-width: 100%;
-      max-height: 75vh;
-      object-fit: contain;
-    }
-    .lb-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--white);
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    .lb-meta {
-      font-size: 12px;
-      color: var(--gray3);
-      font-weight: 300;
-      text-align: center;
-    }
+
     .lb-close {
       position: fixed;
       top: 1.5rem;
@@ -574,8 +549,119 @@
       cursor: pointer;
       transition: color 0.15s;
       font-family: var(--font);
+      z-index: 10;
     }
     .lb-close:hover { color: var(--white); }
+
+    /* 슬라이드 영역 */
+    .lb-slider {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      flex: 1;
+      min-height: 0;
+    }
+    .lb-img-wrap {
+      max-width: 80vw;
+      max-height: 72vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-img-wrap img {
+      max-width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      transition: opacity 0.2s;
+    }
+
+    /* 이전/다음 버튼 */
+    .lb-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.6);
+      font-size: 18px;
+      line-height: 1;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: var(--font);
+    }
+    .lb-arrow:hover { border-color: var(--white); color: var(--white); }
+    .lb-arrow.prev { left: 2rem; }
+    .lb-arrow.next { right: 2rem; }
+    .lb-arrow:disabled { opacity: 0.2; cursor: default; }
+
+    /* 하단 정보 + 썸네일 */
+    .lb-bottom {
+      width: 100%;
+      padding: 1rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .lb-info { text-align: center; }
+    .lb-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .lb-meta {
+      font-size: 12px;
+      color: var(--gray3);
+      font-weight: 300;
+    }
+
+    /* 썸네일 스트립 */
+    .lb-thumbs {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .lb-thumb {
+      width: 52px;
+      height: 40px;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.45;
+      border: 1.5px solid transparent;
+      transition: opacity 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .lb-thumb.active { opacity: 1; border-color: var(--white); }
+    .lb-thumb:hover { opacity: 0.85; }
+
+    /* 인디케이터 (이미지 1장일 때 대신 표시) */
+    .lb-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .lb-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.15s;
+    }
+    .lb-dot.active { background: var(--white); }
+
+    /* 카운터 */
+    .lb-counter {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      font-variant-numeric: tabular-nums;
+    }
 
     /* ── FADE IN ── */
     .fade {
@@ -637,11 +723,10 @@
   </div>
   <div class="hero-r">
     <img
-  src=""
-  alt=""
-  style="display:none"
-  id="heroMainImg"
->
+      src="https://kyebtbufehrdsxvmcwtm.supabase.co/storage/v1/object/public/images/works/street.webp"
+      alt="Street — So Beomsoo, 2024"
+      onerror="this.style.display='none'; document.getElementById('hero-ph').style.display='flex';"
+    >
     <div class="hero-img-ph" id="hero-ph" style="display:none;">
       <svg width="100%" height="100%" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <rect width="600" height="700" fill="#EBEBEB"/>
@@ -823,7 +908,7 @@
       </div>
       <div class="c-row">
         <span class="contact-lbl">Instagram</span>
-        <a class="contact-val" href="https://instagram.com/sobeomsoo/" target="_blank" style="text-decoration:none;color:inherit">sobeomsoo</a>
+        <span class="contact-val">@인스타그램 아이디</span>
       </div>
       <div class="c-row">
         <span class="contact-lbl">Studio</span>
@@ -844,19 +929,29 @@
     <a onclick="goTo('exhibition-section')">Exhibition</a>
     <a onclick="goTo('cv-section')">CV</a>
     <a onclick="goTo('about-section')">About</a>
-    <a href="https://instagram.com/sobeomsoo/" target="_blank">Instagram</a>
+    <a href="https://instagram.com/" target="_blank">Instagram</a>
   </div>
 </footer>
 
 <!-- ── LIGHTBOX ── -->
-<div class="lb" id="lb" onclick="closeLb()">
+<div class="lb" id="lb">
   <button class="lb-close" onclick="closeLb()">Close ✕</button>
-  <div class="lb-img-wrap">
-    <img id="lb-img" src="" alt="">
+
+  <div class="lb-slider">
+    <button class="lb-arrow prev" id="lb-prev" onclick="lbGo(-1)">&#8592;</button>
+    <div class="lb-img-wrap">
+      <img id="lb-img" src="" alt="" onclick="lbGo(1)">
+    </div>
+    <button class="lb-arrow next" id="lb-next" onclick="lbGo(1)">&#8594;</button>
   </div>
-  <div>
-    <div class="lb-title" id="lb-title"></div>
-    <div class="lb-meta" id="lb-meta"></div>
+
+  <div class="lb-bottom">
+    <div class="lb-info">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-meta" id="lb-meta"></div>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+    <div class="lb-counter" id="lb-counter"></div>
   </div>
 </div>
 
@@ -864,14 +959,14 @@
   /* ═══════════════════════════════════════════
    * ▼ Supabase 설정 — 여기만 수정하세요!
    * ═══════════════════════════════════════════ */
-  const SUPABASE_URL = 'https://jytyhonnmtqukdisdyjh.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
+  const SUPABASE_URL = 'https://여기에_Project_URL_붙여넣기';
+  const SUPABASE_KEY = '여기에_Publishable_key_붙여넣기';
   /* ═══════════════════════════════════════════ */
 
   /* Supabase REST API */
   async function sb(table, query = '') {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&&order=year.desc,created_at.desc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
       });
       return res.ok ? res.json() : [];
@@ -906,24 +1001,17 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
   /* ── HERO ── */
   async function loadHero() {
     const h = await sbSingle('hero');
-    const heroImg = document.querySelector('.hero-r img');
-    const heroLabel = document.querySelector('.hero-img-label');
     if (h && h.img) {
+      const heroImg = document.querySelector('.hero-r img');
+      const heroLabel = document.querySelector('.hero-img-label');
       if (heroImg) {
         heroImg.src = h.img;
-        heroImg.style.display = 'block';
         heroImg.onerror = () => {
           heroImg.style.display = 'none';
           document.getElementById('hero-ph').style.display = 'flex';
         };
       }
-      if (heroLabel) {
-        heroLabel.textContent = h.caption || '';
-        heroLabel.style.display = 'block';
-      }
-    } else {
-      if (heroImg) heroImg.style.display = 'none';
-      document.getElementById('hero-ph').style.display = 'flex';
+      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
     }
   }
 
@@ -945,10 +1033,15 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
     }
     grid.innerHTML = list.map((w, i) => {
       const c = PH_COLORS[i % PH_COLORS.length];
-      const imgHTML = w.img
-        ? `<img src="${w.img}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
+      // images 배열 지원: 첫 번째 이미지를 썸네일로 사용, 없으면 기존 img 필드 fallback
+      const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
+      const thumb = images[0] || '';
+      const imgHTML = thumb
+        ? `<img src="${thumb}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
         : makePh(c);
-      return `<div class="work-item" onclick="openLb('${w.img||''}','${w.title}','${w.medium||''} · ${w.year||''}${w.size ? ' · ' + w.size : ''}')">
+      // images를 JSON으로 인코딩해서 onclick에 전달
+      const imagesJson = JSON.stringify(images).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      return `<div class="work-item" onclick="openLb(${JSON.stringify(images).replace(/"/g,'&quot;')},'${w.title.replace(/'/g,"\\'")}','${(w.medium||'') + ' · ' + (w.year||'')}')">
         <div class="work-thumb">${imgHTML}</div>
         <div class="work-info">
           <span class="work-title">${w.title}</span>
@@ -1017,7 +1110,7 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
     document.getElementById('panelPeriod').textContent = e.period || '—';
     document.getElementById('panelVenue').textContent = e.venue || '—';
     document.getElementById('panelArtists').textContent = e.artists || '—';
-    document.getElementById('panelIntro').innerHTML = (e.intro || '—').replace(/\n/g, '<br>');
+    document.getElementById('panelIntro').textContent = e.intro || '—';
     const gallery = document.getElementById('panelGallery');
     const imgs = e.gallery || [];
     gallery.innerHTML = imgs.length
@@ -1073,16 +1166,69 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
   }
 
   /* ── LIGHTBOX ── */
-  function openLb(src, title, meta) {
-    document.getElementById('lb-img').src = src || '';
+  let lbImages = [];
+  let lbIdx = 0;
+
+  function openLb(images, title, meta) {
+    // images는 배열 또는 단일 문자열
+    lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
+    lbIdx = 0;
     document.getElementById('lb-title').textContent = title;
     document.getElementById('lb-meta').textContent = meta;
+    _lbRender();
     document.getElementById('lb').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
+  function _lbRender() {
+    const img = document.getElementById('lb-img');
+    const prev = document.getElementById('lb-prev');
+    const next = document.getElementById('lb-next');
+    const thumbs = document.getElementById('lb-thumbs');
+    const counter = document.getElementById('lb-counter');
+    const total = lbImages.length;
+
+    img.style.opacity = '0';
+    img.src = lbImages[lbIdx] || '';
+    img.onload = () => { img.style.opacity = '1'; };
+    img.onerror = () => { img.style.opacity = '1'; };
+
+    prev.disabled = lbIdx === 0;
+    next.disabled = lbIdx === total - 1;
+    // 이미지 1장이면 화살표 숨김
+    prev.style.display = total > 1 ? 'flex' : 'none';
+    next.style.display = total > 1 ? 'flex' : 'none';
+
+    // 카운터
+    counter.textContent = total > 1 ? `${lbIdx + 1} / ${total}` : '';
+
+    // 썸네일 스트립 (2장 이상일 때만)
+    if (total > 1) {
+      thumbs.innerHTML = lbImages.map((src, i) =>
+        `<img class="lb-thumb${i === lbIdx ? ' active' : ''}" src="${src}" alt="" onclick="lbJump(${i})" loading="lazy">`
+      ).join('');
+    } else {
+      thumbs.innerHTML = '';
+    }
+  }
+
+  function lbGo(dir) {
+    const next = lbIdx + dir;
+    if (next < 0 || next >= lbImages.length) return;
+    lbIdx = next;
+    _lbRender();
+  }
+
+  function lbJump(idx) {
+    lbIdx = idx;
+    _lbRender();
+  }
+
   function closeLb() {
     document.getElementById('lb').classList.remove('open');
     document.body.style.overflow = '';
+    lbImages = [];
+    lbIdx = 0;
   }
 
   /* ── SCROLL & FADE ── */
@@ -1104,7 +1250,13 @@ const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
     checkFades();
   }, { passive: true });
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLb(); closePanel(); } });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLb(); closePanel(); }
+    if (document.getElementById('lb').classList.contains('open')) {
+      if (e.key === 'ArrowLeft') lbGo(-1);
+      if (e.key === 'ArrowRight') lbGo(1);
+    }
+  });
 
   /* ── 초기 로드 ── */
   async function init() {
