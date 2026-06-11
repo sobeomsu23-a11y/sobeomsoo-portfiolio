@@ -1096,7 +1096,7 @@
     Object.keys(map).forEach(type => {
       const el = document.getElementById(map[type]);
       if (!el) return;
-      const list = EXHIBITIONS.filter(e => e.type === type);
+      const list = EXHIBITIONS.filter(e => e.type === type).sort((a, b) => (b.year || '').localeCompare(a.year || ''));
       if (!list.length) {
         el.innerHTML = '<div style="padding:1rem 0;color:#999;font-size:12px;">등록된 전시가 없습니다</div>';
         return;
