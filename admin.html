@@ -906,6 +906,20 @@
     }
     openModal('exhModal');
   }
+  function exhGalleryRemove(idx) {
+  galleryUrls.splice(idx, 1);
+  const preview = document.getElementById('exhGalleryPreview');
+  preview.innerHTML = '';
+  galleryUrls.forEach((url, i) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;';
+    wrap.innerHTML = `
+      <img src="${url}" style="width:80px;height:60px;object-fit:cover;border:1px solid #E0E0E0;display:block;">
+      <button onclick="exhGalleryRemove(${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.55);border:none;color:#fff;font-size:11px;width:18px;height:18px;cursor:pointer;">✕</button>
+    `;
+    preview.appendChild(wrap);
+  });
+}
   function editExh(id) { openExhModal(id); }
 
   async function saveExh() {
