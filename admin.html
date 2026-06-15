@@ -894,12 +894,15 @@
     if (e?.gallery?.length) {
       galleryUrls = [...e.gallery];
       const preview = document.getElementById('exhGalleryPreview');
-      e.gallery.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.style.cssText = 'width:80px;height:60px;object-fit:cover;border:1px solid #E0E0E0';
-        preview.appendChild(img);
-      });
+      e.gallery.forEach((url, i) => {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:relative;display:inline-block;';
+  wrap.innerHTML = `
+    <img src="${url}" style="width:80px;height:60px;object-fit:cover;border:1px solid #E0E0E0;display:block;">
+    <button onclick="exhGalleryRemove(${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.55);border:none;color:#fff;font-size:11px;width:18px;height:18px;cursor:pointer;">✕</button>
+  `;
+  preview.appendChild(wrap);
+});
     }
     openModal('exhModal');
   }
