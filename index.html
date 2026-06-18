@@ -329,18 +329,30 @@
     .wf.on { color: var(--white); background: var(--black); border-color: var(--black); }
 
     /* horizontal scroll row */
-    .works-scroll-wrap {
+   .works-scroll-wrap {
       overflow-x: auto;
       overflow-y: visible;
       margin: 0 -2rem;
-      padding: 0 2rem 1.5rem;
+      padding: 0 2rem 2rem;
       scrollbar-width: none;
       transition: all 0.35s ease;
+      -webkit-overflow-scrolling: touch;
     }
+    .works-scroll-wrap::-webkit-scrollbar { display: none; }
     .works-scroll-wrap.expanded {
-      overflow-x: visible;
+      overflow: visible;
       margin: 0;
       padding: 0 0 1rem;
+    }
+    .work-card {
+      width: 240px;
+      flex-shrink: 0;
+      border-radius: var(--radius-sm);
+      overflow: visible;
+      background: var(--gray5);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .works-scroll-wrap::-webkit-scrollbar { display: none; }
     .works-scroll-wrap.expanded {
@@ -443,6 +455,7 @@
       aspect-ratio: 3/4;
       overflow: hidden;
       position: relative;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     }
     .work-thumb img, .work-thumb svg {
       width: 100%; height: 100%;
