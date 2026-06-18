@@ -331,12 +331,11 @@
     /* horizontal scroll row */
    .works-scroll-wrap {
       overflow-x: auto;
-      overflow-y: visible;
+      overflow-y: clip;
       margin: 0 -2rem;
       padding: 0 2rem 2rem;
       scrollbar-width: none;
       transition: all 0.35s ease;
-      -webkit-overflow-scrolling: touch;
     }
     .works-scroll-wrap::-webkit-scrollbar { display: none; }
     .works-scroll-wrap.expanded {
@@ -344,7 +343,7 @@
       margin: 0;
       padding: 0 0 1rem;
     }
-    .work-card {
+   .work-card {
       width: 240px;
       flex-shrink: 0;
       border-radius: var(--radius-sm);
@@ -451,7 +450,7 @@
       transform: rotate(45deg);
     }
 
-    .work-thumb {
+   .work-thumb {
       aspect-ratio: 3/4;
       overflow: hidden;
       position: relative;
