@@ -331,8 +331,9 @@
     /* horizontal scroll row */
     .works-scroll-wrap {
       overflow-x: auto;
+      overflow-y: visible;
       margin: 0 -2rem;
-      padding: 0 2rem 1rem;
+      padding: 0 2rem 1.5rem;
       scrollbar-width: none;
       transition: all 0.35s ease;
     }
@@ -805,7 +806,7 @@
       .logo { font-size: 14px; }
       .logo-ko { font-size: 11px; }
       footer { margin: 0 -0.8rem; }
-      .works-scroll-wrap { margin: 0 -0.8rem; padding: 0 0.8rem 1rem; }
+      .works-scroll-wrap { margin: 0 -0.8rem; padding: 0 0.8rem 1.5rem; overflow-y: visible; }
       .exh-row { margin: 0; padding-left: 0.3rem; padding-right: 0.3rem; }
       .works-row.expanded { grid-template-columns: repeat(2, 1fr); }
     }
