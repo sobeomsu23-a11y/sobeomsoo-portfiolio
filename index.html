@@ -684,18 +684,6 @@
       background: rgba(255,255,255,0.08); padding: 7px 14px; border-radius: 20px;
     }
     .lb-close:hover { color: var(--white); }
-    .lb-zoom-btns {
-      position: fixed; top: 1.5rem; left: 2rem;
-      display: flex; gap: 6px; z-index: 10;
-    }
-    .lb-zoom-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.55); font-size: 18px; font-weight: 300; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.15s; font-family: var(--font);
-    }
-    .lb-zoom-btn:hover { background: rgba(255,255,255,0.18); color: var(--white); }
     .lb-slider {
       position: relative; display: flex; align-items: center; justify-content: center;
       width: 100vw; flex: 1; min-height: 0; z-index: 1;
@@ -1020,23 +1008,6 @@
 <!-- ── LIGHTBOX ── -->
 <div class="lb" id="lb">
   <button class="lb-close" id="lb-close-btn">Close ✕</button>
-  <div class="lb-zoom-btns" id="lb-zoom-btns">
-    <button class="lb-zoom-btn" id="lb-zoom-out" onclick="lbZoom(-1)" title="축소">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-        <circle cx="6.5" cy="6.5" r="4.5"/>
-        <line x1="10.5" y1="10.5" x2="14" y2="14"/>
-        <line x1="4" y1="6.5" x2="9" y2="6.5"/>
-      </svg>
-    </button>
-    <button class="lb-zoom-btn" id="lb-zoom-in" onclick="lbZoom(1)" title="확대">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-        <circle cx="6.5" cy="6.5" r="4.5"/>
-        <line x1="10.5" y1="10.5" x2="14" y2="14"/>
-        <line x1="6.5" y1="4" x2="6.5" y2="9"/>
-        <line x1="4" y1="6.5" x2="9" y2="6.5"/>
-      </svg>
-    </button>
-  </div>
   <div class="lb-slider" id="lb-slider">
     <button class="lb-arrow prev" id="lb-prev">&#8592;</button>
     <div class="lb-img-wrap" id="lb-img-wrap">
@@ -1285,96 +1256,7 @@
     if (a.instagram) { const el = document.getElementById('about-instagram'); el.textContent = a.instagram; el.href = `https://www.instagram.com/${a.instagram.replace('@','')}/`; }
     if (a.studio) document.getElementById('about-studio').textContent = a.studio;
   }
-
-  /* ── LIGHTBOX ZOOM & PAN ── */
-  let lbScale = 1;
-  let lbPanX = 0, lbPanY = 0;
-  let lbDragging = false;
-  let lbDragStartX = 0, lbDragStartY = 0;
-  let lbPanStartX = 0, lbPanStartY = 0;
-  const LB_SCALE_MAX = 3;
-
-  function _lbApplyTransform() {
-    const img = document.getElementById('lb-img');
-    if (!img) return;
-    if (lbScale <= 1) {
-      img.style.transform = '';
-      img.style.cursor = 'default';
-    } else {
-      img.style.transform = `scale(${lbScale}) translate(${lbPanX / lbScale}px, ${lbPanY / lbScale}px)`;
-      img.style.cursor = lbDragging ? 'grabbing' : 'grab';
-    }
-    _lbUpdateZoomBtns();
-  }
-
-  function lbZoom(dir) {
-    if (dir < 0) {
-      lbScale = 1; lbPanX = 0; lbPanY = 0;
-    } else {
-      lbScale = Math.min(LB_SCALE_MAX, lbScale + 0.75);
-    }
-    const img = document.getElementById('lb-img');
-    /* 슬라이드 transition과 분리 — transform만 단독으로 transition */
-    if (img) img.style.transition = 'transform 0.25s ease';
-    _lbApplyTransform();
-    /* transition 적용 후 즉시 해제해서 drag시 딜레이 없도록 */
-    setTimeout(() => { if (img) img.style.transition = ''; }, 260);
-  }
-
-  function _lbUpdateZoomBtns() {
-    const zOut = document.getElementById('lb-zoom-out');
-    const zIn  = document.getElementById('lb-zoom-in');
-    if (zOut) zOut.style.opacity = lbScale <= 1 ? '0.3' : '1';
-    if (zIn)  zIn.style.opacity  = lbScale >= LB_SCALE_MAX ? '0.3' : '1';
-  }
-
-  function lbResetZoom() {
-    lbScale = 1; lbPanX = 0; lbPanY = 0; lbDragging = false;
-    const img = document.getElementById('lb-img');
-    if (img) { img.style.transition = ''; img.style.transform = ''; img.style.cursor = 'default'; }
-    _lbUpdateZoomBtns();
-  }
-
-  /* pan drag — lb-slider 전체에 걸어서 wrap 크기와 무관하게 동작 */
-  (function initLbPan() {
-    const slider = document.getElementById('lb-slider');
-    if (!slider) return;
-
-    slider.addEventListener('mousedown', e => {
-      if (lbScale <= 1) return;
-      if (e.target.closest('.lb-arrow')) return;
-      lbDragging = true;
-      lbDragStartX = e.clientX;
-      lbDragStartY = e.clientY;
-      lbPanStartX = lbPanX;
-      lbPanStartY = lbPanY;
-      e.preventDefault();
-    });
-
-    window.addEventListener('mousemove', e => {
-      if (!lbDragging) return;
-      lbPanX = lbPanStartX + (e.clientX - lbDragStartX);
-      lbPanY = lbPanStartY + (e.clientY - lbDragStartY);
-      _lbApplyTransform();
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (!lbDragging) return;
-      lbDragging = false;
-      _lbApplyTransform();
-    });
-
-    /* 트랙패드 핀치 — lb-slider 전체에서 감지 */
-    slider.addEventListener('wheel', e => {
-      if (!e.ctrlKey) return;
-      e.preventDefault();
-      const prev = lbScale;
-      lbScale = Math.min(LB_SCALE_MAX, Math.max(1, lbScale - e.deltaY * 0.01));
-      if (lbScale <= 1) { lbPanX = 0; lbPanY = 0; }
-      if (lbScale !== prev) _lbApplyTransform();
-    }, { passive: false });
-  })();
-
+  
   /* ── LIGHTBOX ── */
   let lbImages = [];
   let lbIdx = 0;
@@ -1384,7 +1266,7 @@
     lbIdx = 0;
     document.getElementById('lb-title').textContent = title;
     document.getElementById('lb-meta').textContent = meta;
-    lbResetZoom();
+
     _lbRender();
     document.getElementById('lb').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1422,12 +1304,6 @@
     const counter = document.getElementById('lb-counter');
     const total = lbImages.length;
 
-    /* zoom 초기화 — transition 없이 즉시 */
-    lbScale = 1; lbPanX = 0; lbPanY = 0; lbDragging = false;
-    img.style.transition = '';
-    img.style.transform = '';
-    img.style.cursor = 'default';
-    _lbUpdateZoomBtns();
 
     img.onload = null;
     img.onerror = null;
@@ -1536,10 +1412,8 @@
     const prevBtn = document.getElementById('lb-prev');
     const nextBtn = document.getElementById('lb-next');
     const closeBtn = document.getElementById('lb-close-btn');
-    const zoomBtns = document.getElementById('lb-zoom-btns') || document.querySelector('.lb-zoom-btns');
     lb.addEventListener('click', () => closeLb());
     [imgWrap, bottom].forEach(el => el.addEventListener('click', e => e.stopPropagation()));
-    if (zoomBtns) zoomBtns.addEventListener('click', e => e.stopPropagation());
     prevBtn.addEventListener('click', e => { e.stopPropagation(); lbGo(-1); });
     nextBtn.addEventListener('click', e => { e.stopPropagation(); lbGo(1); });
     closeBtn.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
