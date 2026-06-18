@@ -1144,7 +1144,7 @@
 
   async function loadWorks() {
     WORKS = await sb('works');
-    document.getElementById('stat-works').textContent = WORKS.length || '—';
+    
     renderWorks();
   }
 
@@ -1187,7 +1187,7 @@
 
   async function loadExhibitions() {
     EXHIBITIONS = await sb('exhibitions');
-    document.getElementById('stat-exh').textContent = EXHIBITIONS.length || '—';
+   
     renderExhibitions();
   }
 
