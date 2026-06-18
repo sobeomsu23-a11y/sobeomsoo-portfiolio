@@ -947,7 +947,7 @@
         </div>
         <div class="c-row">
           <span class="contact-lbl">Instagram</span>
-          <span class="contact-val" id="about-instagram">@아이디</span>
+          <a class="contact-val" id="about-instagram" href="https://www.instagram.com/sobeomsoo/" target="_blank" style="text-decoration:none; color:inherit;">sobeomsoo</a>
         </div>
         <div class="c-row">
           <span class="contact-lbl">Studio</span>
@@ -1282,7 +1282,7 @@
     if (a.bio1) document.getElementById('about-bio1').textContent = a.bio1;
     if (a.bio2) document.getElementById('about-bio2').textContent = a.bio2;
     if (a.email) document.getElementById('about-email').textContent = a.email;
-    if (a.instagram) document.getElementById('about-instagram').textContent = a.instagram;
+    if (a.instagram) { const el = document.getElementById('about-instagram'); el.textContent = a.instagram; el.href = `https://www.instagram.com/${a.instagram.replace('@','')}/`; }
     if (a.studio) document.getElementById('about-studio').textContent = a.studio;
   }
 
