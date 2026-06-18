@@ -1450,14 +1450,16 @@
   }
  init();
 
-  /* ── WORKS 마우스 휠 좌우 스크롤 ── */
+  /* ── WORKS 마우스 휠 좌우 스크롤 (Windows 전용) ── */
   (function initWorksWheelScroll() {
+    const isMac = /Mac|iPhone|iPad/.test(navigator.platform) || 
+                  /Mac/.test(navigator.userAgentData?.platform || '');
+    if (isMac) return;
     const worksSection = document.getElementById('works-section');
     if (!worksSection) return;
     worksSection.addEventListener('wheel', e => {
       const wrap = document.getElementById('works-scroll-wrap');
       if (!wrap) return;
-      /* 전체보기(expanded) 상태면 일반 세로 스크롤 유지 */
       if (wrap.classList.contains('expanded')) return;
       e.preventDefault();
       wrap.scrollLeft += e.deltaY;
