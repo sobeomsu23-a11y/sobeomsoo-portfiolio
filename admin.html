@@ -770,7 +770,7 @@
   function renderWorks() {
     const tbody = document.getElementById('worksTbody');
     if (!WORKS.length) { tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">◻</div><p>등록된 작품이 없습니다</p></div></td></tr>`; return; }
-    tbody.innerHTML = WORKS.map(w => {
+    tbody.innerHTML = WORKS.slice().sort((a, b) => (b.year || '').localeCompare(a.year || '')).map(w => {
       const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
       const thumb = images[0] || '';
       const count = images.length;
