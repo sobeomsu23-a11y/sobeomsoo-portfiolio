@@ -1271,7 +1271,7 @@
       gallery.innerHTML = galleryImgs.map((src, i) => {
         const lbIdx = e.hero_img ? i + 1 : i;
         return `<div class="exh-gallery-item" onclick="openLbAt(${JSON.stringify(allImgs).replace(/"/g,'&quot;')}, ${lbIdx}, '${e.title.replace(/'/g,"\\'")}', '${(e.period||'').replace(/'/g,"\\'")}')">
-          <img src="${src}" alt="전시 전경">
+         <img src="${thumbUrl(src, 500)}" alt="전시 전경" loading="lazy">
         </div>`;
       }).join('');
     } else {
@@ -1394,7 +1394,7 @@
     counter.textContent = total > 1 ? `${lbIdx + 1} / ${total}` : '';
     if (total > 1) {
       thumbs.innerHTML = lbImages.map((src, i) =>
-        `<img class="lb-thumb${i === lbIdx ? ' active' : ''}" src="${src}" alt="" onclick="lbJump(${i})" loading="lazy">`
+        `<img class="lb-thumb${i === lbIdx ? ' active' : ''}" src="${thumbUrl(src, 150)}" alt="" onclick="lbJump(${i})" loading="lazy">`
       ).join('');
     } else { thumbs.innerHTML = ''; }
   }
