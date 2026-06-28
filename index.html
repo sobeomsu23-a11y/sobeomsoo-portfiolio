@@ -1165,6 +1165,13 @@
     renderWorks();
   }
 
+  /* Supabase 이미지 변환 — 썸네일용 축소 URL 생성 */
+  function thumbUrl(url, width) {
+    if (!url || typeof url !== 'string') return url;
+    if (!url.includes('/storage/v1/object/public/')) return url; // Supabase 이미지가 아니면 그대로
+    return url.replace('/object/public/', '/render/image/public/') + `?width=${width}&quality=70&resize=contain`;
+  }
+
   function renderWorks() {
     const list = (curFilter === 'all' ? WORKS : WORKS.filter(w => w.year === curFilter))
       .slice().sort((a, b) => (b.year || '').localeCompare(a.year || ''));
@@ -1176,7 +1183,7 @@
     grid.innerHTML = list.map((w, i) => {
       const c = PH_COLORS[i % PH_COLORS.length];
       const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
-      const thumb = images[0] || '';
+    const thumb = images[0] ? thumbUrl(images[0], 500) : '';
       const imgHTML = thumb
         ? `<img src="${thumb}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
         : makePh(c);
