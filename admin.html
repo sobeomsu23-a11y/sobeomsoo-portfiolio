@@ -554,14 +554,53 @@
     return res.ok;
   }
 
+/* ── 이미지 리사이즈 (업로드 전 자동 축소) ── */
+  async function resizeImage(file, maxSide = 1600, quality = 0.82) {
+    // SVG, GIF 등은 캔버스 변환에 부적합하므로 원본 그대로 반환
+    if (!/^image\/(jpeg|jpg|png|webp)$/i.test(file.type)) return file;
+
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const img = await new Promise((resolve, reject) => {
+      const im = new Image();
+      im.onload = () => resolve(im);
+      im.onerror = reject;
+      im.src = dataUrl;
+    });
+
+    // 이미 충분히 작으면 변환 없이 원본 사용
+    if (img.width <= maxSide && img.height <= maxSide) return file;
+
+    const ratio = Math.min(maxSide / img.width, maxSide / img.height);
+    const w = Math.round(img.width * ratio);
+    const h = Math.round(img.height * ratio);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+    if (!blob) return file; // 변환 실패 시 원본 사용
+    return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+  }
+
   /* ── 이미지 업로드 ── */
   async function uploadImage(file) {
-    const ext = file.name.split('.').pop();
+    // 업로드 전 자동 리사이즈 (긴 변 1600px, 품질 82%)
+    const resized = await resizeImage(file, 1600, 0.82);
+    const ext = resized.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
     const res = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${fileName}`, {
       method: 'POST',
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': file.type },
-      body: file
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': resized.type },
+      body: resized
     });
     if (!res.ok) return null;
     return `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
