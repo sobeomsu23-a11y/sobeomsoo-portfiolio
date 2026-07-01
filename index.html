@@ -1237,6 +1237,9 @@
     document.querySelectorAll('.wf').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
     renderWorks();
+    // 필터 변경 시 가로 스크롤을 맨 앞으로 되돌림
+    const wrap = document.getElementById('works-scroll-wrap');
+    if (wrap) wrap.scrollTo({ left: 0, behavior: 'smooth' });
   }
 
   /* ── EXHIBITIONS ── */
