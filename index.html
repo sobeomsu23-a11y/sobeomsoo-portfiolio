@@ -390,38 +390,28 @@
       padding: 0 0 1rem;
     }
 
-   .works-row {
+    .works-row {
       display: flex;
       align-items: flex-start;
       gap: 14px;
       width: max-content;
+      transition: all 0.35s ease;
     }
-   .works-row.expanded {
+    .works-row.expanded {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
-      gap: 18px;
-      animation: expandGrid 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    .works-row.collapsing {
-      animation: collapseGrid 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      gap: 14px;
+      animation: expandGrid 0.4s ease forwards;
     }
     @keyframes expandGrid {
-      from { opacity: 0; transform: translateY(16px) scale(0.98); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes collapseGrid {
-      from { opacity: 1; transform: translateY(0) scale(1); }
-      to   { opacity: 0; transform: translateY(12px) scale(0.98); }
-    }
-    .work-card {
-      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 0.25s ease,
-                  box-shadow 0.25s ease;
-    }
-    .work-card img,
-    .work-card .work-thumb {
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    .works-row.expanded {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
     }
     @media (max-width: 960px) {
       .works-row.expanded {
@@ -436,6 +426,7 @@
       overflow: hidden;
       background: var(--gray5);
       cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .works-row.expanded .work-card { width: 100%; }
@@ -1178,23 +1169,17 @@
   }
 
   /* ── WORKS EXPAND TOGGLE ── */
- function toggleWorksExpand() {
+  function toggleWorksExpand() {
     const wrap = document.getElementById('works-scroll-wrap');
     const grid = document.getElementById('wgrid');
     const expandBtn = document.getElementById('works-expand-btn');
     const collapseBtn = document.getElementById('works-collapse-btn');
     const isExpanded = grid.classList.contains('expanded');
     if (isExpanded) {
-      // 접기 — 퇴장 애니메이션을 먼저 재생한 뒤 grid 해제
-      collapseBtn.classList.remove('visible');
+      grid.classList.remove('expanded');
+      wrap.classList.remove('expanded');
       expandBtn.classList.remove('hidden');
-      grid.classList.add('collapsing');
-      grid.addEventListener('animationend', function handler() {
-        grid.classList.remove('collapsing');
-        grid.classList.remove('expanded');
-        wrap.classList.remove('expanded');
-        grid.removeEventListener('animationend', handler);
-      }, { once: true });
+      collapseBtn.classList.remove('visible');
     } else {
       grid.classList.add('expanded');
       wrap.classList.add('expanded');
