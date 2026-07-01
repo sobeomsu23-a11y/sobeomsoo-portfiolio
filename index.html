@@ -396,16 +396,23 @@
       gap: 14px;
       width: max-content;
     }
-    .works-row.expanded {
+   .works-row.expanded {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
       gap: 18px;
       animation: expandGrid 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
+    .works-row.collapsing {
+      animation: collapseGrid 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
     @keyframes expandGrid {
       from { opacity: 0; transform: translateY(16px) scale(0.98); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes collapseGrid {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(12px) scale(0.98); }
     }
     .work-card {
       transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1171,17 +1178,23 @@
   }
 
   /* ── WORKS EXPAND TOGGLE ── */
-  function toggleWorksExpand() {
+ function toggleWorksExpand() {
     const wrap = document.getElementById('works-scroll-wrap');
     const grid = document.getElementById('wgrid');
     const expandBtn = document.getElementById('works-expand-btn');
     const collapseBtn = document.getElementById('works-collapse-btn');
     const isExpanded = grid.classList.contains('expanded');
     if (isExpanded) {
-      grid.classList.remove('expanded');
-      wrap.classList.remove('expanded');
-      expandBtn.classList.remove('hidden');
+      // 접기 — 퇴장 애니메이션을 먼저 재생한 뒤 grid 해제
       collapseBtn.classList.remove('visible');
+      expandBtn.classList.remove('hidden');
+      grid.classList.add('collapsing');
+      grid.addEventListener('animationend', function handler() {
+        grid.classList.remove('collapsing');
+        grid.classList.remove('expanded');
+        wrap.classList.remove('expanded');
+        grid.removeEventListener('animationend', handler);
+      }, { once: true });
     } else {
       grid.classList.add('expanded');
       wrap.classList.add('expanded');
