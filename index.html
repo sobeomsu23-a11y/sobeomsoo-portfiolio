@@ -390,28 +390,31 @@
       padding: 0 0 1rem;
     }
 
-    .works-row {
+   .works-row {
       display: flex;
       align-items: flex-start;
       gap: 14px;
       width: max-content;
-      transition: all 0.35s ease;
     }
     .works-row.expanded {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
-      gap: 14px;
-      animation: expandGrid 0.4s ease forwards;
+      gap: 18px;
+      animation: expandGrid 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     @keyframes expandGrid {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .works-row.expanded {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      width: 100%;
+    .work-card {
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.25s ease,
+                  box-shadow 0.25s ease;
+    }
+    .work-card img,
+    .work-card .work-thumb {
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
     @media (max-width: 960px) {
       .works-row.expanded {
@@ -426,7 +429,6 @@
       overflow: hidden;
       background: var(--gray5);
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .works-row.expanded .work-card { width: 100%; }
