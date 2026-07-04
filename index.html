@@ -266,7 +266,7 @@
       background: var(--white);
       transition: all 0.15s;
     }
-    .wf:last-child { border-right: 1px solid var(--gray4); }
+    .wf:nth-last-of-type(1) { border-right: 1px solid var(--gray4); }
     .wf:hover { color: var(--black); background: var(--gray5); }
     .wf.on { color: var(--white); background: var(--black); border-color: var(--black); }
 
@@ -889,7 +889,7 @@
       <button class="wf" onclick="filterW('2026', this)">2026</button>
       <button class="wf" onclick="filterW('2025', this)">2025</button>
       <button class="wf" onclick="filterW('2024', this)">2024</button>
-      <button class="wf" onclick="filterW('2023', this)">2023</button>
+      <button class="wf wf-last" onclick="filterW('2023', this)">2023</button>
       <button class="works-collapse-btn" id="works-collapse-btn" onclick="toggleWorksExpand()">
         <span class="expand-icon">+</span><span>접기</span>
       </button>
