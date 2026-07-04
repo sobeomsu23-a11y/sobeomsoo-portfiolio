@@ -1232,13 +1232,8 @@
     if (isExpanded) {
       collapseBtn.classList.remove('visible');
       expandBtn.classList.remove('hidden');
-      grid.classList.add('collapsing');
-      grid.addEventListener('animationend', function handler() {
-        grid.classList.remove('collapsing');
-        grid.classList.remove('expanded');
-        wrap.classList.remove('expanded');
-        grid.removeEventListener('animationend', handler);
-      }, { once: true });
+      grid.classList.remove('expanded');
+      wrap.classList.remove('expanded');
     } else {
       grid.classList.add('expanded');
       wrap.classList.add('expanded');
