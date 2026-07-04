@@ -297,16 +297,9 @@
       gap: 1px;
       animation: expandGrid 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
     }
-    .works-row.collapsing {
-      animation: collapseGrid 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
-    }
     @keyframes expandGrid {
       from { opacity: 0; transform: translateY(14px) scale(0.99); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes collapseGrid {
-      from { opacity: 1; transform: translateY(0) scale(1); }
-      to   { opacity: 0; transform: translateY(10px) scale(0.99); }
     }
     @media (max-width: 700px) {
       .works-row.expanded { grid-template-columns: repeat(2, 1fr); }
