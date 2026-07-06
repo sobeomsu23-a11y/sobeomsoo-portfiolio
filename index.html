@@ -55,28 +55,37 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
+      /* Apple Design System */
       --white: #ffffff;
-      --black: #141414;
-      --gray1: #2a2a2a;
-      --gray2: #5a5a5a;
-      --gray3: #9a9a9a;
-      --gray4: #dedede;
-      --gray5: #f0f2f5;
-      --gray6: #f5f7fa;
-      --accent: #3d5a4c;
-      --accent-light: #e8eeeb;
-      --font: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      --radius: 14px;
-      --radius-sm: 8px;
-      --header-h: 64px;
+      --black: #1d1d1f;          /* ink */
+      --gray1: #333333;          /* ink-muted-80 */
+      --gray2: #7a7a7a;          /* ink-muted-48 */
+      --gray3: #a1a1a6;
+      --gray4: #e0e0e0;          /* hairline */
+      --gray5: #f5f5f7;          /* canvas-parchment */
+      --gray6: #ffffff;          /* canvas (main bg = pure white) */
+      --accent: #0066cc;         /* Action Blue — 유일한 accent */
+      --accent-focus: #0071e3;
+      --accent-light: #e8f0fb;
+      --surface-dark: #1d1d1f;
+      --font: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', system-ui, sans-serif;
+      --font-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', system-ui, sans-serif;
+      --radius: 18px;            /* rounded.lg — 유틸 카드 */
+      --radius-sm: 8px;          /* rounded.sm */
+      --radius-pill: 9999px;     /* pill — 버튼 전용 */
+      --product-shadow: rgba(0,0,0,0.22) 3px 5px 30px;
+      --header-h: 48px;
     }
 
     html { scroll-behavior: smooth; }
     body {
-      background: var(--gray6);
+      background: var(--white);
       color: var(--black);
-      font-family: var(--font);
-      font-weight: 300;
+      font-family: var(--font-text);
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -90,10 +99,10 @@
       top: 0; left: 0; right: 0;
       z-index: 100;
       height: var(--header-h);
-      background: rgba(255,255,255,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.07);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: none;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -103,15 +112,15 @@
     .logo {
       font-family: var(--font);
       font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      color: var(--black);
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--white);
     }
     .logo-ko {
-      font-family: var(--font);
+      font-family: var(--font-text);
       font-size: 12px;
-      font-weight: 300;
-      color: var(--gray3);
+      font-weight: 400;
+      color: rgba(255,255,255,0.7);
       letter-spacing: 0.12em;
       margin-top: 1px;
     }
@@ -119,16 +128,17 @@
     nav { display: flex; align-items: center; gap: 0.3rem; }
     .nav-item {
       padding: 7px 14px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--gray2);
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.8);
       cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.2s;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, transform 0.1s;
     }
-    .nav-item:hover { color: var(--black); background: var(--gray5); }
-    .nav-item.active { color: var(--white); background: var(--black); }
+    .nav-item:hover { color: var(--white); }
+    .nav-item:active { transform: scale(0.95); }
+    .nav-item.active { color: var(--white); font-weight: 600; }
 
     /* ── HERO ── */
     .hero {
@@ -193,11 +203,11 @@
 
     .hero-name {
       font-family: var(--font);
-      font-size: clamp(3.5rem, 8vw, 7.5rem);
-      font-weight: 700;
-      line-height: 0.92;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 600;
+      line-height: 1.07;
       color: var(--white);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.28px;
       margin-bottom: 0.5rem;
     }
 
@@ -227,29 +237,30 @@
 
     .hero-btns { display: flex; gap: 10px; flex-shrink: 0; }
     .btn-hero-primary {
-      font-size: 13px;
-      font-weight: 500;
-      padding: 12px 26px;
-      background: var(--white);
-      color: var(--black);
-      border-radius: 30px;
-      transition: opacity 0.2s;
-      letter-spacing: 0.03em;
-    }
-    .btn-hero-primary:hover { opacity: 0.85; }
-    .btn-hero-secondary {
-      font-size: 13px;
+      font-size: 17px;
       font-weight: 400;
-      padding: 12px 26px;
-      background: rgba(255,255,255,0.18);
+      padding: 11px 22px;
+      background: var(--accent);
       color: var(--white);
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.35);
-      transition: background 0.2s;
-      letter-spacing: 0.03em;
-      backdrop-filter: blur(6px);
+      border-radius: var(--radius-pill);
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: -0.374px;
     }
-    .btn-hero-secondary:hover { background: rgba(255,255,255,0.28); }
+    .btn-hero-primary:hover { background: var(--accent-focus); }
+    .btn-hero-primary:active { transform: scale(0.95); }
+    .btn-hero-secondary {
+      font-size: 17px;
+      font-weight: 400;
+      padding: 11px 22px;
+      background: transparent;
+      color: var(--white);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.4);
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: -0.374px;
+    }
+    .btn-hero-secondary:active { transform: scale(0.95); }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.15); }
 
     .hero-label-badge {
       position: absolute;
@@ -312,32 +323,32 @@
       background: var(--white);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border: 1px solid var(--gray4);
     }
     .card-pad { padding: 2rem 2.5rem; }
 
     .section-eyebrow {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.18em;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 0.6rem;
     }
     .section-title {
       font-family: var(--font);
-      font-size: 1.7rem;
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.01em;
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
       color: var(--black);
       margin-bottom: 0.35rem;
     }
     .section-sub {
-      font-size: 13px;
-      font-weight: 300;
+      font-size: 17px;
+      font-weight: 400;
       color: var(--gray2);
-      line-height: 1.7;
+      line-height: 1.47;
     }
 
     /* ── WORKS SECTION ── */
@@ -353,19 +364,20 @@
 
     .works-filters { display: flex; gap: 6px; flex-wrap: wrap; }
     .wf {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 400;
-      letter-spacing: 0.04em;
-      padding: 6px 16px;
-      color: var(--gray2);
+      letter-spacing: -0.224px;
+      padding: 7px 17px;
+      color: var(--black);
       cursor: pointer;
-      border: 1.5px solid var(--gray4);
-      border-radius: 20px;
+      border: 1px solid var(--gray4);
+      border-radius: var(--radius-pill);
       background: var(--white);
-      transition: all 0.18s;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
     }
-    .wf:hover { color: var(--black); border-color: var(--black); }
-    .wf.on { color: var(--white); background: var(--black); border-color: var(--black); }
+    .wf:hover { border-color: var(--accent); color: var(--accent); }
+    .wf:active { transform: scale(0.95); }
+    .wf.on { color: var(--white); background: var(--accent); border-color: var(--accent); }
 
     /* horizontal scroll row */
   .works-scroll-wrap {
@@ -435,32 +447,32 @@
       overflow: hidden;
       background: var(--gray5);
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      transition: transform 0.25s ease;
     }
     .works-row.expanded .work-card { width: 100%; }
-    .work-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.13); }
+    .work-card:hover .work-thumb img { transform: scale(1.03); }
+    .work-card:hover .work-thumb { box-shadow: var(--product-shadow); }
 
     /* expand toggle button */
     .works-expand-btn {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 7px;
-      width: 100%;
-      margin-top: 1.2rem;
-      padding: 10px;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      color: var(--gray2);
-      border-top: 1px solid var(--gray4);
+      margin: 1.5rem auto 0;
+      padding: 11px 22px;
+      font-size: 17px;
+      font-weight: 400;
+      letter-spacing: -0.374px;
+      color: var(--accent);
+      border: 1px solid var(--gray4);
+      border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: color 0.18s;
-      background: none;
-      border-left: none; border-right: none; border-bottom: none;
+      transition: border-color 0.2s, transform 0.1s;
+      background: var(--white);
     }
-    .works-expand-btn:hover { color: var(--black); }
+    .works-expand-btn:hover { border-color: var(--accent); }
+    .works-expand-btn:active { transform: scale(0.95); }
     .works-expand-btn.hidden { display: none; }
     .works-expand-btn .expand-icon {
       font-size: 18px; font-weight: 300; line-height: 1;
@@ -721,26 +733,27 @@
 
     /* ── FOOTER ── */
     footer {
-      background: var(--black);
-      color: var(--white);
-      padding: 2.5rem 3rem;
+      background: var(--gray5);
+      color: var(--gray1);
+      padding: 3rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--gray4);
       margin: 0 -2rem;
     }
     .footer-logo {
       font-family: var(--font);
-      font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
+      font-size: 15px; font-weight: 600; letter-spacing: -0.2px;
+      color: var(--black);
     }
-    .footer-copy { font-size: 11px; color: var(--gray3); font-weight: 300; margin-top: 6px; }
+    .footer-copy { font-size: 12px; color: var(--gray2); font-weight: 400; margin-top: 6px; }
     .footer-links { display: flex; gap: 1.6rem; }
     .footer-links a {
-      font-size: 12px; font-weight: 400; letter-spacing: 0.06em;
-      color: var(--gray3); transition: color 0.15s;
+      font-size: 14px; font-weight: 400; letter-spacing: -0.224px;
+      color: var(--gray1); transition: color 0.15s;
     }
-    .footer-links a:hover { color: var(--white); }
+    .footer-links a:hover { color: var(--accent); }
 
     /* ── LIGHTBOX ── */
     .lb {
@@ -937,7 +950,7 @@
         <div class="works-scroll-wrap" id="works-scroll-wrap">
           <div class="works-row" id="wgrid"></div>
         </div>
-        <button class="works-expand-btn" id="works-expand-btn" onclick="toggleWorksExpand()">
+        <div style="text-align:center;"><button class="works-expand-btn" id="works-expand-btn" onclick="toggleWorksExpand()">
           <span class="expand-icon">+</span>
           <span id="works-expand-label">전체 보기</span>
         </button>
