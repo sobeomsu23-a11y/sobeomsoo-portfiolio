@@ -126,19 +126,20 @@
     }
 
     nav { display: flex; align-items: center; gap: 0.3rem; }
-    .nav-item {
-      padding: 7px 14px;
+  .nav-item {
+      padding: 0 10px;
       font-size: 12px;
       font-weight: 400;
       letter-spacing: -0.01em;
-      color: rgba(255,255,255,0.8);
+      color: rgba(0,0,0,0.8);
       cursor: pointer;
-      border-radius: var(--radius-sm);
-      transition: color 0.2s, transform 0.1s;
+      border-radius: 0;
+      transition: color 0.2s;
+      line-height: 44px;
     }
-    .nav-item:hover { color: var(--white); }
-    .nav-item:active { transform: scale(0.95); }
-    .nav-item.active { color: var(--white); font-weight: 600; }
+    .nav-item:hover { color: #1d1d1f; opacity: 1; }
+    .nav-item.active { color: #1d1d1f; font-weight: 500; }
+    nav { display: flex; align-items: center; gap: 0.5rem; }
 
     /* ── HERO ── */
     .hero {
