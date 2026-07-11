@@ -129,7 +129,7 @@
     }
 
     nav { display: flex; align-items: center; gap: 0.3rem; }
-  .nav-item {
+ .nav-item {
       padding: 0 10px;
       font-size: 12px;
       font-weight: 400;
@@ -138,7 +138,9 @@
       cursor: pointer;
       border-radius: 0;
       transition: color 0.2s;
-      line-height: 44px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
     }
     .nav-item:hover { color: #1d1d1f; opacity: 1; }
     .nav-item.active { color: #1d1d1f; font-weight: 500; }
@@ -876,7 +878,7 @@
       .work-card { width: 38vw; }
       header { padding: 0 12px; }
       nav { gap: 0; }
-      .nav-item { padding: 0 5px; font-size: 10.5px; line-height: 44px; }
+      .nav-item { padding: 0 5px; font-size: 10.5px; line-height: 1; }
       .nav-item svg { width: 14px; height: 14px; }
       nav a.nav-item { padding: 0 5px !important; }
       .logo { font-size: 12.5px; }
