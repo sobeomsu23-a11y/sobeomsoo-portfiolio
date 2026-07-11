@@ -1377,8 +1377,8 @@
   async function loadAbout() {
     const a = await sbSingle('about');
     if (!a) return;
-    if (a.bio1) document.getElementById('about-bio1').textContent = a.bio1;
-    if (a.bio2) document.getElementById('about-bio2').textContent = a.bio2;
+    if (a.bio1) document.getElementById('about-bio1').innerHTML = a.bio1.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>');
+    if (a.bio2) document.getElementById('about-bio2').innerHTML = a.bio2.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>');
     if (a.email) document.getElementById('about-email').textContent = a.email;
     if (a.instagram) { const el = document.getElementById('about-instagram'); el.textContent = a.instagram; el.href = `https://www.instagram.com/${a.instagram.replace('@','')}/`; }
     if (a.studio) document.getElementById('about-studio').textContent = a.studio;
