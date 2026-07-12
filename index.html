@@ -1309,7 +1309,7 @@
   function openPanel(id) {
     const e = EXHIBITIONS.find(x => x.id === id);
     if (!e) return;
-    const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Upcoming' };
+    const typeLabel = { solo: 'Solo Exhibition', group: 'Group Exhibition', upcoming: 'Current' };
     const hero = document.getElementById('panelHero');
     const galleryImgs = Array.isArray(e.gallery) ? e.gallery.filter(Boolean) : [];
     const allImgs = [e.hero_img, ...galleryImgs].filter(Boolean);
