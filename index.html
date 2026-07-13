@@ -53,93 +53,6 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
-/* ── CURRENT 전시 배너 ── */
-    .now-banner {
-      display: none;
-      align-items: center;
-      gap: 1.25rem;
-      background: var(--black);
-      color: var(--white);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 2rem;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .now-banner.show { display: flex; }
-    .now-banner:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.18); }
-
-    .now-banner-thumb {
-      width: 180px;
-      align-self: stretch;
-      flex-shrink: 0;
-      background: var(--gray1);
-      overflow: hidden;
-    }
-    .now-banner-thumb img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-    }
-    .now-banner-body {
-      flex: 1;
-      padding: 1.5rem 1.75rem;
-      min-width: 0;
-    }
-    .now-banner-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-    .now-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #30d158;
-      animation: nowPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes nowPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: 0.45; transform: scale(0.82); }
-    }
-    .now-banner-title {
-      font-family: var(--font);
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: -0.4px;
-      line-height: 1.2;
-      margin-bottom: 0.4rem;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .now-banner-meta {
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(255,255,255,0.72);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .now-banner-cta {
-      display: flex; align-items: center; gap: 5px;
-      padding-right: 1.75rem;
-      flex-shrink: 0;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--white);
-      transition: transform 0.2s ease;
-    }
-    .now-banner:hover .now-banner-cta { transform: translateX(3px); }
-
-    @media (max-width: 700px) {
-      .now-banner { flex-direction: column; align-items: stretch; }
-      .now-banner-thumb { width: 100%; height: 150px; }
-      .now-banner-body { padding: 1.1rem 1.25rem 0.5rem; }
-      .now-banner-title { font-size: 20px; white-space: normal; }
-      .now-banner-meta { white-space: normal; }
-      .now-banner-cta { padding: 0 1.25rem 1.25rem; }
-    }
   
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -974,6 +887,93 @@
       .works-scroll-wrap { margin: 0 -0.8rem; padding: 0 0.8rem 1.5rem; overflow-y: visible; }
       .exh-row { margin: 0; padding-left: 0.3rem; padding-right: 0.3rem; }
       .works-row.expanded { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── CURRENT 전시 배너 ── */
+    .now-banner {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      background: var(--black);
+      color: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .now-banner.show { display: flex; }
+    .now-banner:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.18); }
+
+    .now-banner-thumb {
+      width: 180px;
+      align-self: stretch;
+      flex-shrink: 0;
+      background: var(--gray1);
+      overflow: hidden;
+    }
+    .now-banner-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .now-banner-body {
+      flex: 1;
+      padding: 1.5rem 1.75rem;
+      min-width: 0;
+    }
+    .now-banner-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .now-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #30d158;
+      animation: nowPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes nowPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.45; transform: scale(0.82); }
+    }
+    .now-banner-title {
+      font-family: var(--font);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .now-banner-meta {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.72);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .now-banner-cta {
+      display: flex; align-items: center; gap: 5px;
+      padding-right: 1.75rem;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--white);
+      transition: transform 0.2s ease;
+    }
+    .now-banner:hover .now-banner-cta { transform: translateX(3px); }
+
+    @media (max-width: 700px) {
+      .now-banner { flex-direction: column; align-items: stretch; }
+      .now-banner-thumb { width: 100%; height: 150px; }
+      .now-banner-body { padding: 1.1rem 1.25rem 0.5rem; }
+      .now-banner-title { font-size: 20px; white-space: normal; }
+      .now-banner-meta { white-space: normal; }
+      .now-banner-cta { padding: 0 1.25rem 1.25rem; }
     }
   </style>
 </head>
