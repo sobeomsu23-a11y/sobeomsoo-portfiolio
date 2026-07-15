@@ -1351,7 +1351,7 @@
       const imgHTML = thumb
         ? `<img src="${thumb}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
         : makePh(c);
-      return `<div class="work-card" onclick="openLb(${JSON.stringify(images).replace(/"/g,'&quot;')},'${w.title.replace(/'/g,"\\'")}','${[w.medium, w.size, w.year].filter(Boolean).join(' · ').replace(/'/g,"\\'")}')">
+      return `<div class="work-card" onclick="openLb(${JSON.stringify(images).replace(/"/g,'&quot;')},'${w.title.replace(/'/g,"\\'")}','${[w.year, w.medium, w.size].filter(Boolean).join(' · ').replace(/'/g,"\\'")}')">
         <div class="work-thumb">
           ${imgHTML}
         </div>
