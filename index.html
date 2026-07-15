@@ -1357,7 +1357,7 @@
         </div>
         <div class="work-info">
           <div class="work-title">${w.title}</div>
-          <div class="work-meta">${w.year||''} · ${w.medium||''}</div>
+          <div class="work-meta">${[w.year, w.medium, w.size].filter(Boolean).join(' · ')}</div>
         </div>
       </div>`;
     }).join('');
