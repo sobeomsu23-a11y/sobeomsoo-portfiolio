@@ -1799,29 +1799,38 @@
     const wrap = document.getElementById('works-scroll-wrap');
     if (!wrap) return;
 
-    let gestureIsTrackpad = false;
-    let lastWheelTime = 0;
+    const RAPID_MS = 45;          // 이 간격보다 빠르게 연달아 오면 트랙패드 스트림으로 판정
+    const SESSION_RESET_MS = 300; // 이만큼 조용해야 완전히 새로운 입력으로 리셋
+    const STEP = 120;             // 마우스 휠 한 칸당 이동 거리(px)
 
-    function isTrackpadWheel(e) {
-      const now = performance.now();
-      const gap = now - lastWheelTime;
-      if (gap > 200) gestureIsTrackpad = false; // 200ms 넘게 비었으면 새 제스처로 리셋
-      lastWheelTime = now;
-
-      const fractional = !Number.isInteger(e.deltaY) || !Number.isInteger(e.deltaX);
-      const rapid = gap > 0 && gap < 40; // 직전 이벤트와 40ms 이내 = 연속 스트림(트랙패드 특징)
-      if (fractional || rapid) gestureIsTrackpad = true;
-
-      return gestureIsTrackpad;
-    }
+    let lastTime = 0;
+    let sessionIsTrackpad = false;
+    let pending = null;
 
     wrap.addEventListener('wheel', e => {
       if (wrap.classList.contains('expanded')) return;
-      const trackpad = isTrackpadWheel(e); // 항상 먼저 판별해서 제스처 상태를 갱신
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // 트랙패드 좌우 스와이프 — 브라우저 기본 동작 유지
-      if (trackpad) return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
+
+      const now = performance.now();
+      const gap = now - lastTime;
+      lastTime = now;
+
+      if (gap > SESSION_RESET_MS) sessionIsTrackpad = false; // 충분히 쉬었으면 새 입력 세션
+      if (gap < RAPID_MS) sessionIsTrackpad = true;           // 연속 스트림 감지 = 트랙패드 확정
+
+      if (sessionIsTrackpad) {
+        if (pending) { clearTimeout(pending); pending = null; }
+        return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
+      }
+
+      // 아직 마우스인지 트랙패드인지 확정 전 — 잠깐 기다렸다가 후속 이벤트가 안 오면 마우스로 확정
       e.preventDefault();
-      wrap.scrollLeft += e.deltaY;
+      const dir = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0;
+      if (pending) clearTimeout(pending);
+      pending = setTimeout(() => {
+        pending = null;
+        if (dir) wrap.scrollLeft += STEP * dir;
+      }, RAPID_MS);
     }, { passive: false });
   })();
   </script>
