@@ -1787,6 +1787,21 @@
       wrap.scrollLeft += e.deltaY;
     }, { passive: false });
   })();
+  init();
+
+  /* ── WORKS 마우스 휠 좌우 스크롤 ── */
+  (function initWorksWheelScroll() {
+    const worksSection = document.getElementById('works-section');
+    if (!worksSection) return;
+    worksSection.addEventListener('wheel', e => {
+      const wrap = document.getElementById('works-scroll-wrap');
+      if (!wrap) return;
+      /* 전체보기(expanded) 상태면 일반 세로 스크롤 유지 */
+      if (wrap.classList.contains('expanded')) return;
+      e.preventDefault();
+      wrap.scrollLeft += e.deltaY;
+    }, { passive: false });
+  })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
 </body>
