@@ -1794,17 +1794,27 @@
   }
  init();
 
-  /* ── WORKS 마우스 휠 좌우 스크롤 (Windows 전용) ── */
+  /* ── WORKS 마우스 휠 좌우 스크롤 (마우스만, 트랙패드는 기존 동작 유지) ── */
   (function initWorksWheelScroll() {
-    const isMac = /Mac|iPhone|iPad/.test(navigator.platform) || 
-                  /Mac/.test(navigator.userAgentData?.platform || '');
-    if (isMac) return;
     const worksSection = document.getElementById('works-section');
     if (!worksSection) return;
+
+    function isTrackpadWheel(e) {
+      // 파이어폭스: 물리 마우스 휠은 deltaMode 1(줄 단위), 트랙패드는 0(픽셀 단위)
+      if (e.deltaMode === 1) return false;
+      // 크롬/사파리: 물리 마우스 휠 노치는 legacy wheelDelta = deltaY * -3 관계가 정확히 성립
+      if (typeof e.wheelDeltaY === 'number' && e.wheelDeltaY !== 0) {
+        return e.wheelDeltaY !== -3 * e.deltaY;
+      }
+      return true; // 판단 애매하면 트랙패드로 간주 (안전한 기본값 = 기존 동작 유지)
+    }
+
     worksSection.addEventListener('wheel', e => {
       const wrap = document.getElementById('works-scroll-wrap');
       if (!wrap) return;
       if (wrap.classList.contains('expanded')) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // 트랙패드 좌우 스와이프 — 브라우저 기본 동작 유지
+      if (isTrackpadWheel(e)) return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
       e.preventDefault();
       wrap.scrollLeft += e.deltaY;
     }, { passive: false });
