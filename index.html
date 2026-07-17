@@ -1734,11 +1734,12 @@
   }
 
   window.addEventListener('scroll', () => {
+    const mid = window.innerHeight / 2;
     ['works', 'exhibition', 'cv', 'about'].forEach(id => {
       const el = document.getElementById(id + '-section');
       if (!el) return;
       const r = el.getBoundingClientRect();
-      document.getElementById('n-' + id)?.classList.toggle('active', r.top <= 80 && r.bottom > 0);
+      document.getElementById('n-' + id)?.classList.toggle('active', r.top <= mid && r.bottom > mid);
     });
     checkFades();
   }, { passive: true });
