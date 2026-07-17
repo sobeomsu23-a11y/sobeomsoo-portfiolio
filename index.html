@@ -997,12 +997,14 @@
     }
 
     @media (max-width: 700px) {
-      .now-banner { flex-direction: column; align-items: stretch; }
-      .now-banner-thumb { width: 100%; height: 150px; }
-      .now-banner-body { padding: 1.1rem 1.25rem 0.5rem; }
-      .now-banner-title { font-size: 20px; white-space: normal; }
-      .now-banner-meta { white-space: normal; }
-      .now-banner-cta { padding: 0 1.25rem 1.25rem; }
+      /* 모바일에서도 가로 유지, 컴팩트하게 */
+      .now-banner { gap: 0.9rem; }
+      .now-banner-thumb { width: 90px; }
+      .now-banner-body { padding: 0.9rem 0.5rem 0.9rem 0; }
+      .now-banner-tag { font-size: 9px; margin-bottom: 0.35rem; }
+      .now-banner-title { font-size: 16px; margin-bottom: 0.25rem; }
+      .now-banner-meta { font-size: 11px; }
+      .now-banner-cta { display: none; }
       .now-banner-arrow {
         display: flex;
         align-items: center;
