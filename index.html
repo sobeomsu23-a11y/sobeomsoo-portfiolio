@@ -1499,12 +1499,12 @@
     }
     document.getElementById('exhPanel').classList.add('open');
     document.body.style.overflow = 'hidden';
-    history.pushState({ modal: 'exhPanel' }, '');
+    pushModal('exhPanel');
   }
 
   function closePanel() {
-    if (history.state && history.state.modal === 'exhPanel') {
-      history.back();          // popstate에서 실제로 닫힘
+    if (modalStack[modalStack.length - 1] === 'exhPanel') {
+      history.back();
     } else {
       _closePanelImmediate();
     }
@@ -1547,6 +1547,19 @@
     if (a.studio) document.getElementById('about-studio').textContent = a.studio;
   }
   
+/* ── 모달 히스토리 스택 (뒤로가기 제스처로 닫기) ── */
+  const modalStack = [];
+  function pushModal(name) {
+    modalStack.push(name);
+    history.pushState({ modal: name }, '');
+  }
+  function popModalImmediate() {
+    const name = modalStack.pop();
+    if (name === 'lightbox') _closeLbImmediate();
+    else if (name === 'exhPanel') _closePanelImmediate();
+  }
+  window.addEventListener('popstate', popModalImmediate);
+
   /* ── LIGHTBOX ── */
   let lbImages = [];
   let lbIdx = 0;
@@ -1560,6 +1573,7 @@
     _lbRender();
     document.getElementById('lb').classList.add('open');
     document.body.style.overflow = 'hidden';
+    pushModal('lightbox');
   }
 
   function openLbAt(images, startIdx, title, meta) {
@@ -1570,6 +1584,7 @@
     _lbRender();
     document.getElementById('lb').classList.add('open');
     document.body.style.overflow = 'hidden';
+    pushModal('lightbox');
   }
 
   function _lbFitWrap() {
@@ -1644,6 +1659,14 @@
   }
 
   function closeLb() {
+    if (modalStack[modalStack.length - 1] === 'lightbox') {
+      history.back();
+    } else {
+      _closeLbImmediate();
+    }
+  }
+
+  function _closeLbImmediate() {
     document.getElementById('lb').classList.remove('open');
     document.body.style.overflow = '';
     lbImages = []; lbIdx = 0;
@@ -1669,7 +1692,11 @@
   }, { passive: true });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeLb(); closePanel(); }
+    if (e.key === 'Escape') {
+      const top = modalStack[modalStack.length - 1];
+      if (top === 'lightbox') closeLb();
+      else if (top === 'exhPanel') closePanel();
+    }
     if (document.getElementById('lb').classList.contains('open')) {
       if (e.key === 'ArrowLeft') lbGo(-1);
       if (e.key === 'ArrowRight') lbGo(1);
