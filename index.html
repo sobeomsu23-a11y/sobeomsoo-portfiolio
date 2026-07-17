@@ -1816,14 +1816,25 @@
       lastTime = now;
 
       if (gap > SESSION_RESET_MS) sessionIsTrackpad = false; // 충분히 쉬었으면 새 입력 세션
-      if (gap < RAPID_MS) sessionIsTrackpad = true;           // 연속 스트림 감지 = 트랙패드 확정
 
-      if (sessionIsTrackpad) {
+      if (sessionIsTrackpad) return; // 이미 트랙패드로 확정된 세션(관성 꼬리 포함) — 계속 기본 동작 유지
+
+      if (gap < RAPID_MS && Math.abs(e.deltaY) < BIG_DELTA) {
+        // 짧은 간격 + 작은 델타 = 트랙패드 스트림 확정
+        sessionIsTrackpad = true;
         if (pending) { clearTimeout(pending); pending = null; }
-        return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
+        return;
       }
 
-      // 아직 마우스인지 트랙패드인지 확정 전 — 잠깐 기다렸다가 후속 이벤트가 안 오면 마우스로 확정
+      if (Math.abs(e.deltaY) >= BIG_DELTA) {
+        // 델타가 크게 튐 = 가속된 마우스 휠 — 간격과 상관없이 즉시 반영
+        if (pending) { clearTimeout(pending); pending = null; }
+        e.preventDefault();
+        wrap.scrollLeft += e.deltaY;
+        return;
+      }
+
+      // 아직 마우스인지 트랙패드인지 확정 전 — 잠깐 기다렸다가 후속 이벤트가 안 오면 마우스 클릭으로 확정
       e.preventDefault();
       const dir = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0;
       if (pending) clearTimeout(pending);
