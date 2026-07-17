@@ -915,6 +915,7 @@
 
     /* ── CURRENT 전시 배너 ── */
     .now-banner {
+      position: relative;
       display: none;
       align-items: center;
       gap: 1.25rem;
@@ -991,14 +992,32 @@
     }
     .now-banner:hover .now-banner-cta { transform: translateX(3px); }
 
+    .now-banner-arrow {
+      display: none;
+    }
+
     @media (max-width: 700px) {
-      .now-banner { gap: 0.9rem; }
-      .now-banner-thumb { width: 90px; }
-      .now-banner-body { padding: 0.9rem 0.5rem 0.9rem 0; }
-      .now-banner-tag { font-size: 9px; margin-bottom: 0.35rem; }
-      .now-banner-title { font-size: 16px; margin-bottom: 0.25rem; }
-      .now-banner-meta { font-size: 11px; }
-      .now-banner-cta { display: none; }
+      .now-banner { flex-direction: column; align-items: stretch; }
+      .now-banner-thumb { width: 100%; height: 150px; }
+      .now-banner-body { padding: 1.1rem 1.25rem 0.5rem; }
+      .now-banner-title { font-size: 20px; white-space: normal; }
+      .now-banner-meta { white-space: normal; }
+      .now-banner-cta { padding: 0 1.25rem 1.25rem; }
+      .now-banner-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 75px;
+        right: 14px;
+        transform: translateY(-50%);
+        color: var(--white);
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1;
+        text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+        pointer-events: none;
+      }
     }
   </style>
 </head>
@@ -1047,6 +1066,7 @@
   <!-- ── CURRENT 전시 배너 (등록시에만 표시) ── -->
   <div class="now-banner" id="now-banner">
     <div class="now-banner-thumb" id="now-banner-thumb"></div>
+    <div class="now-banner-arrow">›</div>
     <div class="now-banner-body">
       <div class="now-banner-tag"><span class="now-dot"></span>Now Showing</div>
       <div class="now-banner-title" id="now-banner-title"></div>
