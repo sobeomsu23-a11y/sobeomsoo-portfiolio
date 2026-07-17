@@ -1801,7 +1801,8 @@
 
     const RAPID_MS = 45;          // 이 간격보다 빠르게 연달아 오면 트랙패드 스트림으로 판정
     const SESSION_RESET_MS = 300; // 이만큼 조용해야 완전히 새로운 입력으로 리셋
-    const STEP = 120;             // 마우스 휠 한 칸당 이동 거리(px)
+    const BIG_DELTA = 25;         // 이 값 이상이면 (가속된) 마우스 휠로 간주
+    const STEP = 120;             // 마우스 휠 한 칸당 이동 거리(px), 느린 개별 클릭용
 
     let lastTime = 0;
     let sessionIsTrackpad = false;
