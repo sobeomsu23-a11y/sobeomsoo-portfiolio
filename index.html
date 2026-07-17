@@ -1499,12 +1499,25 @@
     }
     document.getElementById('exhPanel').classList.add('open');
     document.body.style.overflow = 'hidden';
+    history.pushState({ modal: 'exhPanel' }, '');
   }
 
   function closePanel() {
+    if (history.state && history.state.modal === 'exhPanel') {
+      history.back();          // popstate에서 실제로 닫힘
+    } else {
+      _closePanelImmediate();
+    }
+  }
+
+  function _closePanelImmediate() {
     document.getElementById('exhPanel').classList.remove('open');
     document.body.style.overflow = '';
   }
+  
+  window.addEventListener('popstate', function () {
+    _closePanelImmediate();
+  });
 
   /* ── CV ── */
   async function loadCv() {
