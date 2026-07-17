@@ -459,11 +459,16 @@
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
     }
-    @media (max-width: 960px) {
-      .works-row.expanded {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+    @media (max-width: 1200px) {
+  .works-row.expanded {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .works-row.expanded {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
     .work-card {
       width: 240px;
