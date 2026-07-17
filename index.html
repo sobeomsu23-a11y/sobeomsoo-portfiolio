@@ -1799,22 +1799,27 @@
     const worksSection = document.getElementById('works-section');
     if (!worksSection) return;
 
+    let gestureIsTrackpad = false;
+    let lastWheelTime = 0;
+
     function isTrackpadWheel(e) {
-      // 파이어폭스: 물리 마우스 휠은 deltaMode 1(줄 단위), 트랙패드는 0(픽셀 단위)
-      if (e.deltaMode === 1) return false;
-      // 크롬/사파리: 물리 마우스 휠 노치는 legacy wheelDelta = deltaY * -3 관계가 정확히 성립
-      if (typeof e.wheelDeltaY === 'number' && e.wheelDeltaY !== 0) {
-        return e.wheelDeltaY !== -3 * e.deltaY;
+      const now = performance.now();
+      if (now - lastWheelTime > 200) gestureIsTrackpad = false; // 간격이 크면 새 제스처로 리셋
+      lastWheelTime = now;
+      // 픽셀 모드(deltaMode 0)에서 소수점 델타가 하나라도 나오면 트랙패드로 확정
+      if (e.deltaMode === 0 && (!Number.isInteger(e.deltaY) || !Number.isInteger(e.deltaX))) {
+        gestureIsTrackpad = true;
       }
-      return true; // 판단 애매하면 트랙패드로 간주 (안전한 기본값 = 기존 동작 유지)
+      return gestureIsTrackpad;
     }
 
     worksSection.addEventListener('wheel', e => {
       const wrap = document.getElementById('works-scroll-wrap');
       if (!wrap) return;
       if (wrap.classList.contains('expanded')) return;
+      const trackpad = isTrackpadWheel(e); // 항상 먼저 판별해서 제스처 상태를 갱신
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // 트랙패드 좌우 스와이프 — 브라우저 기본 동작 유지
-      if (isTrackpadWheel(e)) return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
+      if (trackpad) return; // 트랙패드 세로 스크롤 — 페이지 스크롤 그대로 유지
       e.preventDefault();
       wrap.scrollLeft += e.deltaY;
     }, { passive: false });
