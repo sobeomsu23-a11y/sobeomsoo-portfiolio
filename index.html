@@ -1347,6 +1347,7 @@
   /* ── WORKS ── */
   let WORKS = [];
   let curFilter = 'all';
+  let curWorksList = [];
 
   async function loadWorks() {
     WORKS = await sb('works');
@@ -1364,6 +1365,7 @@
   function renderWorks() {
     const list = (curFilter === 'all' ? WORKS : WORKS.filter(w => w.year === curFilter))
       .slice().sort((a, b) => (b.year || '').localeCompare(a.year || ''));
+    curWorksList = list;
     const grid = document.getElementById('wgrid');
     if (!list.length) {
       grid.innerHTML = '<div style="padding:3rem 2rem;color:#999;font-size:13px;">등록된 작품이 없습니다</div>';
@@ -1376,7 +1378,7 @@
       const imgHTML = thumb
         ? `<img src="${thumb}" alt="${w.title}" loading="lazy" onerror="this.outerHTML='${makePh(c).replace(/'/g,"\\'").replace(/\n/g,'')}';">`
         : makePh(c);
-      return `<div class="work-card" onclick="openLb(${JSON.stringify(images).replace(/"/g,'&quot;')},'${w.title.replace(/'/g,"\\'")}','${[w.year, w.medium, w.size].filter(Boolean).join(' · ').replace(/'/g,"\\'")}')">
+      return `<div class="work-card" onclick="openLbForWork(${i})">
         <div class="work-thumb">
           ${imgHTML}
         </div>
@@ -1563,8 +1565,10 @@
   /* ── LIGHTBOX ── */
   let lbImages = [];
   let lbIdx = 0;
+  let lbWorkIndex = -1; // 작품 그리드에서 연 경우 curWorksList 내 인덱스, 아니면 -1
 
   function openLb(images, title, meta) {
+    lbWorkIndex = -1;
     lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
     lbIdx = 0;
     document.getElementById('lb-title').textContent = title;
@@ -1576,7 +1580,17 @@
     pushModal('lightbox');
   }
 
+  function openLbForWork(idx) {
+    const w = curWorksList[idx];
+    if (!w) return;
+    const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
+    const meta = [w.year, w.medium, w.size].filter(Boolean).join(' · ');
+    openLb(images, w.title, meta);
+    lbWorkIndex = idx; // openLb가 -1로 리셋한 뒤 다시 지정
+  }
+
   function openLbAt(images, startIdx, title, meta) {
+    lbWorkIndex = -1;
     lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
     lbIdx = Math.min(startIdx, lbImages.length - 1);
     document.getElementById('lb-title').textContent = title;
@@ -1633,10 +1647,13 @@
       img.onerror = () => { _lbFitWrap(); img.style.opacity = '1'; };
     }
 
-    prev.disabled = lbIdx === 0;
-    next.disabled = lbIdx === total - 1;
-    prev.style.display = total > 1 ? 'flex' : 'none';
-    next.style.display = total > 1 ? 'flex' : 'none';
+    const isFirstWork = lbWorkIndex <= 0;
+    const isLastWork = lbWorkIndex === curWorksList.length - 1;
+    prev.disabled = lbIdx === 0 && (lbWorkIndex === -1 || isFirstWork);
+    next.disabled = lbIdx === total - 1 && (lbWorkIndex === -1 || isLastWork);
+    const canNav = total > 1 || (lbWorkIndex !== -1 && curWorksList.length > 1);
+    prev.style.display = canNav ? 'flex' : 'none';
+    next.style.display = canNav ? 'flex' : 'none';
     counter.textContent = total > 1 ? `${lbIdx + 1} / ${total}` : '';
     if (total > 1) {
       thumbs.innerHTML = lbImages.map((src, i) =>
@@ -1647,7 +1664,20 @@
 
   function lbGo(dir) {
     const next = lbIdx + dir;
-    if (next < 0 || next >= lbImages.length) return;
+    if (next < 0 || next >= lbImages.length) {
+      if (lbWorkIndex === -1) return; // 작품 그리드에서 연 게 아니면 여기서 끝
+      const nextWorkIdx = lbWorkIndex + dir;
+      if (nextWorkIdx < 0 || nextWorkIdx >= curWorksList.length) return; // 첫/마지막 작품
+      const w = curWorksList[nextWorkIdx];
+      const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
+      lbImages = images;
+      lbIdx = dir > 0 ? 0 : Math.max(images.length - 1, 0);
+      document.getElementById('lb-title').textContent = w.title;
+      document.getElementById('lb-meta').textContent = [w.year, w.medium, w.size].filter(Boolean).join(' · ');
+      lbWorkIndex = nextWorkIdx;
+      _lbRender(dir);
+      return;
+    }
     lbIdx = next;
     _lbRender(dir);
   }
