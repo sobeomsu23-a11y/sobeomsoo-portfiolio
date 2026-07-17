@@ -1794,28 +1794,28 @@
   }
  init();
 
-  /* ── WORKS 마우스 휠 좌우 스크롤 (마우스만, 트랙패드는 기존 동작 유지) ── */
+  /* ── WORKS 썸네일 영역 마우스 휠 좌우 스크롤 (마우스만, 트랙패드는 기존 동작 유지) ── */
   (function initWorksWheelScroll() {
-    const worksSection = document.getElementById('works-section');
-    if (!worksSection) return;
+    const wrap = document.getElementById('works-scroll-wrap');
+    if (!wrap) return;
 
     let gestureIsTrackpad = false;
     let lastWheelTime = 0;
 
     function isTrackpadWheel(e) {
       const now = performance.now();
-      if (now - lastWheelTime > 200) gestureIsTrackpad = false; // 간격이 크면 새 제스처로 리셋
+      const gap = now - lastWheelTime;
+      if (gap > 200) gestureIsTrackpad = false; // 200ms 넘게 비었으면 새 제스처로 리셋
       lastWheelTime = now;
-      // 픽셀 모드(deltaMode 0)에서 소수점 델타가 하나라도 나오면 트랙패드로 확정
-      if (e.deltaMode === 0 && (!Number.isInteger(e.deltaY) || !Number.isInteger(e.deltaX))) {
-        gestureIsTrackpad = true;
-      }
+
+      const fractional = !Number.isInteger(e.deltaY) || !Number.isInteger(e.deltaX);
+      const rapid = gap > 0 && gap < 40; // 직전 이벤트와 40ms 이내 = 연속 스트림(트랙패드 특징)
+      if (fractional || rapid) gestureIsTrackpad = true;
+
       return gestureIsTrackpad;
     }
 
-    worksSection.addEventListener('wheel', e => {
-      const wrap = document.getElementById('works-scroll-wrap');
-      if (!wrap) return;
+    wrap.addEventListener('wheel', e => {
       if (wrap.classList.contains('expanded')) return;
       const trackpad = isTrackpadWheel(e); // 항상 먼저 판별해서 제스처 상태를 갱신
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // 트랙패드 좌우 스와이프 — 브라우저 기본 동작 유지
