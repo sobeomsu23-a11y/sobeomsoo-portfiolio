@@ -1595,8 +1595,8 @@
   let lbIdx = 0;
   let lbWorkIndex = -1; // 작품 그리드에서 연 경우 curWorksList 내 인덱스, 아니면 -1
 
-  function openLb(images, title, meta) {
-    lbWorkIndex = -1;
+  function openLb(images, title, meta, workIdx = -1) {
+    lbWorkIndex = workIdx;
     lbImages = Array.isArray(images) ? images.filter(Boolean) : (images ? [images] : []);
     lbIdx = 0;
     document.getElementById('lb-title').textContent = title;
@@ -1613,8 +1613,7 @@
     if (!w) return;
     const images = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
     const meta = [w.year, w.medium, w.size].filter(Boolean).join(' · ');
-    openLb(images, w.title, meta);
-    lbWorkIndex = idx; // openLb가 -1로 리셋한 뒤 다시 지정
+    openLb(images, w.title, meta, idx); // lbWorkIndex를 렌더 전에 바로 전달
   }
 
   function openLbAt(images, startIdx, title, meta) {
