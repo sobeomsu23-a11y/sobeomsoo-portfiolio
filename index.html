@@ -96,7 +96,7 @@
     a { text-decoration: none; color: inherit; }
     button { font-family: var(--font); cursor: pointer; border: none; background: none; }
 
-    /* ── HEADER ── */
+    /* ── HEADER (로고만) ── */
   header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -128,11 +128,28 @@
       margin-top: 1px;
     }
 
-    nav { display: flex; align-items: center; gap: 0.3rem; }
+    /* ── BOTTOM NAV (인스타그램 스타일 플로팅 알약) ── */
+    nav {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 5px;
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 10px 34px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.06);
+    }
 .nav-item {
       position: relative;
-      padding: 6px 14px;
-      font-size: 12px;
+      padding: 9px 16px;
+      font-size: 13px;
       font-weight: 400;
       letter-spacing: -0.01em;
       color: rgba(0,0,0,0.72);
@@ -142,6 +159,7 @@
       line-height: 1;
       display: flex;
       align-items: center;
+      white-space: nowrap;
       z-index: 1;
     }
     /* 플랫 파란 알약 — 활성 메뉴 뒤에 깔림 */
@@ -163,7 +181,6 @@
       opacity: 1;
       transform: scale(1);
     }
-    nav { display: flex; align-items: center; gap: 0.5rem; }
 
     /* ── HERO ── */
     .hero {
@@ -302,7 +319,8 @@
     }
 
     /* ── MAIN WRAPPER ── */
-    .main { padding: 2.5rem 2rem; max-width: 1280px; margin: 0 auto; }
+    /* 하단 padding은 플로팅 알약 네비게이션에 콘텐츠(특히 footer)가 가리지 않도록 여유 확보 */
+    .main { padding: 2.5rem 2rem calc(2.5rem + 76px); max-width: 1280px; margin: 0 auto; }
 
     /* ── STAT BAND ── */
     .stat-band {
@@ -878,7 +896,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
       header { padding: 0 1.5rem; }
-      .main { padding: 2rem 1rem; max-width: 100%; }
+      .main { padding: 2rem 1rem calc(2rem + 70px); max-width: 100%; }
       .hero-content { padding: 0 1.5rem 3rem; }
       .hero-name { font-size: clamp(3rem, 10vw, 5rem); }
       .two-col { grid-template-columns: 1fr; }
@@ -897,14 +915,14 @@
       .section-title { font-size: 1.4rem; }
     }
  @media (max-width: 600px) {
-      .main { padding: 1.5rem 0.8rem; }
+      .main { padding: 1.5rem 0.8rem calc(1.5rem + 62px); }
       .hero-content { padding: 0 1.2rem 2.5rem; }
       .work-card { width: 38vw; }
       header { padding: 0 12px; }
-      nav { gap: 0; }
-      .nav-item { padding: 5px 10px; font-size: 10.5px; line-height: 1; }
+      nav { gap: 0; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); }
+      .nav-item { padding: 8px 11px; font-size: 11px; line-height: 1; }
       .nav-item svg { width: 14px; height: 14px; }
-      nav a.nav-item { padding: 0 5px !important; }
+      nav a.nav-item { padding: 8px 9px !important; }
       .logo { font-size: 12.5px; }
       .logo-ko { font-size: 9px; letter-spacing: 0.06em; }
       footer { margin: 0 -0.8rem; }
@@ -1031,20 +1049,22 @@
     <div class="logo">So Beomsoo</div>
     <div class="logo-ko">소 범 수</div>
   </div>
-  <nav>
-    <div class="nav-item active" id="n-works" onclick="goTo('works-section')">Works</div>
-    <div class="nav-item" id="n-exhibition" onclick="goTo('exhibition-section')">Exhibition</div>
-    <div class="nav-item" id="n-cv" onclick="goTo('cv-section')">CV</div>
-    <div class="nav-item" id="n-about" onclick="goTo('about-section')">About</div>
-    <a href="https://www.instagram.com/sobeomsoo/" target="_blank" class="nav-item" style="display:flex; align-items:center; padding: 0 0.8rem;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-        <circle cx="12" cy="12" r="4"/>
-        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-      </svg>
-    </a>
-  </nav>
 </header>
+
+<!-- ── 하단 플로팅 네비게이션 ── -->
+<nav>
+  <div class="nav-item active" id="n-works" onclick="goTo('works-section')">Works</div>
+  <div class="nav-item" id="n-exhibition" onclick="goTo('exhibition-section')">Exhibition</div>
+  <div class="nav-item" id="n-cv" onclick="goTo('cv-section')">CV</div>
+  <div class="nav-item" id="n-about" onclick="goTo('about-section')">About</div>
+  <a href="https://www.instagram.com/sobeomsoo/" target="_blank" class="nav-item" style="display:flex; align-items:center; padding: 9px 12px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+    </svg>
+  </a>
+</nav>
 
 <!-- ── HERO ── -->
 <div class="hero">
@@ -1218,7 +1238,7 @@
       <a onclick="goTo('exhibition-section')">Exhibition</a>
       <a onclick="goTo('cv-section')">CV</a>
       <a onclick="goTo('about-section')">About</a>
-      <a href="https://instagram.com/" target="_blank">Instagram</a>
+      <a href="https://www.instagram.com/sobeomsoo/" target="_blank">Instagram</a>
     </div>
   </footer>
 
@@ -1343,7 +1363,8 @@
       heroImg.src = h.img;
       if (heroLabel && h.caption) heroLabel.textContent = h.caption;
     }
-    if (h && h.desc) document.getElementById('hero-desc').textContent = h.desc;
+    const heroDescEl = document.getElementById('hero-desc');
+    if (h && h.desc && heroDescEl) heroDescEl.textContent = h.desc;
   }
 
   /* ── WORKS EXPAND TOGGLE ── */
