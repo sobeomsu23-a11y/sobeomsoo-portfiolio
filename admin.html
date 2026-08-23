@@ -500,6 +500,33 @@
    * ═══════════════════════════════════════ */
   const SUPABASE_URL = 'https://jytyhonnmtqukdisdyjh.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_UOYI0mk2h_xtqJZmj1pvEA_1Veb2QI4';
+
+  /* ═══════════════════════════════════════════
+   * ▼ Cloudflare R2 업로드 설정
+   *   ⚠️ sobeomsoo-assets 버킷 전용으로 권한이 좁혀진 토큰만 여기 넣으세요.
+   *   (다른 버킷/계정 리소스 접근 권한이 있는 토큰은 절대 넣지 마세요)
+   * ═══════════════════════════════════════════ */
+  const R2_ACCOUNT_ID = 'a25bab0c46a5f4cb1a6535c1e411508c';
+  const R2_ACCESS_KEY_ID = 'a3ddfb05389a057867e738a2f1adbb70';
+  const R2_SECRET_ACCESS_KEY = 'd9e5a74b7028e8ae55504b6019bdb2971a0bc34cd7985669b2951bdade1acb8b';
+  const R2_BUCKET = 'sobeomsoo-assets';
+  const R2_PUBLIC_URL = 'https://pub-65609b0e37af4706a096fb4dba0c6e04.r2.dev';
+  /* ═══════════════════════════════════════════ */
+
+  let _r2ClientPromise = null;
+  async function getR2Client() {
+    if (!_r2ClientPromise) {
+      _r2ClientPromise = import('https://esm.sh/aws4fetch@1.0.20').then(
+        ({ AwsClient }) => new AwsClient({
+          accessKeyId: R2_ACCESS_KEY_ID,
+          secretAccessKey: R2_SECRET_ACCESS_KEY,
+          service: 's3',
+          region: 'auto'
+        })
+      );
+    }
+    return _r2ClientPromise;
+  }
   /* ═══════════════════════════════════════ */
 
   const ADMIN_PW = 'sobeomsoo2024';
@@ -591,19 +618,21 @@
     return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
   }
 
-  /* ── 이미지 업로드 ── */
+  /* ── 이미지 업로드 (Cloudflare R2) ── */
   async function uploadImage(file) {
     // 업로드 전 자동 리사이즈 (긴 변 1600px, 품질 82%)
     const resized = await resizeImage(file, 1600, 0.82);
     const ext = resized.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${fileName}`, {
-      method: 'POST',
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': resized.type },
+    const client = await getR2Client();
+    const endpoint = `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}/${fileName}`;
+    const res = await client.fetch(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': resized.type },
       body: resized
     });
     if (!res.ok) return null;
-    return `${SUPABASE_URL}/storage/v1/object/public/images/${fileName}`;
+    return `${R2_PUBLIC_URL}/${fileName}`;
   }
 
   function onDragOver(e, zoneId) {
