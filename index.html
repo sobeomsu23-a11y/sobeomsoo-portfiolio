@@ -67,15 +67,15 @@
       --gray4: #e0e0e0;          /* hairline */
       --gray5: #f5f5f7;          /* canvas-parchment */
       --gray6: #ffffff;          /* canvas (main bg = pure white) */
-      --accent: #0066cc;         /* Action Blue — 유일한 accent */
-      --accent-focus: #0071e3;
-      --accent-light: #e8f0fb;
+      --accent: #1d1d1f;         /* 참고 디자인처럼 컬러 액센트 없이 잉크색 하나로 통일 */
+      --accent-focus: #000000;
+      --accent-light: #f0f0f0;
       --surface-dark: #1d1d1f;
       --font: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', system-ui, sans-serif;
       --font-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', system-ui, sans-serif;
-      --radius: 18px;            /* rounded.lg — 유틸 카드 */
-      --radius-sm: 8px;          /* rounded.sm */
-      --radius-pill: 9999px;     /* pill — 버튼 전용 */
+      --radius: 0px;             /* 참고 디자인처럼 각진 편집 스타일로 */
+      --radius-sm: 0px;
+      --radius-pill: 0px;
       --product-shadow: rgba(0,0,0,0.22) 3px 5px 30px;
       --header-h: 44px;
     }
@@ -168,7 +168,7 @@
       position: absolute;
       inset: 0;
       border-radius: var(--radius-pill);
-      background: rgba(0,102,204,0.9);
+      background: rgba(29,29,31,0.94);
       opacity: 0;
       transform: scale(0.9);
       transition: opacity 0.25s ease, transform 0.25s ease;
@@ -186,79 +186,71 @@
     .hero {
       margin-top: var(--header-h);
       position: relative;
-      height: calc(100vh - var(--header-h));
-      min-height: 520px;
+      min-height: calc(100vh - var(--header-h));
       overflow: hidden;
-      border-radius: 0 0 24px 24px;
+      background: var(--white);
+      padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 3.5rem) 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2.5rem;
     }
 
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #2a3d35 0%, #1a2820 50%, #3d5a4c 100%);
+    /* 비대칭 콜라주 — 참고 디자인의 사진 배치를 본떠, 큰 사진 하나 + 작은 사진 두 장 */
+    .hero-collage {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(2, minmax(140px, 1fr));
+      gap: 14px;
+      height: clamp(340px, 46vw, 560px);
     }
-
-    .hero-img-actual {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+    .hero-collage-img {
+      overflow: hidden;
+      background: var(--gray5);
+    }
+    .hero-collage-img img {
+      width: 100%; height: 100%;
       object-fit: cover;
+      display: block;
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.5s ease;
     }
-
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 100%);
-    }
+    .hero-collage-img.a { grid-column: 5 / 13; grid-row: 1 / 3; }
+    .hero-collage-img.b { grid-column: 1 / 5; grid-row: 1 / 2; }
+    .hero-collage-img.c { grid-column: 1 / 5; grid-row: 2 / 3; }
 
     .hero-content {
       position: relative;
-      z-index: 2;
-      height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 3.5rem 4rem;
+      gap: 1.6rem;
     }
 
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
-      margin-bottom: 1.2rem;
+      color: var(--gray2);
     }
     .hero-eyebrow::before {
       content: '';
       display: block;
       width: 24px;
       height: 1px;
-      background: rgba(255,255,255,0.5);
+      background: var(--gray3);
     }
 
     .hero-name {
       font-family: var(--font);
-      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-size: clamp(3rem, 9vw, 6.5rem);
       font-weight: 600;
-      line-height: 1.07;
-      color: var(--white);
-      letter-spacing: -0.28px;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-name-ko {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      font-weight: 300;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: 0.3em;
-      margin-bottom: 2.5rem;
+      line-height: 0.98;
+      color: var(--black);
+      letter-spacing: -0.02em;
     }
 
     .hero-bottom-row {
@@ -267,55 +259,16 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1.5rem;
+      border-top: 1px solid var(--gray4);
+      padding-top: 1.4rem;
     }
 
     .hero-desc {
       font-size: 14px;
-      font-weight: 300;
+      font-weight: 400;
       line-height: 1.85;
-      color: rgba(255,255,255,0.72);
-      max-width: 360px;
-    }
-
-    .hero-btns { display: flex; gap: 10px; flex-shrink: 0; }
-    .btn-hero-primary {
-      font-size: 17px;
-      font-weight: 400;
-      padding: 11px 22px;
-      background: var(--accent);
-      color: var(--white);
-      border-radius: var(--radius-pill);
-      transition: background 0.2s, transform 0.1s;
-      letter-spacing: -0.374px;
-    }
-    .btn-hero-primary:hover { background: var(--accent-focus); }
-    .btn-hero-primary:active { transform: scale(0.95); }
-    .btn-hero-secondary {
-      font-size: 17px;
-      font-weight: 400;
-      padding: 11px 22px;
-      background: transparent;
-      color: var(--white);
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255,255,255,0.4);
-      transition: background 0.2s, transform 0.1s;
-      letter-spacing: -0.374px;
-    }
-    .btn-hero-secondary:active { transform: scale(0.95); }
-    .btn-hero-secondary:hover { background: rgba(255,255,255,0.15); }
-
-    .hero-label-badge {
-      position: absolute;
-      bottom: 1rem;
-      right: 2.5rem;
-      background: rgba(0,0,0,0.45);
-      color: rgba(255,255,255,0.8);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      padding: 5px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
+      color: var(--gray2);
+      max-width: 380px;
     }
 
     /* ── MAIN WRAPPER ── */
@@ -650,7 +603,7 @@
       background: var(--white); overflow-y: auto;
       transform: translateX(100%);
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      border-radius: 20px 0 0 20px;
+      border-radius: 0;
     }
     .exh-panel.open .exh-panel-body { transform: translateX(0); }
     .exh-panel-close {
@@ -677,7 +630,7 @@
       display: inline-block; font-size: 10px; font-weight: 500;
       letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--accent); background: var(--accent-light);
-      padding: 4px 12px; border-radius: 20px; margin-bottom: 0.75rem;
+      padding: 4px 12px; border-radius: 0; margin-bottom: 0.75rem;
     }
     .exh-panel-title {
       font-family: var(--font);
@@ -775,7 +728,7 @@
       text-transform: uppercase;
       border: 1.5px solid var(--gray4);
       padding: 5px 12px; color: var(--gray1);
-      background: var(--gray6); border-radius: 20px;
+      background: var(--gray6); border-radius: 0;
     }
 
     /* ── FOOTER ── */
@@ -815,7 +768,7 @@
       font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
       text-transform: uppercase; color: rgba(255,255,255,0.45);
       cursor: pointer; transition: color 0.15s; font-family: var(--font); z-index: 10;
-      background: rgba(255,255,255,0.08); padding: 7px 14px; border-radius: 20px;
+      background: rgba(255,255,255,0.08); padding: 7px 14px; border-radius: 0;
     }
     .lb-close:hover { color: var(--white); }
     .lb-slider {
@@ -837,7 +790,7 @@
       max-height: 100%;
       object-fit: contain;
       transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
-      border-radius: 8px;
+      border-radius: 0;
       transform-origin: center center;
       display: block;
       user-select: none;
@@ -860,7 +813,7 @@
       width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.15s; font-family: var(--font);
-      border-radius: 50%;
+      border-radius: 0;
     }
     .lb-arrow:hover { background: rgba(255,255,255,0.18); color: var(--white); }
     .lb-arrow.prev { left: 2rem; }
@@ -879,7 +832,7 @@
       width: 52px; height: 40px; object-fit: cover; cursor: pointer;
       opacity: 0.4; border: 1.5px solid transparent;
       transition: opacity 0.15s, border-color 0.15s;
-      flex-shrink: 0; border-radius: 4px;
+      flex-shrink: 0; border-radius: 0;
     }
     .lb-thumb.active { opacity: 1; border-color: var(--white); }
     .lb-thumb:hover { opacity: 0.8; }
@@ -896,15 +849,19 @@
     @media (max-width: 960px) {
       header { padding: 0 1.5rem; }
       .main { padding: 2rem 1rem calc(2rem + 70px); max-width: 100%; }
-      .hero-content { padding: 0 1.5rem 3rem; }
+      .hero { padding: 2rem 1.5rem 2.5rem; gap: 1.8rem; }
       .hero-name { font-size: clamp(3rem, 10vw, 5rem); }
+      .hero-collage { height: auto; grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px; }
+      .hero-collage-img.a { grid-column: 1 / 3; grid-row: 1 / 2; }
+      .hero-collage-img.b { grid-column: 1 / 2; grid-row: 2 / 3; }
+      .hero-collage-img.c { grid-column: 2 / 3; grid-row: 2 / 3; }
       .two-col { grid-template-columns: 1fr; }
       .exh-cols { grid-template-columns: 1fr; }
       .bottom-row { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2.5rem 1.5rem; margin: 0 -1rem; }
       .stat-band { padding: 1.5rem 1.5rem; flex-wrap: wrap; justify-content: center; }
       .stat-divider { display: none; }
-      .card { border-radius: 10px; }
+      .card { border-radius: 0; }
       .works-card { padding: 1.5rem 1.2rem 1rem; }
       .exh-card { padding: 1.5rem 1.2rem; }
       .cv-card { padding: 1.5rem 1.2rem; }
@@ -915,7 +872,8 @@
     }
  @media (max-width: 600px) {
       .main { padding: 1.5rem 0.8rem calc(1.5rem + 62px); }
-      .hero-content { padding: 0 1.2rem 2.5rem; }
+      .hero { padding: 1.6rem 1.1rem 2rem; }
+      .hero-bottom-row { flex-direction: column; align-items: flex-start; }
       .work-card { width: 38vw; }
       header { padding: 0 12px; }
       nav { gap: 0; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); }
@@ -975,7 +933,7 @@
       margin-bottom: 0.5rem;
     }
     .now-dot {
-      width: 7px; height: 7px; border-radius: 50%;
+      width: 7px; height: 7px; border-radius: 0;
       background: #30d158;
       animation: nowPulse 1.8s ease-in-out infinite;
     }
@@ -1067,18 +1025,18 @@
 
 <!-- ── HERO ── -->
 <div class="hero">
-  <div class="hero-bg" id="hero-bg"></div>
-  <img
-    id="hero-img"
-    class="hero-img-actual"
-    src=""
-    alt="So Beomsoo"
-  >
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-name">SO<br>BEOMSOO</div>
+  <div class="hero-collage" id="hero-collage">
+    <div class="hero-collage-img a"><img id="hero-img-a" alt="So Beomsoo work"></div>
+    <div class="hero-collage-img b"><img id="hero-img-b" alt="So Beomsoo work"></div>
+    <div class="hero-collage-img c"><img id="hero-img-c" alt="So Beomsoo work"></div>
   </div>
-  <div class="hero-label-badge" id="hero-label"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Contemporary Painter — Seoul</div>
+    <div class="hero-name">SO<br>BEOMSOO.</div>
+    <div class="hero-bottom-row">
+      <div class="hero-desc" id="hero-desc"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ── MAIN ── -->
@@ -1105,7 +1063,7 @@
         <div class="works-header">
           <div>
             <div class="section-eyebrow">Portfolio</div>
-            <div class="section-title">Works</div>
+            <div class="section-title">Works.</div>
           </div>
           <div class="works-filters">
             <button class="wf on" onclick="filterW('all', this)">All</button>
@@ -1139,7 +1097,7 @@
       <div class="exh-card">
         <div style="margin-bottom: 1.5rem;">
           <div class="section-eyebrow">History</div>
-          <div class="section-title">Exhibition</div>
+          <div class="section-title">Exhibition.</div>
         </div>
         <div class="exh-cols">
           <div>
@@ -1166,7 +1124,7 @@
       <div class="cv-card">
         <div style="margin-bottom: 1.5rem;">
           <div class="section-eyebrow">Curriculum Vitae</div>
-          <div class="section-title">CV</div>
+          <div class="section-title">CV.</div>
         </div>
         <div class="cv-cols-inner">
           <div id="cv-left">
@@ -1346,7 +1304,7 @@
     return `<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <rect width="300" height="400" fill="${c[0]}"/>
       <ellipse cx="180" cy="160" rx="120" ry="100" fill="${c[1]}" opacity="0.55"/>
-      <rect x="20" y="280" width="260" height="80" fill="${c[2]}" opacity="0.4" rx="4"/>
+      <rect x="20" y="280" width="260" height="80" fill="${c[2]}" opacity="0.4" rx="0"/>
       <ellipse cx="70" cy="100" rx="55" ry="70" fill="${c[2]}" opacity="0.38"/>
     </svg>`;
   }
@@ -1354,16 +1312,34 @@
   /* ── HERO ── */
   async function loadHero() {
     const h = await sbSingle('hero');
-    const heroImg = document.getElementById('hero-img');
-    const heroLabel = document.getElementById('hero-label');
-    if (h && h.img && heroImg) {
-      heroImg.onload = () => { heroImg.style.opacity = '1'; };
-      heroImg.onerror = () => { heroImg.style.display = 'none'; };
-      heroImg.src = h.img;
-      if (heroLabel && h.caption) heroLabel.textContent = h.caption;
-    }
     const heroDescEl = document.getElementById('hero-desc');
     if (h && h.desc && heroDescEl) heroDescEl.textContent = h.desc;
+
+    // 랜딩페이지 콜라주 사진 — 매 방문마다 works 중 무작위로 골라 표시
+    const list = await sb('works');
+    const pool = [];
+    (list || []).forEach(w => {
+      const imgs = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
+      if (imgs[0]) pool.push({ url: imgs[0], title: w.title || '' });
+    });
+
+    // 무작위로 섞어서 최대 3장 고르기 (Fisher–Yates)
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const picks = pool.slice(0, 3);
+    const slotIds = ['hero-img-a', 'hero-img-b', 'hero-img-c'];
+    slotIds.forEach((id, i) => {
+      const el = document.getElementById(id);
+      const wrap = el ? el.closest('.hero-collage-img') : null;
+      if (!el) return;
+      if (!picks[i]) { if (wrap) wrap.style.display = 'none'; return; }
+      el.alt = picks[i].title || 'So Beomsoo work';
+      el.onload = () => { el.style.opacity = '1'; };
+      el.onerror = () => { if (wrap) wrap.style.display = 'none'; };
+      el.src = thumbUrl(picks[i].url, 1000);
+    });
   }
 
   /* ── WORKS EXPAND TOGGLE ── */
@@ -1538,8 +1514,8 @@
         </div>`;
       }).join('');
     } else {
-      gallery.innerHTML = `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E0EAE5" rx="4"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#9ABAAA" font-family="sans-serif">이미지</text></svg></div></div>
-        <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E0EAE5" rx="4"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#9ABAAA" font-family="sans-serif">이미지</text></svg></div></div>`;
+      gallery.innerHTML = `<div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E0EAE5" rx="0"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#9ABAAA" font-family="sans-serif">이미지</text></svg></div></div>
+        <div class="exh-gallery-item"><div class="exh-gallery-ph"><svg width="80" height="60" viewBox="0 0 80 60"><rect width="80" height="60" fill="#E0EAE5" rx="0"/><text x="40" y="35" text-anchor="middle" font-size="10" fill="#9ABAAA" font-family="sans-serif">이미지</text></svg></div></div>`;
     }
     document.getElementById('exhPanel').classList.add('open');
     document.body.style.overflow = 'hidden';
