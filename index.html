@@ -196,11 +196,10 @@
       gap: 2.5rem;
     }
 
-    /* 비대칭 콜라주 — 참고 디자인의 사진 배치를 본떠, 큰 사진 하나 + 작은 사진 두 장 */
+    /* 랜덤 모자이크 그리드 — 방문마다 그리드 모양(칸 배치)과 채워지는 사진을 모두 무작위로 결정.
+       칸끼리 겹치지 않고 빈틈없이 채워짐 (JS에서 grid-column/row 지정). */
     .hero-collage {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(2, minmax(140px, 1fr));
       gap: 14px;
       height: clamp(340px, 46vw, 560px);
     }
@@ -213,11 +212,9 @@
       object-fit: cover;
       display: block;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s ease, transform 0.4s ease;
     }
-    .hero-collage-img.a { grid-column: 5 / 13; grid-row: 1 / 3; }
-    .hero-collage-img.b { grid-column: 1 / 5; grid-row: 1 / 2; }
-    .hero-collage-img.c { grid-column: 1 / 5; grid-row: 2 / 3; }
+    .hero-collage-img:hover img { transform: scale(1.035); }
 
     .hero-content {
       position: relative;
@@ -851,10 +848,7 @@
       .main { padding: 2rem 1rem calc(2rem + 70px); max-width: 100%; }
       .hero { padding: 2rem 1.5rem 2.5rem; gap: 1.8rem; }
       .hero-name { font-size: clamp(3rem, 10vw, 5rem); }
-      .hero-collage { height: auto; grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px; }
-      .hero-collage-img.a { grid-column: 1 / 3; grid-row: 1 / 2; }
-      .hero-collage-img.b { grid-column: 1 / 2; grid-row: 2 / 3; }
-      .hero-collage-img.c { grid-column: 2 / 3; grid-row: 2 / 3; }
+      .hero-collage { height: 420px; }
       .two-col { grid-template-columns: 1fr; }
       .exh-cols { grid-template-columns: 1fr; }
       .bottom-row { grid-template-columns: 1fr; }
@@ -1025,11 +1019,7 @@
 
 <!-- ── HERO ── -->
 <div class="hero">
-  <div class="hero-collage" id="hero-collage">
-    <div class="hero-collage-img a"><img id="hero-img-a" alt="So Beomsoo work"></div>
-    <div class="hero-collage-img b"><img id="hero-img-b" alt="So Beomsoo work"></div>
-    <div class="hero-collage-img c"><img id="hero-img-c" alt="So Beomsoo work"></div>
-  </div>
+  <div class="hero-collage" id="hero-collage"></div>
   <div class="hero-content">
     <div class="hero-eyebrow"></div>
     <div class="hero-name">SO<br>BEOMSOO.</div>
@@ -1310,36 +1300,86 @@
   }
 
   /* ── HERO ── */
-  async function loadHero() {
+  // 모자이크 그리드 템플릿 모음 — 12칼럼 기준, 칸 수(3~5)와 배치 비율이 서로 다름.
+  // 매 방문마다 이 중 하나를 무작위로 골라 사용 (겹치는 칸 없이 빈틈없이 채워지도록 미리 설계됨).
+  const HERO_GRID_TEMPLATES = [
+    { rows: 2, cells: [ [5,13,1,3], [1,5,1,2], [1,5,2,3] ] },                     // 큰 사진(우) + 작은 사진 2장(좌)
+    { rows: 2, cells: [ [1,9,1,3], [9,13,1,2], [9,13,2,3] ] },                    // 큰 사진(좌) + 작은 사진 2장(우)
+    { rows: 1, cells: [ [1,5,1,2], [5,9,1,2], [9,13,1,2] ] },                     // 세로로 긴 사진 3장 (트립틱)
+    { rows: 2, cells: [ [1,8,1,2], [8,13,1,2], [1,5,2,3], [5,13,2,3] ] },         // 4칸 비대칭 모자이크
+    { rows: 2, cells: [ [1,7,1,3], [7,10,1,2], [10,13,1,2], [7,10,2,3], [10,13,2,3] ] }, // 큰 사진(좌) + 작은 사진 4장(우, 2x2)
+    { rows: 3, cells: [ [1,7,1,2], [7,13,1,3], [1,4,2,4], [4,7,2,4] ] },          // 세로 3단 비대칭 모자이크
+  ];
+
+  function buildHeroCollage(containerEl, pool) {
+    containerEl.innerHTML = '';
+    if (!pool.length) return;
+
+    const template = HERO_GRID_TEMPLATES[Math.floor(Math.random() * HERO_GRID_TEMPLATES.length)];
+    containerEl.style.gridTemplateColumns = 'repeat(12, 1fr)';
+    containerEl.style.gridTemplateRows = `repeat(${template.rows}, 1fr)`;
+
+    template.cells.forEach((cell, i) => {
+      const [c0, c1, r0, r1] = cell;
+      const pick = pool[i % pool.length]; // 후보가 칸 수보다 적으면 순환하며 재사용
+      const wrap = document.createElement('div');
+      wrap.className = 'hero-collage-img';
+      wrap.style.gridColumn = `${c0} / ${c1}`;
+      wrap.style.gridRow = `${r0} / ${r1}`;
+      const img = document.createElement('img');
+      img.alt = pick.title || 'So Beomsoo work';
+      img.onload = () => { img.style.opacity = '1'; };
+      img.onerror = () => { wrap.style.display = 'none'; };
+      img.src = thumbUrl(pick.url, 1000);
+      wrap.appendChild(img);
+
+      // 클릭 시 작품은 라이트박스로, 전시 전경은 해당 전시 상세페이지로 연결
+      wrap.style.cursor = 'pointer';
+      if (pick.type === 'work') {
+        wrap.onclick = () => openLb(pick.images, pick.title, pick.meta);
+      } else if (pick.type === 'exhibition' && pick.id) {
+        wrap.onclick = () => openPanel(pick.id);
+      }
+
+      containerEl.appendChild(wrap);
+    });
+  }
+
+  async function loadHero(works, exhibitions) {
     const h = await sbSingle('hero');
     const heroDescEl = document.getElementById('hero-desc');
     if (h && h.desc && heroDescEl) heroDescEl.textContent = h.desc;
 
-    // 랜딩페이지 콜라주 사진 — 매 방문마다 works 중 무작위로 골라 표시
-    const list = await sb('works');
+    // 랜딩페이지 그리드 사진 — 작품(works) + 전시 전경(exhibitions) 이미지를 한데 모아
+    // 매 방문마다 무작위로 골라 표시. 클릭 시 작품은 라이트박스, 전시 전경은 해당 전시 상세페이지로 연결.
+    // works/exhibitions는 init()에서 한 번만 불러와 전달받음 (loadWorks/loadExhibitions와 중복 요청 방지)
     const pool = [];
-    (list || []).forEach(w => {
+    (works || []).forEach(w => {
       const imgs = Array.isArray(w.images) && w.images.length ? w.images : (w.img ? [w.img] : []);
-      if (imgs[0]) pool.push({ url: imgs[0], title: w.title || '' });
+      if (imgs[0]) {
+        pool.push({
+          type: 'work',
+          url: imgs[0],
+          title: w.title || '',
+          images: imgs,
+          meta: [w.year, w.medium, w.size].filter(Boolean).join(' · '),
+        });
+      }
+    });
+    (exhibitions || []).forEach(e => {
+      // hero_img는 보통 포스터/키비주얼이라 제외하고, 실제 설치 전경인 gallery만 사용
+      const imgs = Array.isArray(e.gallery) ? e.gallery.filter(Boolean) : [];
+      imgs.forEach(url => pool.push({ type: 'exhibition', url, title: e.title || '전시 전경', id: e.id }));
     });
 
-    // 무작위로 섞어서 최대 3장 고르기 (Fisher–Yates)
+    // 무작위로 섞기 (Fisher–Yates)
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
-    const picks = pool.slice(0, 3);
-    const slotIds = ['hero-img-a', 'hero-img-b', 'hero-img-c'];
-    slotIds.forEach((id, i) => {
-      const el = document.getElementById(id);
-      const wrap = el ? el.closest('.hero-collage-img') : null;
-      if (!el) return;
-      if (!picks[i]) { if (wrap) wrap.style.display = 'none'; return; }
-      el.alt = picks[i].title || 'So Beomsoo work';
-      el.onload = () => { el.style.opacity = '1'; };
-      el.onerror = () => { if (wrap) wrap.style.display = 'none'; };
-      el.src = thumbUrl(picks[i].url, 1000);
-    });
+
+    const collageEl = document.getElementById('hero-collage');
+    if (collageEl) buildHeroCollage(collageEl, pool);
   }
 
   /* ── WORKS EXPAND TOGGLE ── */
@@ -1367,9 +1407,8 @@
   let curFilter = 'all';
   let curWorksList = [];
 
-  async function loadWorks() {
-    WORKS = await sb('works');
-    
+  async function loadWorks(data) {
+    WORKS = data || [];
     renderWorks();
   }
 
@@ -1421,9 +1460,8 @@
   /* ── EXHIBITIONS ── */
   let EXHIBITIONS = [];
 
-  async function loadExhibitions() {
-    EXHIBITIONS = await sb('exhibitions');
-   
+  async function loadExhibitions(data) {
+    EXHIBITIONS = data || [];
     renderExhibitions();
     renderNowBanner();
   }
@@ -1788,7 +1826,16 @@
 
   /* ── 초기 로드 ── */
   async function init() {
-    await Promise.all([loadHero(), loadWorks(), loadExhibitions(), loadCv(), loadAbout()]);
+    // works/exhibitions는 여기서 한 번만 불러와 loadHero·loadWorks·loadExhibitions가 공유
+    // (예전엔 loadHero가 따로 또 fetch해서 같은 테이블을 매 방문마다 2번씩 읽었음 → Supabase 요청/쿼터 절약)
+    const [worksData, exhibitionsData] = await Promise.all([sb('works'), sb('exhibitions')]);
+    await Promise.all([
+      loadHero(worksData, exhibitionsData),
+      loadWorks(worksData),
+      loadExhibitions(exhibitionsData),
+      loadCv(),
+      loadAbout(),
+    ]);
     setTimeout(checkFades, 100);
   }
  init();
