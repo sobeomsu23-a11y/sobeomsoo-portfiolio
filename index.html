@@ -1112,7 +1112,7 @@
     lb.classList.remove('open');
     document.body.style.overflow='';
     if(returnToPage==='works-section' || returnToPage==='cv-about-section' || returnToPage==='home' || returnToPage==='exhibition-detail-section') {
-      showPage(returnToPage);
+      showPage(returnToPage, true, false); // false = 스크롤 위치 유지
     }
   }
 
@@ -1130,7 +1130,7 @@
   const pages=['home','works-section','cv-about-section','contact-section','exhibition-detail-section'];
   const navButtons=[...document.querySelectorAll('.menu [data-target]')];
 
-  function showPage(target, updateHash=true){
+  function showPage(target, updateHash=true, resetScroll=true){
     if(!pages.includes(target)) target='home';
 
     pages.forEach(id=>{
@@ -1142,6 +1142,10 @@
       b.classList.toggle('active',b.dataset.target===target);
     });
 
+    if(target==='home' && WORKS.length){
+      renderHero(WORKS); // Home에 진입할 때마다 랜덤 이미지 다시 뽑기
+    }
+
     if(updateHash){
       const hash=target==='home'?'':'#'+target.replace('-section','');
       if(location.hash!==hash){
@@ -1149,7 +1153,7 @@
       }
     }
 
-    window.scrollTo(0,0);
+    if(resetScroll) window.scrollTo(0,0);
   }
 
   navButtons.forEach(btn=>{
@@ -1231,7 +1235,6 @@
     EXHIBITIONS=exhibitions||[];
     ALL_WORKS=sortWorksByYearDesc(WORKS);
 
-    renderHero(WORKS);
     renderWorks();
     showPage(pageFromHash(),false);
 
