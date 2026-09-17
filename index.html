@@ -701,8 +701,18 @@
             </div>
 
             <div class="info-block">
-              <div class="info-title">Exhibitions</div>
-              <div id="cv-exhibitions"></div>
+              <div class="info-title">Solo Exhibition</div>
+              <div id="cv-exh-solo"></div>
+            </div>
+
+            <div class="info-block">
+              <div class="info-title">Group Exhibition</div>
+              <div id="cv-exh-group"></div>
+            </div>
+
+            <div class="info-block" id="cv-exh-upcoming-block" style="display:none">
+              <div class="info-title">Upcoming</div>
+              <div id="cv-exh-upcoming"></div>
             </div>
           </div>
 
@@ -1014,18 +1024,32 @@
         : `<div class="cv-row"><span class="cv-year">—</span><div class="cv-title" style="color:#aaa">등록된 항목이 없습니다.</div></div>`;
     });
 
-    const exhEl=document.getElementById('cv-exhibitions');
     const exhibitions=[...(EXHIBITIONS||[])].sort((a,b)=>String(b.year||'').localeCompare(String(a.year||'')));
-    exhEl.innerHTML=exhibitions.length
-      ? exhibitions.map(e=>`
-          <div class="cv-row" style="cursor:pointer" onclick="openPanel('${String(e.id).replace(/'/g,"\\'")}')">
-            <span class="cv-year">${e.year||''}</span>
-            <div>
-              <div class="cv-title">${e.title||''}</div>
-              <div class="cv-loc">${[e.venue,e.type==='solo'?'Solo Exhibition':e.type==='group'?'Group Exhibition':e.type==='upcoming'?'Current':''].filter(Boolean).join(' · ')}</div>
-            </div>
-          </div>`).join('')
-      : `<div class="cv-row"><span class="cv-year">—</span><div class="cv-title" style="color:#aaa">등록된 전시가 없습니다.</div></div>`;
+
+    const renderExhList=(el,list)=>{
+      el.innerHTML=list.length
+        ? list.map(e=>`
+            <div class="cv-row" style="cursor:pointer" onclick="openPanel('${String(e.id).replace(/'/g,"\\'")}')">
+              <span class="cv-year">${e.year||''}</span>
+              <div>
+                <div class="cv-title">${e.title||''}</div>
+                <div class="cv-loc">${e.venue||''}</div>
+              </div>
+            </div>`).join('')
+        : `<div class="cv-row"><span class="cv-year">—</span><div class="cv-title" style="color:#aaa">등록된 전시가 없습니다.</div></div>`;
+    };
+
+    renderExhList(document.getElementById('cv-exh-solo'), exhibitions.filter(e=>e.type==='solo'));
+    renderExhList(document.getElementById('cv-exh-group'), exhibitions.filter(e=>e.type==='group'));
+
+    const upcoming=exhibitions.filter(e=>e.type==='upcoming');
+    const upcomingBlock=document.getElementById('cv-exh-upcoming-block');
+    if(upcoming.length){
+      upcomingBlock.style.display='';
+      renderExhList(document.getElementById('cv-exh-upcoming'), upcoming);
+    }else{
+      upcomingBlock.style.display='none';
+    }
   }
 
   /* ─────────────────────────────────────
